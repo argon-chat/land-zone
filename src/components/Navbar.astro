@@ -1,0 +1,316 @@
+---
+import { Sun, Moon, Menu, X, Download, ChevronDown, Video, Gamepad2, BookOpen, Bot, LayoutDashboard, Github, Terminal as TerminalIcon, LifeBuoy as Support } from 'lucide-astro';
+
+interface Props {
+  current?: string;
+}
+const { current = '/' } = Astro.props;
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 pointer-events-none px-3 sm:px-5 pt-3" id="hud-nav">
+  <div class="hud-bar pointer-events-auto">
+    <!-- Scan line animation -->
+    <div class="hud-scanline"></div>
+
+    <!-- Top edge glow line -->
+    <div class="hud-edge-top"></div>
+
+    <div class="hud-content">
+      <!-- Left: Logo + nav -->
+      <div class="hud-left">
+        <a href="/" class="hud-logo group" aria-label="ARGON — Home">
+          <div class="hud-logo-hex">
+            <img src="/argon-cat.svg" alt="" class="hud-logo-icon" />
+            <div class="hud-logo-ring"></div>
+          </div>
+          <span class="hud-brand">ARGON</span>
+        </a>
+
+        <div class="hud-sep"></div>
+
+        <div class="hidden md:flex items-center gap-0.5">
+          <a href="/" class:list={["hud-link", current === '/' && 'active']}>
+            <span class="hud-link-indicator"></span>
+            Home
+          </a>
+
+          <!-- Products dropdown -->
+          <div class="hud-dropdown" id="dropdown-products">
+            <button type="button" class="hud-link hud-dropdown-trigger">
+              <span class="hud-link-indicator"></span>
+              Products
+              <ChevronDown class="size-3 ml-0.5 opacity-50" />
+            </button>
+            <div class="hud-dropdown-panel">
+              <div class="hud-dropdown-edge"></div>
+              <a href="/#features" class="hud-dd-item">
+                <Gamepad2 class="size-4 text-accent" />
+                <div>
+                  <div class="hud-dd-title">Argon Chat</div>
+                  <div class="hud-dd-desc">Voice, text & games platform</div>
+                </div>
+              </a>
+              <a href="https://meet.argon.gl" target="_blank" rel="noopener" class="hud-dd-item">
+                <Video class="size-4 text-accent-2" />
+                <div>
+                  <div class="hud-dd-title">Argon Meet</div>
+                  <div class="hud-dd-desc">Video conferencing</div>
+                </div>
+              </a>
+              <a href="https://pew.red" target="_blank" rel="noopener" class="hud-dd-item">
+                <Gamepad2 class="size-4 text-accent-3" />
+                <div>
+                  <div class="hud-dd-title">Pew Pew Engine</div>
+                  <div class="hud-dd-desc">2D game engine</div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <!-- Developers dropdown -->
+          <div class="hud-dropdown" id="dropdown-devs">
+            <button type="button" class="hud-link hud-dropdown-trigger">
+              <span class="hud-link-indicator"></span>
+              Developers
+              <ChevronDown class="size-3 ml-0.5 opacity-50" />
+            </button>
+            <div class="hud-dropdown-panel">
+              <div class="hud-dropdown-edge"></div>
+              <a href="https://docs.argon.gl" target="_blank" rel="noopener" class="hud-dd-item">
+                <BookOpen class="size-4 text-accent" />
+                <div>
+                  <div class="hud-dd-title">Documentation</div>
+                  <div class="hud-dd-desc">Guides & references</div>
+                </div>
+              </a>
+              <a href="https://bots.argon.gl" target="_blank" rel="noopener" class="hud-dd-item">
+                <Bot class="size-4 text-accent-2" />
+                <div>
+                  <div class="hud-dd-title">Bot API</div>
+                  <div class="hud-dd-desc">Build bots & integrations</div>
+                </div>
+              </a>
+              <a href="https://console.argon.gl" target="_blank" rel="noopener" class="hud-dd-item">
+                <TerminalIcon class="size-4 text-accent-3" />
+                <div>
+                  <div class="hud-dd-title">Console</div>
+                  <div class="hud-dd-desc">Manage bots & credentials</div>
+                </div>
+              </a>
+              <a href="https://argon.support" target="_blank" rel="noopener" class="hud-dd-item">
+                <Support class="size-4 text-accent-3" />
+                <div>
+                  <div class="hud-dd-title">Support</div>
+                  <div class="hud-dd-desc">Get help & support</div>
+                </div>
+              </a>
+              <div class="hud-dd-sep"></div>
+              <a href="https://github.com/argon-chat" target="_blank" rel="noopener" class="hud-dd-item">
+                <Github class="size-4 text-text-muted" />
+                <div>
+                  <div class="hud-dd-title">GitHub</div>
+                  <div class="hud-dd-desc">Source code & issues</div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <a href="https://beta.argon.gl" class="hud-link">
+            <span class="hud-link-indicator"></span>
+            Enrollment Portal
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: controls -->
+      <div class="hud-right">
+        <button id="theme-toggle" type="button" class="hud-btn" aria-label="Toggle theme">
+          <Sun class="size-3.5 hidden dark:block" />
+          <Moon class="size-3.5 block dark:hidden" />
+        </button>
+
+        <button id="mobile-menu-btn" type="button" class="hud-btn" aria-label="Menu">
+          <Menu class="size-4 mobile-menu-icon" />
+          <X class="size-4 mobile-close-icon hidden" />
+        </button>
+
+        <button type="button" data-open-enroll class="hud-cta hidden sm:inline-flex">
+          <Download class="size-3.5" />
+          <span>JOIN BETA</span>
+          <div class="hud-cta-pulse"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Bottom edge glow line -->
+    <div class="hud-edge-bottom"></div>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div id="mobile-sidebar" class="fixed inset-0 z-40 hidden md:hidden">
+  <div id="mobile-sidebar-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+  <aside class="absolute top-14 left-3 right-3">
+    <div class="hud-mobile-panel">
+      <div class="hud-mobile-edge"></div>
+      <nav class="flex flex-col gap-0.5 p-3">
+        <a href="/" class:list={["hud-mobile-link", current === '/' && 'active']}>
+          <span class="hud-ml-dot"></span>Home
+        </a>
+        <a href="/#features" class="hud-mobile-link">
+          <span class="hud-ml-dot"></span>Features
+        </a>
+        <button type="button" data-open-enroll class="hud-mobile-link w-full text-left">
+          <span class="hud-ml-dot"></span>Enrollment
+        </button>
+
+        <div class="hud-mobile-sep"></div>
+        <div class="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-text-faint">Products</div>
+        <a href="https://meet.argon.gl" target="_blank" rel="noopener" class="hud-mobile-link">
+          <span class="hud-ml-dot"></span>Argon Meet
+        </a>
+        <a href="https://pew.red" target="_blank" rel="noopener" class="hud-mobile-link">
+          <span class="hud-ml-dot"></span> Pew Pew Engine
+        </a>
+
+        <div class="hud-mobile-sep"></div>
+        <div class="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-text-faint">Developers</div>
+        <a href="https://docs.argon.gl" target="_blank" rel="noopener" class="hud-mobile-link">
+          <span class="hud-ml-dot"></span>Docs
+        </a>
+        <a href="https://bots.argon.gl/" target="_blank" rel="noopener" class="hud-mobile-link">
+          <span class="hud-ml-dot"></span>Bot API
+        </a>
+        <a href="https://console.argon.gl" target="_blank" rel="noopener" class="hud-mobile-link">
+          <span class="hud-ml-dot"></span>Console
+        </a>
+        <a href="https://github.com/argon-chat" target="_blank" rel="noopener" class="hud-mobile-link">
+          <span class="hud-ml-dot"></span>GitHub
+        </a>
+
+        <div class="hud-mobile-sep"></div>
+        <a href="/terms/" class:list={["hud-mobile-link dim", current === '/terms/' && 'active']}>Terms</a>
+        <a href="/privacy/" class:list={["hud-mobile-link dim", current === '/privacy/' && 'active']}>Privacy</a>
+      </nav>
+    </div>
+  </aside>
+</div>
+
+<script>
+  // ── Dropdown menus ──
+  function initDropdowns() {
+    document.querySelectorAll('.hud-dropdown').forEach(dd => {
+      const trigger = dd.querySelector('.hud-dropdown-trigger');
+      const panel = dd.querySelector('.hud-dropdown-panel') as HTMLElement;
+      if (!trigger || !panel) return;
+      let timeout: number;
+
+      const show = () => { clearTimeout(timeout); dd.classList.add('open'); };
+      const hide = () => { timeout = window.setTimeout(() => dd.classList.remove('open'), 150); };
+
+      trigger.addEventListener('mouseenter', show);
+      trigger.addEventListener('mouseleave', hide);
+      panel.addEventListener('mouseenter', show);
+      panel.addEventListener('mouseleave', hide);
+
+      // Also toggle on click for touch
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        dd.classList.toggle('open');
+      });
+    });
+
+    // Close all dropdowns on outside click
+    document.addEventListener('click', (e) => {
+      if (!(e.target as HTMLElement).closest('.hud-dropdown')) {
+        document.querySelectorAll('.hud-dropdown.open').forEach(dd => dd.classList.remove('open'));
+      }
+    });
+  }
+
+  // ── Enroll button fallback: navigate to home if no modal on page ──
+  function initEnrollFallback() {
+    document.querySelectorAll('[data-open-enroll]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!document.getElementById('enroll-modal')) {
+          window.location.href = '/?enroll=1';
+        }
+      });
+    });
+  }
+
+  // ── Circle-expand theme toggle (View Transitions API) ──
+  function initThemeToggle() {
+    const btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      const { top, left, width, height } = btn.getBoundingClientRect();
+      const x = left + width / 2;
+      const y = top + height / 2;
+      const maxR = Math.hypot(
+        Math.max(x, window.innerWidth - x),
+        Math.max(y, window.innerHeight - y)
+      );
+
+      const applyTheme = () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+      };
+
+      if (typeof document.startViewTransition !== 'function') {
+        applyTheme();
+        return;
+      }
+
+      const transition = document.startViewTransition(applyTheme);
+      transition.ready?.then(() => {
+        document.documentElement.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${maxR}px at ${x}px ${y}px)`] },
+          { duration: 500, easing: 'ease-in-out', pseudoElement: '::view-transition-new(root)' }
+        );
+      });
+    });
+  }
+
+  function initMobileMenu() {
+    const btn = document.getElementById('mobile-menu-btn');
+    const sidebar = document.getElementById('mobile-sidebar');
+    const backdrop = document.getElementById('mobile-sidebar-backdrop');
+    if (!btn || !sidebar) return;
+
+    function toggle() {
+      const isOpen = !sidebar!.classList.contains('hidden');
+      sidebar!.classList.toggle('hidden', isOpen);
+      btn!.querySelector('.mobile-menu-icon')?.classList.toggle('hidden', !isOpen);
+      btn!.querySelector('.mobile-close-icon')?.classList.toggle('hidden', isOpen);
+    }
+
+    btn.addEventListener('click', toggle);
+    backdrop?.addEventListener('click', toggle);
+    sidebar.querySelectorAll('a[href]').forEach(a => {
+      a.addEventListener('click', () => {
+        if (!sidebar!.classList.contains('hidden')) toggle();
+      });
+    });
+  }
+  // Scroll: hide/show + background fill
+  function initHudScroll() {
+    const nav = document.getElementById('hud-nav');
+    if (!nav) return;
+    let lastY = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      nav.classList.toggle('hud-scrolled', y > 50);
+      nav.classList.toggle('hud-hidden', y > lastY && y > 200);
+      lastY = y;
+    });
+  }
+
+  document.addEventListener('astro:page-load', () => { initDropdowns(); initEnrollFallback(); initThemeToggle(); initMobileMenu(); initHudScroll(); });
+  initDropdowns();
+  initEnrollFallback();
+  initThemeToggle();
+  initMobileMenu();
+  initHudScroll();
+</script>

@@ -1,0 +1,132 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { Newspaper, Download, FileText, Image, Palette } from 'lucide-astro';
+---
+
+<Layout title="Press Kit — Argon Chat" description="Argon Chat press resources. Logos, screenshots, company info, and brand guidelines for media use." image="/og/press.png">
+	<Navbar current="/press/" />
+
+	<!-- Hero -->
+	<section class="relative pt-32 sm:pt-40 pb-16 sm:pb-20 px-4 sm:px-6">
+		<div class="absolute left-1/2 top-1/4 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]"></div>
+
+		<div class="relative z-10 mx-auto max-w-4xl text-center">
+			<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/20 bg-accent/5 text-accent text-xs font-semibold mb-4">
+				<Newspaper class="size-3.5" />
+				Media
+			</div>
+			<h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">Press Kit</h1>
+			<p class="text-text-secondary mt-3 text-sm sm:text-base max-w-xl mx-auto">
+				Everything you need to write about Argon. Logos, facts, screenshots, and brand guidelines.
+			</p>
+		</div>
+	</section>
+
+	<!-- Company Info -->
+	<section class="px-4 sm:px-6 pb-20 sm:pb-24">
+		<div class="mx-auto max-w-5xl">
+			<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-6 flex items-center gap-2">
+				<FileText class="size-5 text-accent" />
+				About Argon
+			</h2>
+
+			<div class="rounded-2xl border border-oled-border bg-oled-surface p-6 sm:p-8">
+				<div class="grid sm:grid-cols-2 gap-6">
+					<div>
+						<h3 class="text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">Boilerplate</h3>
+						<p class="text-sm text-text-secondary leading-relaxed">
+							Argon Chat is a free communication platform combining voice chat, text messaging, screen sharing, and social games. Built for communities that value privacy and quality, Argon delivers crystal-clear audio and a modern interface — without ads or data mining.
+						</p>
+					</div>
+					<div class="space-y-4">
+						<div>
+							<h3 class="text-xs font-semibold uppercase tracking-wider text-text-muted mb-1">Company</h3>
+							<p class="text-sm text-text-primary">Argon Incorporated LLC</p>
+						</div>
+						<div>
+							<h3 class="text-xs font-semibold uppercase tracking-wider text-text-muted mb-1">Founded</h3>
+						<p class="text-sm text-text-primary">May 15, 2025</p>
+						</div>
+						<div>
+							<h3 class="text-xs font-semibold uppercase tracking-wider text-text-muted mb-1">Headquarters</h3>
+							<p class="text-sm text-text-primary">Yerevan, Armenia</p>
+						</div>
+						<div>
+							<h3 class="text-xs font-semibold uppercase tracking-wider text-text-muted mb-1">Website</h3>
+							<a href="https://argon.gl" class="text-sm text-accent hover:text-accent-hover transition-colors">argon.gl</a>
+						</div>
+						<div>
+							<h3 class="text-xs font-semibold uppercase tracking-wider text-text-muted mb-1">Press Contact</h3>
+							<a href="mailto:press@argon.gl" class="text-sm text-accent hover:text-accent-hover transition-colors">press@argon.gl</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Logo Assets -->
+	<section class="px-4 sm:px-6 pb-20 sm:pb-24">
+		<div class="mx-auto max-w-5xl">
+			<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-6 flex items-center gap-2">
+				<Image class="size-5 text-accent" />
+				Logo Assets
+			</h2>
+
+			<div class="grid sm:grid-cols-3 gap-4">
+				<!-- Logo on dark -->
+				<div class="group relative flex flex-col items-center justify-center rounded-2xl border border-oled-border bg-oled-surface p-8 min-h-[160px]">
+					<img src="/argon-cat.svg" alt="Argon logo on dark" class="h-16 w-16" style="filter: brightness(0) invert(1);" />
+					<span class="text-[11px] text-text-muted mt-3">White on dark</span>
+					<a href="/argon-cat.svg" download="argon-logo.svg" class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-accent">
+						<Download class="size-4" />
+					</a>
+				</div>
+
+				<!-- Logo on light -->
+				<div class="group relative flex flex-col items-center justify-center rounded-2xl border border-oled-border bg-white p-8 min-h-[160px]">
+					<img src="/argon-cat.svg" alt="Argon logo on light" class="h-16 w-16" style="filter: brightness(0);" />
+					<span class="text-[11px] text-zinc-400 mt-3">Black on light</span>
+					<a href="/argon-cat.svg" download="argon-logo.svg" class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-zinc-400 hover:text-accent">
+						<Download class="size-4" />
+					</a>
+				</div>
+
+				<!-- Logo accent -->
+				<div class="group relative flex flex-col items-center justify-center rounded-2xl border border-oled-border bg-oled-surface p-8 min-h-[160px]">
+					<img src="/argon-cat.svg" alt="Argon logo accent" class="h-16 w-16" style="filter: brightness(0) invert(0.5) sepia(1) hue-rotate(220deg) saturate(5);" />
+					<span class="text-[11px] text-text-muted mt-3">Accent violet</span>
+					<a href="/argon-cat.svg" download="argon-logo.svg" class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-accent">
+						<Download class="size-4" />
+					</a>
+				</div>
+			</div>
+
+			<div class="mt-4 flex items-center gap-3">
+				<a href="/branding/" class="inline-flex items-center gap-1.5 text-xs font-semibold text-accent hover:text-accent-hover transition-colors">
+					<Palette class="size-3.5" />
+					Full brand guidelines →
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- Usage guidelines -->
+	<section class="px-4 sm:px-6 pb-20 sm:pb-28">
+		<div class="mx-auto max-w-5xl">
+			<div class="rounded-2xl border border-oled-border bg-oled-surface p-6 sm:p-8">
+				<h2 class="text-base font-bold mb-3">Usage & Attribution</h2>
+				<ul class="text-sm text-text-secondary space-y-2">
+					<li class="flex items-start gap-2"><span class="text-accent mt-0.5">•</span> You may use the Argon name and logo in news articles, reviews, and editorial content.</li>
+					<li class="flex items-start gap-2"><span class="text-accent mt-0.5">•</span> Do not alter, recolor, or distort the logo beyond the provided variants.</li>
+					<li class="flex items-start gap-2"><span class="text-accent mt-0.5">•</span> Do not use the Argon brand to imply endorsement without written permission.</li>
+					<li class="flex items-start gap-2"><span class="text-accent mt-0.5">•</span> For press inquiries, reach out to <a href="mailto:press@argon.gl" class="text-accent hover:text-accent-hover transition-colors font-medium">press@argon.gl</a>.</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<Footer />
+</Layout>

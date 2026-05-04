@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import IconGenerator from '../components/IconGenerator.vue';
+import { Sparkles } from 'lucide-astro';
+---
+
+<Layout title="Icon Generator — Argon Chat" description="Internal tool for generating Argon icons and avatars." noindex={true}>
+	<Navbar />
+
+	<section class="relative pt-32 sm:pt-36 pb-20 sm:pb-28 px-4 sm:px-6">
+		<div class="absolute left-1/2 top-1/4 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]"></div>
+
+		<div class="relative z-10 mx-auto max-w-5xl">
+			<div class="text-center mb-12">
+				<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/20 bg-accent/5 text-accent text-xs font-semibold mb-4">
+					<Sparkles class="size-3.5" />
+					Internal Tool
+				</div>
+				<h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">Icon Generator</h1>
+				<p class="text-text-secondary mt-3 text-sm sm:text-base max-w-lg mx-auto">
+					Create custom icons and avatars with the Argon logo. Pick a shape, background, and color — then download in any size.
+				</p>
+			</div>
+
+			<IconGenerator client:load />
+		</div>
+	</section>
+
+	<Footer />
+</Layout>

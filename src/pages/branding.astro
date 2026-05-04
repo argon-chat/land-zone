@@ -1,0 +1,194 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { Sparkles, Download, Palette, Type, Shield } from 'lucide-astro';
+---
+
+<Layout title="Branding — Argon Chat" description="Argon brand assets, colors, typography, and usage guidelines." image="/og/branding.png">
+	<Navbar current="/branding/" />
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- HERO                                           -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section class="relative pt-32 sm:pt-40 pb-16 sm:pb-20 px-4 sm:px-6">
+		<div class="absolute left-1/2 top-1/4 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]"></div>
+
+		<div class="relative z-10 mx-auto max-w-4xl text-center">
+			<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/20 bg-accent/5 text-accent text-xs font-semibold mb-4">
+				<Sparkles class="size-3.5" />
+				Brand Kit
+			</div>
+			<h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">Branding</h1>
+			<p class="text-text-secondary mt-3 text-sm sm:text-base max-w-xl mx-auto">
+				Logo, colors, typography, and usage guidelines — everything you need to represent Argon.
+			</p>
+		</div>
+	</section>
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- LOGO                                           -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section id="logo" class="px-4 sm:px-6 pb-20 sm:pb-24">
+		<div class="mx-auto max-w-5xl">
+			<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-6 flex items-center gap-2">
+				<Download class="size-5 text-accent" />
+				Logo
+			</h2>
+
+			<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+				<!-- Logo on dark -->
+				<div class="group relative flex flex-col items-center justify-center rounded-2xl border border-oled-border bg-oled-surface p-8 min-h-[180px]">
+					<img src="/argon-cat.svg" alt="Argon logo" class="h-20 w-20" style="filter: brightness(0) invert(1);" />
+					<span class="text-[11px] text-text-muted mt-4">On dark</span>
+					<a href="/argon-cat.svg" download class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-accent">
+						<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+					</a>
+				</div>
+
+				<!-- Logo on light -->
+				<div class="group relative flex flex-col items-center justify-center rounded-2xl border border-oled-border bg-white p-8 min-h-[180px]">
+					<img src="/argon-cat.svg" alt="Argon logo" class="h-20 w-20" style="filter: brightness(0);" />
+					<span class="text-[11px] text-zinc-400 mt-4">On light</span>
+					<a href="/argon-cat.svg" download class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-zinc-400 hover:text-accent">
+						<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+					</a>
+				</div>
+
+				<!-- Logo colored -->
+				<div class="group relative flex flex-col items-center justify-center rounded-2xl border border-oled-border bg-oled-surface p-8 min-h-[180px]">
+					<img src="/argon-cat.svg" alt="Argon logo" class="h-20 w-20" style="filter: brightness(0) invert(0.5) sepia(1) hue-rotate(220deg) saturate(5);" />
+					<span class="text-[11px] text-text-muted mt-4">Accent color</span>
+					<a href="/argon-cat.svg" download class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-accent">
+						<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+					</a>
+				</div>
+			</div>
+
+			<p class="text-xs text-text-muted mt-4">SVG format — scales to any resolution. Right-click or use the download button.</p>
+		</div>
+	</section>
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- COLORS                                         -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section id="colors" class="px-4 sm:px-6 pb-20 sm:pb-24">
+		<div class="mx-auto max-w-5xl">
+			<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-6 flex items-center gap-2">
+				<Palette class="size-5 text-accent" />
+				Color Palette
+			</h2>
+
+			<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+				{[
+					{ name: 'Accent', hex: '#8b5cf6', cls: 'bg-[#8b5cf6]' },
+					{ name: 'Accent Hover', hex: '#a78bfa', cls: 'bg-[#a78bfa]' },
+					{ name: 'Accent Deep', hex: '#7c3aed', cls: 'bg-[#7c3aed]' },
+					{ name: 'Cyan', hex: '#06b6d4', cls: 'bg-[#06b6d4]' },
+					{ name: 'Success', hex: '#34d399', cls: 'bg-[#34d399]' },
+					{ name: 'Background', hex: '#020202', cls: 'bg-[#020202] border border-oled-border' },
+				].map((c) => (
+					<button
+						type="button"
+						class="group flex flex-col rounded-xl overflow-hidden border border-oled-border hover:border-accent/30 transition-all cursor-pointer color-swatch"
+						data-hex={c.hex}
+					>
+						<div class={`h-16 w-full ${c.cls}`}></div>
+						<div class="px-3 py-2.5 bg-oled-surface">
+							<div class="text-xs font-semibold text-text-primary">{c.name}</div>
+							<div class="text-[11px] font-mono text-text-muted group-hover:text-accent transition-colors">{c.hex}</div>
+						</div>
+					</button>
+				))}
+			</div>
+			<p class="text-xs text-text-muted mt-4">Click a swatch to copy the hex code.</p>
+		</div>
+	</section>
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- TYPOGRAPHY                                     -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section id="typography" class="px-4 sm:px-6 pb-20 sm:pb-24">
+		<div class="mx-auto max-w-5xl">
+			<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-6 flex items-center gap-2">
+				<Type class="size-5 text-accent" />
+				Typography
+			</h2>
+
+			<div class="grid sm:grid-cols-2 gap-4">
+				<div class="rounded-2xl border border-oled-border bg-oled-surface p-6">
+					<div class="text-xs font-semibold uppercase tracking-wider text-text-muted mb-3">Primary — Inter</div>
+					<p class="text-4xl font-black tracking-tight leading-tight">Aa Bb Cc</p>
+					<p class="text-lg font-medium text-text-secondary mt-2">The quick brown fox jumps over the lazy dog.</p>
+					<div class="flex flex-wrap gap-2 mt-4">
+						{['400 Regular', '500 Medium', '600 Semi', '700 Bold', '800 Extra', '900 Black'].map((w) => (
+							<span class="text-[10px] px-2 py-0.5 rounded-md bg-oled-elevated text-text-muted border border-oled-border-subtle">{w}</span>
+						))}
+					</div>
+				</div>
+
+				<div class="rounded-2xl border border-oled-border bg-oled-surface p-6">
+					<div class="text-xs font-semibold uppercase tracking-wider text-text-muted mb-3">Mono — JetBrains Mono</div>
+					<p class="text-4xl font-bold tracking-tight leading-tight font-mono">0123 {'{}'}</p>
+					<p class="text-lg font-mono text-text-secondary mt-2">console.log("argon")</p>
+					<div class="mt-4">
+						<span class="text-[10px] px-2 py-0.5 rounded-md bg-oled-elevated text-text-muted border border-oled-border-subtle">Used in code blocks & badges</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- GUIDELINES                                     -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section id="guidelines" class="px-4 sm:px-6 pb-20 sm:pb-24">
+		<div class="mx-auto max-w-5xl">
+			<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-6 flex items-center gap-2">
+				<Shield class="size-5 text-accent" />
+				Usage Guidelines
+			</h2>
+
+			<div class="grid sm:grid-cols-2 gap-4">
+				<div class="rounded-2xl border border-success/20 bg-success/5 p-5">
+					<div class="text-sm font-bold text-success mb-3">Do</div>
+					<ul class="text-sm text-text-secondary space-y-2 list-none">
+						<li class="flex items-start gap-2"><span class="text-success mt-0.5">✓</span> Use the official SVG logo files</li>
+						<li class="flex items-start gap-2"><span class="text-success mt-0.5">✓</span> Keep sufficient clear space around the logo</li>
+						<li class="flex items-start gap-2"><span class="text-success mt-0.5">✓</span> Use the accent color <code class="text-xs bg-oled-elevated px-1 py-0.5 rounded">#8b5cf6</code> for brand references</li>
+						<li class="flex items-start gap-2"><span class="text-success mt-0.5">✓</span> Reference the brand page when in doubt</li>
+					</ul>
+				</div>
+
+				<div class="rounded-2xl border border-red-500/20 bg-red-500/5 p-5">
+					<div class="text-sm font-bold text-red-400 mb-3">Don't</div>
+					<ul class="text-sm text-text-secondary space-y-2 list-none">
+						<li class="flex items-start gap-2"><span class="text-red-400 mt-0.5">✕</span> Distort, rotate, or skew the logo</li>
+						<li class="flex items-start gap-2"><span class="text-red-400 mt-0.5">✕</span> Use the logo at sizes below 16px</li>
+						<li class="flex items-start gap-2"><span class="text-red-400 mt-0.5">✕</span> Place the logo on busy or low-contrast backgrounds</li>
+						<li class="flex items-start gap-2"><span class="text-red-400 mt-0.5">✕</span> Modify the cat silhouette shape</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<Footer />
+</Layout>
+
+<script>
+	document.querySelectorAll('.color-swatch').forEach((el) => {
+		el.addEventListener('click', () => {
+			const hex = (el as HTMLElement).dataset.hex;
+			if (hex) {
+				navigator.clipboard.writeText(hex);
+				const label = el.querySelector('.font-mono');
+				if (label) {
+					const orig = label.textContent;
+					label.textContent = 'Copied!';
+					setTimeout(() => { label.textContent = orig; }, 1200);
+				}
+			}
+		});
+	});
+</script>

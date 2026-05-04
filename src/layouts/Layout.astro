@@ -1,0 +1,257 @@
+---
+import '../styles/global.css';
+import CookieBanner from '../components/CookieBanner.astro';
+
+interface Props {
+	title?: string;
+	description?: string;
+	image?: string;
+	noindex?: boolean;
+}
+
+const {
+	title = 'Argon Chat — Where conversations come alive',
+	description = 'Voice chat, messaging, and community — all in one place. Crystal-clear audio, rich messaging, screen sharing, and games. Free and open source.',
+	image = '/og/index.png',
+	noindex = false,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<link rel="canonical" href={canonicalURL} />
+		{noindex && <meta name="robots" content="noindex, nofollow" />}
+		<title>{title}</title>
+		<meta name="description" content={description} />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+		<!-- Open Graph -->
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:image" content={new URL(image, Astro.site)} />
+		<meta property="og:site_name" content="Argon Chat" />
+		<meta property="og:locale" content="en_US" />
+
+		<!-- Twitter Card -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={new URL(image, Astro.site)} />
+		<meta name="twitter:site" content="@argonchat" />
+
+		<!-- Structured Data -->
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "WebApplication",
+			"name": "Argon Chat",
+			"url": "https://argon.gl",
+			"description": description,
+			"applicationCategory": "CommunicationApplication",
+			"operatingSystem": "Windows, macOS, Linux",
+			"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+			"author": { "@type": "Organization", "name": "Argon Incorporated LLC", "url": "https://argon.gl" }
+		})} />
+
+		<style>
+			/* View Transition for theme toggle */
+			::view-transition-old(root),
+			::view-transition-new(root) {
+				animation: none;
+				mix-blend-mode: normal;
+			}
+		</style>
+
+		<script is:inline>
+			(function() {
+				var t = localStorage.getItem('theme');
+				if (t === 'light') {
+					document.documentElement.classList.remove('dark');
+				} else if (t === 'dark') {
+					document.documentElement.classList.add('dark');
+				} else if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+					document.documentElement.classList.remove('dark');
+				}
+			})();
+		</script>
+	</head>
+	<body class="min-h-screen overflow-x-hidden flex flex-col">
+		<a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-accent focus:text-white focus:text-sm focus:font-medium">Skip to content</a>
+
+		<div class="cursor-glow" id="cursor-glow"></div>
+
+		<!-- Sleek line cursor trail -->
+		<canvas id="cursor-trail" class="fixed inset-0 z-[9999] pointer-events-none"></canvas>
+
+		<!-- Progressive blur under HUD navbar -->
+		<div class="progressive-blur-nav"></div>
+
+		<slot />
+
+		<CookieBanner />
+
+		<!-- Back to top -->
+		<button id="back-to-top" type="button" aria-label="Back to top"
+			class="fixed bottom-6 right-6 z-40 w-10 h-10 rounded-full bg-oled-elevated border border-oled-border-subtle flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-oled-hover transition-all opacity-0 translate-y-4 pointer-events-none cursor-pointer shadow-lg">
+			<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+		</button>
+	</body>
+</html>
+
+<script is:inline>
+	function initBackToTop() {
+		const btn = document.getElementById('back-to-top');
+		if (!btn) return;
+		let visible = false;
+		const toggle = () => {
+			const show = window.scrollY > 400;
+			if (show !== visible) {
+				visible = show;
+				btn.classList.toggle('opacity-0', !show);
+				btn.classList.toggle('translate-y-4', !show);
+				btn.classList.toggle('pointer-events-none', !show);
+				btn.classList.toggle('opacity-100', show);
+				btn.classList.toggle('translate-y-0', show);
+				btn.classList.toggle('pointer-events-auto', show);
+			}
+		};
+		window.addEventListener('scroll', toggle, { passive: true });
+		btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+		toggle();
+	}
+
+	function initCursorGlow() {
+		const glow = document.getElementById('cursor-glow');
+		if (!glow) return;
+		let raf = 0;
+		document.addEventListener('mousemove', (e) => {
+			cancelAnimationFrame(raf);
+			raf = requestAnimationFrame(() => {
+				glow.style.left = e.clientX + 'px';
+				glow.style.top = e.clientY + 'px';
+				glow.style.opacity = '0.15';
+			});
+		});
+		document.addEventListener('mouseleave', () => {
+			glow.style.opacity = '0';
+		});
+	}
+
+	function initReveal() {
+		const els = document.querySelectorAll('.reveal');
+		if (!els.length) return;
+		const obs = new IntersectionObserver((entries) => {
+			entries.forEach(e => {
+				if (e.isIntersecting) {
+					e.target.classList.add('visible');
+					obs.unobserve(e.target);
+				}
+			});
+		}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+		els.forEach(el => obs.observe(el));
+	}
+
+	// ── Sleek cursor trail ──
+	function initCursorTrail() {
+		// Skip on touch / mobile
+		if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
+
+		const canvas = document.getElementById('cursor-trail');
+		if (!canvas || !(canvas instanceof HTMLCanvasElement)) return;
+		const ctx = canvas.getContext('2d');
+		if (!ctx) return;
+
+		function resize() {
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+		}
+		resize();
+		window.addEventListener('resize', resize);
+
+		const TRAIL_LENGTH = 50;
+		const trail = [];
+		let mouseX = -100, mouseY = -100;
+
+		document.addEventListener('mousemove', (e) => {
+			mouseX = e.clientX;
+			mouseY = e.clientY;
+		});
+
+		document.addEventListener('mouseleave', () => {
+			mouseX = -1000;
+			mouseY = -1000;
+		});
+
+		function draw() {
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+			// Add current position with spring physics
+			trail.unshift({ x: mouseX, y: mouseY });
+			if (trail.length > TRAIL_LENGTH) trail.pop();
+
+			// Smooth trailing positions
+			for (let i = 1; i < trail.length; i++) {
+				trail[i].x += (trail[i - 1].x - trail[i].x) * 0.35;
+				trail[i].y += (trail[i - 1].y - trail[i].y) * 0.35;
+			}
+
+			if (trail.length < 3 || mouseX < -500) {
+				requestAnimationFrame(draw);
+				return;
+			}
+
+			const isDark = document.documentElement.classList.contains('dark');
+
+			// Draw trail
+			ctx.beginPath();
+			ctx.moveTo(trail[0].x, trail[0].y);
+
+			for (let i = 1; i < trail.length - 1; i++) {
+				const xc = (trail[i].x + trail[i + 1].x) / 2;
+				const yc = (trail[i].y + trail[i + 1].y) / 2;
+				ctx.quadraticCurveTo(trail[i].x, trail[i].y, xc, yc);
+			}
+
+			ctx.strokeStyle = isDark
+				? 'rgba(139, 92, 246, 0.3)'
+				: 'rgba(139, 92, 246, 0.2)';
+			ctx.lineWidth = 2;
+			ctx.lineCap = 'round';
+			ctx.stroke();
+
+			// Draw thinner inner line
+			ctx.beginPath();
+			ctx.moveTo(trail[0].x, trail[0].y);
+			for (let i = 1; i < Math.min(trail.length - 1, 20); i++) {
+				const xc = (trail[i].x + trail[i + 1].x) / 2;
+				const yc = (trail[i].y + trail[i + 1].y) / 2;
+				ctx.quadraticCurveTo(trail[i].x, trail[i].y, xc, yc);
+			}
+			ctx.strokeStyle = isDark
+				? 'rgba(192, 132, 252, 0.5)'
+				: 'rgba(139, 92, 246, 0.35)';
+			ctx.lineWidth = 1;
+			ctx.stroke();
+
+			requestAnimationFrame(draw);
+		}
+		draw();
+	}
+
+	initBackToTop();
+	initCursorGlow();
+	initReveal();
+	initCursorTrail();
+	document.addEventListener('astro:page-load', () => { initBackToTop(); initCursorGlow(); initReveal(); initCursorTrail(); });
+</script>

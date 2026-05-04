@@ -1,0 +1,18 @@
+{
+    "endpoints": [
+        "releases.argon.zone"
+    ],
+    "limitedRegions": [
+        "RU"
+    ],
+    "baseUrl": "{domain}/pkg/argon/{platform}/{channel}/{version}/{package}",
+    "manifest": "version.{channel}.json",
+    "self": {
+        "latestHash": "sha256:61356fd9f76bc28621f9663609e4bdfd17e5fb1223bcdf6afd8f5e9b661602da",
+        "url": "{domain}/ArgonChat_Setup.exe"
+    },
+    "endpoints_v2": [
+        "updates.argon.gl"
+    ],
+    "componentManifest": "{component}.{channel}.json"
+}

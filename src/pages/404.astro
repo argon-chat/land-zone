@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { Ghost, ArrowLeft, Home } from 'lucide-astro';
+---
+
+<Layout title="404 — Page Not Found | Argon Chat" description="The page you're looking for doesn't exist or has been moved." noindex={true}>
+	<Navbar />
+
+	<section class="relative pt-32 pb-16 sm:pb-24 px-4 sm:px-6 min-h-[70vh] flex items-center justify-center">
+		<!-- Background glow -->
+		<div class="absolute left-1/2 top-1/3 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]"></div>
+
+		<div class="relative z-10 mx-auto max-w-lg text-center">
+			<!-- Glitchy 404 number -->
+			<div class="relative mb-6">
+				<span class="text-[120px] sm:text-[160px] font-black leading-none tracking-tighter text-oled-border select-none" aria-hidden="true">404</span>
+				<div class="absolute inset-0 flex items-center justify-center">
+					<div class="w-20 h-20 rounded-2xl bg-accent/10 border border-accent/15 flex items-center justify-center">
+						<Ghost class="size-10 text-accent" />
+					</div>
+				</div>
+			</div>
+
+			<h1 class="animate-fade-in-up text-2xl sm:text-3xl md:text-4xl font-black tracking-tight">
+				Page not found
+			</h1>
+			<p class="animate-fade-in-up-delay-1 text-text-secondary mt-4 text-sm sm:text-base max-w-md mx-auto">
+				This page doesn't exist, was moved, or you followed a broken link. Let's get you back on track.
+			</p>
+
+			<div class="animate-fade-in-up-delay-2 mt-8 flex flex-wrap items-center justify-center gap-3">
+				<a href="/" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-accent px-6 py-3 text-sm font-bold text-white hover:bg-accent-hover hover:shadow-lg hover:shadow-accent/20 transition-all hover:-translate-y-0.5">
+					<Home class="size-4" />
+					Back to Home
+				</a>
+				<button type="button" onclick="history.back()" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-oled-border px-6 py-3 text-sm font-medium text-text-secondary hover:text-text-primary hover:border-oled-border-subtle hover:bg-oled-elevated transition-all cursor-pointer">
+					<ArrowLeft class="size-4" />
+					Go Back
+				</button>
+			</div>
+		</div>
+	</section>
+
+	<Footer />
+</Layout>

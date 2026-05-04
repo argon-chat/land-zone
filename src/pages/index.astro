@@ -1,0 +1,1146 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import ChatMockup from '../components/ChatMockup.vue';
+import VoiceWaveform from '../components/VoiceWaveform.vue';
+import CoinRain from '../components/CoinRain.vue';
+import {
+  Mic, MicOff, Users, Shield, Monitor, Gamepad2,
+  Lock, Zap, ArrowRight, Download, Volume2,
+  Headphones, ScreenShare, Sparkles, Heart,
+  Crown, Trophy, Gift, Star, Swords
+} from 'lucide-astro';
+---
+
+<Layout>
+	<Navbar current="/" />
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- HERO                                           -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section id="main-content" class="relative min-h-[100vh] overflow-hidden flex flex-col">
+		<!-- Background -->
+		<div class="absolute inset-0 hero-bg-gradient"></div>
+		<canvas id="hero-particles" class="absolute inset-0 pointer-events-none z-[1]"></canvas>
+
+		<!-- Hero heading + CTA -->
+		<div class="relative z-10 pt-40 sm:pt-48 md:pt-56 pb-10 sm:pb-14 px-4 sm:px-6 text-center">
+			<h1 class="hero-title text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl" id="hero-scramble">
+				<span class="hero-word" data-word="Talk.">Talk.</span>
+				<span class="hero-word" data-word="Play.">Play.</span>
+				<span class="hero-word hero-gradient" data-word="Hang out.">Hang out.</span>
+			</h1>
+			<p class="animate-fade-in-up-delay-1 mx-auto mt-6 max-w-lg text-sm sm:text-base md:text-lg leading-relaxed text-text-secondary">
+				Voice, text, screen share and games — all in one place.<br class="hidden sm:block" />
+				Built for communities that actually care.
+			</p>
+			<div class="animate-fade-in-up-delay-2 mt-8 flex flex-wrap items-center justify-center gap-3">
+				<button type="button" class="hero-cta-primary group confetti-trigger" data-open-enroll>
+					<Download class="size-4" />
+					Request Invite
+					<span class="hero-cta-shine"></span>
+				</button>
+			</div>
+		</div>
+
+		<!-- Bottom: LIVE APP MOCKUP — the hero IS the product -->
+		<div class="relative z-10 flex-1 flex items-end justify-center px-2 sm:px-6 pb-0">
+			<div class="hero-app-frame animate-fade-in-up-delay-2">
+				<!-- App titlebar -->
+				<div class="app-titlebar">
+					<div class="flex items-center gap-2">
+						<div class="flex gap-1.5">
+							<div class="w-3 h-3 rounded-full bg-red-500/70"></div>
+							<div class="w-3 h-3 rounded-full bg-yellow-500/70"></div>
+							<div class="w-3 h-3 rounded-full bg-green-500/70"></div>
+						</div>
+						<span class="text-[11px] font-medium text-text-muted ml-2">Argon Chat</span>
+					</div>
+					<div class="flex items-center gap-1.5">
+						<div class="app-titlebar-pill">
+							<span class="w-1.5 h-1.5 rounded-full bg-green-400 shadow-[0_0_6px_rgba(34,197,94,0.6)]"></span>
+							<span class="text-[10px] text-text-muted font-medium" id="hero-online-count">4,218 online</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- App body: sidebar + main -->
+				<div class="app-body">
+					<!-- Sidebar -->
+					<div class="app-sidebar">
+						<!-- Server name -->
+						<div class="app-server-header">
+							<div class="w-8 h-8 rounded-xl bg-accent/15 flex items-center justify-center shrink-0">
+								<img src="/argon-cat.svg" alt="Argon" class="size-5" style="filter: brightness(0) invert(0.6) sepia(1) hue-rotate(220deg) saturate(3);" />
+							</div>
+							<div>
+								<div class="text-[11px] font-bold text-text-primary">Argon HQ</div>
+								<div class="text-[9px] text-text-muted">128 members</div>
+							</div>
+						</div>
+
+						<!-- Channels -->
+						<div class="app-channels">
+							<div class="app-channel-category">TEXT CHANNELS</div>
+							<div class="app-channel active">
+								<span class="text-text-faint">#</span> general
+							</div>
+							<div class="app-channel">
+								<span class="text-text-faint">#</span> off-topic
+							</div>
+							<div class="app-channel">
+								<span class="text-text-faint">#</span> showcase
+							</div>
+
+							<div class="app-channel-category mt-3">VOICE CHANNELS</div>
+							<div class="app-channel voice-active">
+								<Volume2 class="size-3 text-green-400" />
+								<span>Lounge</span>
+								<span class="ml-auto text-[9px] text-text-faint">4</span>
+							</div>
+							<!-- Voice users under channel -->
+							<div class="app-voice-users">
+								<div class="app-voice-user">
+									<img src="/avatars/yuuki.svg" alt="" class="w-5 h-5 rounded-full ring-[1.5px] ring-lime-400/60 shadow-[0_0_8px_rgba(132,255,90,0.3)]" />
+									<span class="text-[10px] text-text-secondary">Yuuki</span>
+									<div class="flex gap-[2px] ml-auto">
+										<div class="voice-bar-mini"></div>
+										<div class="voice-bar-mini"></div>
+										<div class="voice-bar-mini"></div>
+									</div>
+								</div>
+								<div class="app-voice-user">
+									<img src="/avatars/ren.svg" alt="" class="w-5 h-5 rounded-full" />
+									<span class="text-[10px] text-text-secondary">Ren</span>
+									<Mic class="size-2.5 text-text-faint ml-auto" />
+								</div>
+								<div class="app-voice-user">
+									<img src="/avatars/boba.svg" alt="" class="w-5 h-5 rounded-full" />
+									<span class="text-[10px] text-text-secondary">Boba</span>
+									<ScreenShare class="size-2.5 text-accent-2 ml-auto" />
+								</div>
+								<div class="app-voice-user">
+									<img src="/avatars/kai.svg" alt="" class="w-5 h-5 rounded-full" />
+									<span class="text-[10px] text-text-muted">Kai</span>
+									<MicOff class="size-2.5 text-red-400/50 ml-auto" />
+								</div>
+							</div>
+							<div class="app-channel">
+								<Volume2 class="size-3 text-text-faint" />
+								<span>Gaming</span>
+							</div>
+						</div>
+
+						<!-- User bar at bottom -->
+						<div class="app-user-bar">
+							<div class="w-7 h-7 rounded-full bg-accent/20 flex items-center justify-center">
+								<span class="text-[9px] font-bold text-accent">Y</span>
+							</div>
+							<div class="flex-1 min-w-0">
+								<div class="text-[10px] font-semibold text-text-primary truncate">You</div>
+								<div class="text-[8px] text-green-400">Online</div>
+							</div>
+							<div class="flex gap-1">
+								<div class="w-5 h-5 rounded-md bg-oled-hover flex items-center justify-center">
+									<Mic class="size-2.5 text-text-muted" />
+								</div>
+								<div class="w-5 h-5 rounded-md bg-oled-hover flex items-center justify-center">
+									<Headphones class="size-2.5 text-text-muted" />
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Main content area -->
+					<div class="app-main">
+						<!-- Channel header -->
+						<div class="app-main-header">
+							<span class="text-text-faint font-medium">#</span>
+							<span class="text-[12px] font-semibold text-text-primary">general</span>
+							<div class="ml-auto flex items-center gap-2">
+								<div class="app-header-pill">
+									<Gamepad2 class="size-3 text-accent-3" />
+									<span>Pong</span>
+								</div>
+								<Users class="size-3.5 text-text-muted" />
+							</div>
+						</div>
+
+						<!-- Messages -->
+						<div class="app-messages" id="hero-messages">
+							<div class="app-msg" data-delay="0">
+								<img src="/avatars/boba.svg" alt="" class="app-msg-avatar-img" />
+								<div>
+									<div class="app-msg-meta"><span class="app-msg-name" style="color:#c084fc;">Boba</span><span class="app-msg-time">Today at 11:42 PM</span></div>
+									<div class="app-msg-text">yo anyone wanna play pong?</div>
+								</div>
+							</div>
+							<div class="app-msg" data-delay="600">
+								<img src="/avatars/yuuki.svg" alt="" class="app-msg-avatar-img" />
+								<div>
+									<div class="app-msg-meta"><span class="app-msg-name" style="color:#a78bfa;">Yuuki</span><span class="app-msg-time">Today at 11:42 PM</span></div>
+									<div class="app-msg-text">im in 🎮 join voice</div>
+								</div>
+							</div>
+							<div class="app-msg" data-delay="1200">
+								<img src="/avatars/ren.svg" alt="" class="app-msg-avatar-img" />
+								<div>
+									<div class="app-msg-meta"><span class="app-msg-name" style="color:#22d3ee;">Ren</span><span class="app-msg-time">Today at 11:43 PM</span></div>
+									<div class="app-msg-text">lol bet, prepare to lose</div>
+								</div>
+							</div>
+							<div class="app-msg" data-delay="1800">
+								<img src="/avatars/kai.svg" alt="" class="app-msg-avatar-img" />
+								<div>
+									<div class="app-msg-meta"><span class="app-msg-name" style="color:#34d399;">Kai</span><span class="app-msg-time">Today at 11:43 PM</span></div>
+									<div class="app-msg-text">nice, just got the <span class="text-amber-400 font-semibold">Year 2026</span> coin btw 🪙</div>
+								</div>
+							</div>
+							<div class="app-msg" data-delay="2400">
+								<img src="/avatars/boba.svg" alt="" class="app-msg-avatar-img" />
+								<div>
+									<div class="app-msg-meta"><span class="app-msg-name" style="color:#c084fc;">Boba</span><span class="app-msg-time">Today at 11:43 PM</span></div>
+									<div class="app-msg-text">wait HOW. i'm still level 8 💀</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Typing indicator + input -->
+						<div class="app-input-area">
+							<div class="app-typing" id="hero-typing">
+								<span class="typing-dot"></span>
+								<span class="typing-dot"></span>
+								<span class="typing-dot"></span>
+								<span class="text-[10px] text-text-muted ml-1"><strong>Yuuki</strong> is typing...</span>
+							</div>
+							<div class="app-input">
+								<span class="text-[11px] text-text-faint">Message #general</span>
+								<div class="flex gap-2 ml-auto">
+									<Sparkles class="size-3.5 text-text-faint" />
+									<Gift class="size-3.5 text-text-faint" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Fade out at bottom -->
+		<div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-oled-black to-transparent z-20 pointer-events-none"></div>
+	</section>
+
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- SECTION: Crystal Clear Voice                   -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section class="py-24 sm:py-32 px-4 sm:px-6">
+		<div class="mx-auto max-w-6xl">
+			<div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+				<div class="reveal">
+					<span class="section-label">Voice-First</span>
+					<h2 class="mt-3 text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
+						Crystal clear,<br/>every time
+					</h2>
+					<p class="text-text-secondary mt-4 text-base sm:text-lg leading-relaxed max-w-lg">
+						AI-powered noise suppression, voice isolation, and ultra-low latency audio.
+						Whether you're in a team meeting or a late-night gaming session — everyone sounds perfect.
+					</p>
+
+					<div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3">
+						<div class="glass rounded-xl p-4 feature-card">
+							<Volume2 class="size-5 text-accent mb-2" />
+							<h3 class="text-sm font-semibold">Noise Suppression</h3>
+							<p class="text-[11px] text-text-muted mt-1">DTLN-powered AI removes background noise</p>
+						</div>
+						<div class="glass rounded-xl p-4 feature-card">
+							<Headphones class="size-5 text-accent mb-2" />
+							<h3 class="text-sm font-semibold">Voice Isolation</h3>
+							<p class="text-[11px] text-text-muted mt-1">Only your voice gets through, nothing else</p>
+						</div>
+						<div class="glass rounded-xl p-4 feature-card">
+							<Zap class="size-5 text-accent mb-2" />
+							<h3 class="text-sm font-semibold">Ultra-low Latency</h3>
+							<p class="text-[11px] text-text-muted mt-1">WebRTC SFU for real-time audio</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Voice channel mockup (authentic to client) -->
+				<div class="reveal reveal-delay-2 flex justify-center">
+					<div class="voice-mockup">
+						<!-- Header -->
+						<div class="voice-mockup-header">
+							<Volume2 class="size-4 text-green-400" />
+							<span class="text-sm font-semibold text-text-primary">Lounge</span>
+							<span class="text-[10px] text-text-muted ml-auto">3 connected</span>
+						</div>
+
+						<!-- Participants -->
+						<div class="voice-mockup-body">
+							<!-- Yuuki — speaking -->
+							<div class="voice-user">
+								<img src="/avatars/yuuki.svg" alt="" class="voice-avatar speaking" />
+								<div class="flex-1 min-w-0">
+									<div class="text-xs font-medium text-text-primary">Yuuki</div>
+									<div class="text-[10px] text-lime-400">Speaking</div>
+								</div>
+								<div class="flex items-center gap-0.5">
+									<div class="voice-bar" style="height:8px"></div>
+									<div class="voice-bar"></div>
+									<div class="voice-bar"></div>
+									<div class="voice-bar"></div>
+								</div>
+							</div>
+
+							<!-- Ren — listening -->
+							<div class="voice-user">
+								<img src="/avatars/ren.svg" alt="" class="voice-avatar" />
+								<div class="flex-1 min-w-0">
+									<div class="text-xs font-medium text-text-primary">Ren</div>
+									<div class="text-[10px] text-text-muted">Listening</div>
+								</div>
+								<Mic class="size-3.5 text-text-muted" />
+							</div>
+
+							<!-- Boba — screen sharing -->
+							<div class="voice-user">
+								<img src="/avatars/boba.svg" alt="" class="voice-avatar" />
+								<div class="flex-1 min-w-0">
+									<div class="text-xs font-medium text-text-primary">Boba</div>
+									<div class="text-[10px] text-accent-2">Sharing screen</div>
+								</div>
+								<ScreenShare class="size-3.5 text-accent-2" />
+							</div>
+
+							<!-- Kai — muted -->
+							<div class="voice-user">
+								<img src="/avatars/kai.svg" alt="" class="voice-avatar" />
+								<div class="flex-1 min-w-0">
+									<div class="text-xs font-medium text-text-primary">Kai</div>
+									<div class="text-[10px] text-text-muted">Muted</div>
+								</div>
+								<MicOff class="size-3.5 text-red-400/70" />
+							</div>
+						</div>
+
+						<!-- VU Meter -->
+						<div class="voice-mockup-vu">
+							<VoiceWaveform client:visible />
+						</div>
+
+						<!-- Controls -->
+						<div class="voice-controls">
+							<button class="voice-ctrl-btn active" aria-label="Microphone">
+								<Mic class="size-4" />
+							</button>
+							<button class="voice-ctrl-btn" aria-label="Headphones">
+								<Headphones class="size-4" />
+							</button>
+							<button class="voice-ctrl-btn" aria-label="Screen share">
+								<ScreenShare class="size-4" />
+							</button>
+							<button class="voice-ctrl-btn danger" aria-label="Disconnect">
+								<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- SECTION: More Than Text                        -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section class="py-24 sm:py-32 px-4 sm:px-6 bg-oled-surface/30">
+		<div class="mx-auto max-w-6xl">
+			<div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+				<!-- Chat mockup -->
+				<div class="reveal order-2 lg:order-1 flex justify-center">
+					<ChatMockup client:visible />
+				</div>
+
+				<div class="reveal order-1 lg:order-2">
+					<span class="section-label">Messaging</span>
+					<h2 class="mt-3 text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
+						More than just text
+					</h2>
+					<p class="text-text-secondary mt-4 text-base sm:text-lg leading-relaxed max-w-lg">
+						Rich messages with formatting, mentions, spoilers, file sharing, and emoji.
+						Threaded replies keep conversations organized.
+					</p>
+
+					<div class="mt-6 space-y-3">
+						<div class="flex items-center gap-3">
+							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-subtle text-[10px] font-bold text-accent">✓</span>
+							<span class="text-sm text-text-secondary"><strong class="text-text-primary">Rich text</strong> — bold, italic, spoilers, code, mentions</span>
+						</div>
+						<div class="flex items-center gap-3">
+							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-subtle text-[10px] font-bold text-accent">✓</span>
+							<span class="text-sm text-text-secondary"><strong class="text-text-primary">File sharing</strong> — up to 8 MB with instant previews</span>
+						</div>
+						<div class="flex items-center gap-3">
+							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-subtle text-[10px] font-bold text-accent">✓</span>
+							<span class="text-sm text-text-secondary"><strong class="text-text-primary">DMs & channels</strong> — text, voice, and announcements</span>
+						</div>
+						<div class="flex items-center gap-3">
+							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-subtle text-[10px] font-bold text-accent">✓</span>
+							<span class="text-sm text-text-secondary"><strong class="text-text-primary">Offline cache</strong> — pick up where you left off</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- SECTION: PlayFrame — Games                     -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section class="py-24 sm:py-32 px-4 sm:px-6 relative overflow-hidden">
+		<div class="mx-auto max-w-6xl">
+			<div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+				<div class="reveal">
+					<div class="flex items-center gap-2 mb-3">
+						<span class="section-label">PlayFrame</span>
+						<span class="text-[9px] font-bold uppercase tracking-wider bg-accent/10 text-accent px-2 py-0.5 rounded-full border border-accent/20">Technology</span>
+					</div>
+					<h2 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
+						Games inside<br/>your calls
+					</h2>
+					<p class="text-text-secondary mt-4 text-base sm:text-lg leading-relaxed max-w-lg">
+						PlayFrame is our built-in game platform. Launch multiplayer games directly inside voice channels — no installs, no tab switching. Just play.
+					</p>
+
+					<div class="mt-6 space-y-3">
+						<div class="flex items-center gap-3">
+							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-3/10 text-[10px] font-bold text-accent-3">⚡</span>
+							<span class="text-sm text-text-secondary">P2P Multiplayer</span>
+						</div>
+						<div class="flex items-center gap-3">
+							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-3/10 text-[10px] font-bold text-accent-3">⚡</span>
+							<span class="text-sm text-text-secondary">Sandboxed — games can't access your data</span>
+						</div>
+						<div class="flex items-center gap-3">
+							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-3/10 text-[10px] font-bold text-accent-3">⚡</span>
+							<span class="text-sm text-text-secondary">Screen share in 4K/60fps alongside games</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- PlayFrame mockup -->
+				<div class="reveal reveal-delay-2 flex justify-center">
+					<div class="playframe-mockup">
+						<div class="playframe-header">
+							<Gamepad2 class="size-4 text-accent-3" />
+							<span class="text-sm font-semibold text-text-primary">PlayFrame</span>
+							<span class="playframe-badge">In Voice</span>
+						</div>
+						<div class="playframe-grid">
+							<!-- Game cards -->
+							<div class="playframe-card">
+								<div class="playframe-icon" style="background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(139,92,246,0.05));">
+									<Swords class="size-8 text-accent" />
+								</div>
+								<span class="text-sm font-semibold mt-3">Pong</span>
+								<span class="text-[10px] text-text-muted">2 players • Classic</span>
+								<button class="playframe-play">Play</button>
+							</div>
+							<div class="playframe-card">
+								<div class="playframe-icon" style="background: linear-gradient(135deg, rgba(6,182,212,0.2), rgba(6,182,212,0.05));">
+									<Sparkles class="size-8 text-accent-2" />
+								</div>
+								<span class="text-sm font-semibold mt-3">Snake</span>
+								<span class="text-[10px] text-text-muted">Solo • Highscore</span>
+								<button class="playframe-play">Play</button>
+							</div>
+							<div class="playframe-card coming-soon">
+								<div class="playframe-icon" style="background: linear-gradient(135deg, rgba(192,132,252,0.1), rgba(192,132,252,0.03));">
+									<Gamepad2 class="size-8 text-text-muted" />
+								</div>
+								<span class="text-sm font-medium text-text-muted mt-3">More soon</span>
+								<span class="text-[10px] text-text-faint">SDK available</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- SECTION: Inventory & Leveling                  -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section class="py-24 sm:py-32 px-4 sm:px-6 bg-oled-surface/30 relative overflow-hidden">
+		<!-- Coin rain background -->
+		<CoinRain client:visible />
+
+		<div class="mx-auto max-w-6xl relative z-10">
+			<div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+				<!-- Inventory mockup -->
+				<div class="reveal order-2 lg:order-1 flex justify-center">
+					<div class="inventory-mockup">
+						<!-- Item grid -->
+						<div class="inventory-grid">
+							<!-- Staff Coin — Relic (slow spin + shimmer) -->
+							<div class="inv-item relic">
+								<div class="inv-item-inner">
+									<div class="inv-coin-icon relic-glow coin-spin">
+										<img src="/coins/staff.webp" alt="Staff Coin" width="64" height="64" class="pixelated" />
+									</div>
+									<span class="inv-label relic-text">Staff Coin</span>
+									<span class="inv-rarity relic-badge">RELIC</span>
+								</div>
+							</div>
+
+							<!-- Year Coin — Legendary (bounce) -->
+							<div class="inv-item legendary">
+								<div class="inv-item-inner">
+									<div class="inv-coin-icon legendary-glow coin-bounce">
+										<img src="/coins/year2026.webp" alt="Year 2026 Coin" width="64" height="64" class="pixelated" />
+									</div>
+									<span class="inv-label legendary-text">Year 2026</span>
+									<span class="inv-rarity legendary-badge">LEGENDARY</span>
+								</div>
+							</div>
+
+							<!-- Contributor — Rare (wobble) -->
+							<div class="inv-item rare">
+								<div class="inv-item-inner">
+									<div class="inv-coin-icon rare-glow coin-wobble">
+										<img src="/coins/contributor.webp" alt="Contributor Coin" width="64" height="64" class="pixelated" />
+									</div>
+									<span class="inv-label rare-text">Contributor</span>
+									<span class="inv-rarity rare-badge">RARE</span>
+								</div>
+							</div>
+
+							<!-- Secret Impact — CENSORED (pixelated blur, reveal on hover) -->
+							<div class="inv-item secret" title="???">
+								<div class="inv-item-inner">
+									<div class="inv-coin-icon coin-secret-wrap">
+										<img src="/coins/secret.webp" alt="???" width="64" height="64" class="pixelated coin-secret-img" />
+										<div class="coin-censored-overlay">
+											<span>?</span>
+										</div>
+									</div>
+									<span class="inv-label secret-text">???</span>
+									<span class="inv-rarity secret-badge">CLASSIFIED</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Level bar -->
+						<div class="inv-level-bar">
+							<div class="flex items-center gap-3 mb-2">
+								<div class="inv-level-badge">12</div>
+								<div class="flex-1">
+									<div class="flex items-center justify-between mb-1">
+										<span class="text-xs font-semibold text-text-primary">Level 12</span>
+										<span class="text-[10px] text-text-muted">2,340 / 3,000 XP</span>
+									</div>
+									<div class="inv-xp-track">
+										<div class="inv-xp-fill" style="width: 78%"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="reveal order-1 lg:order-2">
+					<span class="section-label">Collect & Level Up</span>
+					<h2 class="mt-3 text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
+						Your activity<br/><span class="bg-linear-to-r from-yellow-400 via-amber-400 to-yellow-500 bg-clip-text text-transparent">matters here</span>
+					</h2>
+					<p class="text-text-secondary mt-4 text-base sm:text-lg leading-relaxed max-w-lg">
+						Earn XP by chatting, calling, and hanging out. Level up to unlock rewards and collect
+						coins with different rarities — from common to relic.
+					</p>
+
+					<div class="mt-8 flex flex-wrap gap-3">
+						<div class="glass rounded-xl px-4 py-3 flex items-center gap-2 feature-card">
+							<Crown class="size-4 text-yellow-400" />
+							<span class="text-sm font-medium">XP & Leveling</span>
+						</div>
+						<div class="glass rounded-xl px-4 py-3 flex items-center gap-2 feature-card">
+							<Star class="size-4 text-amber-400" />
+							<span class="text-sm font-medium">Collectible Coins</span>
+						</div>
+						<div class="glass rounded-xl px-4 py-3 flex items-center gap-2 feature-card">
+							<Trophy class="size-4 text-accent-3" />
+							<span class="text-sm font-medium">Rarity Tiers</span>
+						</div>
+						<div class="glass rounded-xl px-4 py-3 flex items-center gap-2 feature-card">
+							<Gift class="size-4 text-accent" />
+							<span class="text-sm font-medium">Redeem Codes</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- SECTION: Feature Grid                          -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section id="features" class="py-24 sm:py-32 px-4 sm:px-6 bg-oled-surface/30 scroll-mt-16">
+		<div class="mx-auto max-w-6xl">
+			<div class="reveal text-center mb-12 sm:mb-16">
+				<span class="section-label">Everything You Need</span>
+				<h2 class="mt-3 text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">Built for communities</h2>
+				<p class="text-text-secondary mt-4 text-base sm:text-lg max-w-2xl mx-auto">
+					Every feature designed to make your community feel like home.
+				</p>
+			</div>
+
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+				<div class="reveal glass rounded-2xl p-6 feature-card">
+					<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-subtle mb-4">
+						<Shield class="size-5 text-accent" />
+					</div>
+					<h3 class="font-semibold mb-2">Roles & Permissions</h3>
+					<p class="text-sm text-text-secondary">55+ granular permissions. Assign roles, manage access per-channel, keep your community safe.</p>
+				</div>
+
+				<div class="reveal reveal-delay-1 glass rounded-2xl p-6 feature-card">
+					<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-subtle mb-4">
+						<Lock class="size-5 text-accent" />
+					</div>
+					<h3 class="font-semibold mb-2">Security First</h3>
+					<p class="text-sm text-text-secondary">Passkeys, 2FA, session management. Your account is yours — protected by modern standards.</p>
+				</div>
+
+				<div class="reveal reveal-delay-2 glass rounded-2xl p-6 feature-card">
+					<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-subtle mb-4">
+						<Users class="size-5 text-accent" />
+					</div>
+					<h3 class="font-semibold mb-2">Friends & DMs</h3>
+					<p class="text-sm text-text-secondary">Add friends, send direct messages, start 1:1 voice calls. Stay connected outside of servers.</p>
+				</div>
+
+				<div class="reveal glass rounded-2xl p-6 feature-card">
+					<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-subtle mb-4">
+						<Sparkles class="size-5 text-accent" />
+					</div>
+					<h3 class="font-semibold mb-2">Bots & Integrations</h3>
+					<p class="text-sm text-text-secondary">Install bots, build your own with the API. Slash commands, interactive controls, real-time events.</p>
+				</div>
+
+				<div class="reveal reveal-delay-1 glass rounded-2xl p-6 feature-card">
+					<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-subtle mb-4">
+						<Monitor class="size-5 text-accent" />
+					</div>
+					<h3 class="font-semibold mb-2">Cross-platform</h3>
+					<p class="text-sm text-text-secondary">Windows, macOS, and Linux. Native desktop app with auto-updates. Everything syncs.</p>
+				</div>
+
+				<div class="reveal reveal-delay-2 glass rounded-2xl p-6 feature-card">
+					<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-subtle mb-4">
+						<Heart class="size-5 text-accent" />
+					</div>
+					<h3 class="font-semibold mb-2">Community Driven</h3>
+					<p class="text-sm text-text-secondary">Built by people who use it daily. Feedback drives development, not investor roadmaps.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- SECTION: CTA                                   -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section class="py-24 sm:py-32 px-4 sm:px-6 relative overflow-hidden">
+		<!-- Glow bg -->
+		<div class="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]"></div>
+
+		<div class="mx-auto max-w-3xl text-center relative z-10">
+			<div class="reveal">
+				<!-- 3D Text heading -->
+				<h2 class="text-3d-wrap">
+					<span class="text-3d" data-text="Ready to switch?">Ready to switch?</span>
+				</h2>
+				<p class="text-text-secondary mt-6 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
+					No premium tiers for basic features. No investor-driven enshittification.
+					Just a communication platform that respects you.
+				</p>
+
+				<div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
+					<button type="button" data-open-enroll class="confetti-trigger w-full sm:w-auto inline-flex items-center justify-center gap-3 rounded-2xl bg-accent px-8 py-4 text-base font-bold text-white transition-all hover:bg-accent-hover hover:shadow-lg hover:shadow-accent/20 hover:-translate-y-0.5 cursor-pointer">
+						<Download class="size-5" />
+						Request Invite
+					</button>
+					<a href="https://github.com/argon-chat" target="_blank" rel="noopener" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-oled-border bg-oled-surface/50 px-8 py-4 text-base font-semibold text-text-primary backdrop-blur-sm transition-all hover:border-oled-border hover:bg-oled-hover hover:-translate-y-0.5">
+						View on GitHub
+						<ArrowRight class="size-4" />
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- ENROLLMENT MODAL                               -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<div id="enroll-modal" class="enroll-modal-overlay hidden" aria-hidden="true">
+		<div class="enroll-modal-backdrop"></div>
+		<div class="enroll-modal-container">
+			<div class="enroll-modal-card">
+				<!-- Close btn -->
+				<button type="button" id="enroll-modal-close" class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-lg text-text-muted hover:text-text-primary hover:bg-oled-hover transition-colors" aria-label="Close">
+					<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+				</button>
+
+				<!-- Success state -->
+				<div id="enroll-success" class="hidden text-center py-4">
+					<div class="w-14 h-14 rounded-full bg-success/10 border border-success/20 flex items-center justify-center mx-auto mb-5">
+						<svg class="size-7 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+					</div>
+					<h3 class="text-xl font-black tracking-tight">You're in the queue!</h3>
+					<p class="text-text-secondary mt-3 text-sm max-w-xs mx-auto">
+						We'll send you an invitation email when your spot opens up.
+					</p>
+					<p class="text-text-muted mt-2 text-xs">Check your inbox (and spam) 😊</p>
+				</div>
+
+				<!-- Form state -->
+				<div id="enroll-form-wrap">
+					<div class="text-center mb-6">
+						<div class="w-11 h-11 rounded-xl bg-accent/10 border border-accent/15 flex items-center justify-center mx-auto mb-3">
+							<svg class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+						</div>
+						<h3 class="text-xl font-black tracking-tight">Request an Invite</h3>
+						<p class="text-text-secondary mt-2 text-sm max-w-xs mx-auto">
+							Argon Chat is in closed beta. Enter your email to join the queue.
+						</p>
+						<p class="text-text-muted mt-3 text-xs max-w-xs mx-auto">
+							Already received an invitation? Visit the <a href="https://beta.argon.gl" target="_blank" rel="noopener" class="text-accent hover:underline">Beta Portal</a> to access builds.
+						</p>
+					</div>
+
+					<form id="enroll-form" class="space-y-3">
+						<div class="relative">
+							<svg class="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-text-muted pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+							<input
+								type="email"
+								id="enroll-email"
+								name="email"
+								required
+								placeholder="you@example.com"
+								autocomplete="email"
+								class="w-full pl-10 pr-4 py-3 rounded-xl bg-oled-surface border border-oled-border text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/25 transition-colors"
+							/>
+						</div>
+
+						<!-- Cloudflare Turnstile -->
+						<div id="turnstile-container" class="flex justify-center"></div>
+
+						<!-- Error message -->
+						<p id="enroll-error" class="text-red-400 text-sm text-center hidden"></p>
+
+						<button
+							type="submit"
+							id="enroll-submit"
+							class="w-full flex items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-white hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+						>
+							<span id="enroll-btn-text">Request Invite</span>
+							<svg id="enroll-btn-arrow" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+							<svg id="enroll-btn-spinner" class="size-4 animate-spin hidden" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+						</button>
+					</form>
+
+					<p class="text-center text-[10px] text-text-faint mt-3">
+						By signing up you agree to our <a href="/terms/" class="underline hover:text-text-muted">Terms</a> & <a href="/privacy/" class="underline hover:text-text-muted">Privacy</a>.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<Footer />
+</Layout>
+
+<script>
+	const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
+
+	// ── Text scramble effect on hero title ──
+	function initScramble() {
+		const words = document.querySelectorAll<HTMLElement>('.hero-word');
+		words.forEach((el, i) => {
+			const target = el.dataset.word || el.textContent || '';
+			el.textContent = '';
+			const delay = 600 + i * 400;
+
+			setTimeout(() => {
+				let iteration = 0;
+				const maxIterations = target.length * 3;
+				const interval = setInterval(() => {
+					el.textContent = target
+						.split('')
+						.map((char, idx) => {
+							if (idx < iteration / 3) return char;
+							return CHARS[Math.floor(Math.random() * CHARS.length)];
+						})
+						.join('');
+					iteration++;
+					if (iteration > maxIterations) {
+						clearInterval(interval);
+						el.textContent = target;
+					}
+				}, 30);
+			}, delay);
+		});
+	}
+
+
+	// ── Particle canvas (subtle floating dots) ──
+	function initParticles() {
+		const canvas = document.getElementById('hero-particles') as HTMLCanvasElement;
+		if (!canvas) return;
+		const ctx = canvas.getContext('2d');
+		if (!ctx) return;
+
+		let w = 0, h = 0;
+		let mouseX = -1000, mouseY = -1000;
+
+		function resize() {
+			const section = canvas.parentElement;
+			if (!section) return;
+			w = section.offsetWidth;
+			h = section.offsetHeight;
+			canvas.width = w;
+			canvas.height = h;
+		}
+		resize();
+		window.addEventListener('resize', resize);
+
+		const particles: { x: number; y: number; vx: number; vy: number; r: number; a: number }[] = [];
+		const count = Math.min(60, Math.floor(w * h / 15000));
+
+		for (let i = 0; i < count; i++) {
+			particles.push({
+				x: Math.random() * w,
+				y: Math.random() * h,
+				vx: (Math.random() - 0.5) * 0.3,
+				vy: (Math.random() - 0.5) * 0.3,
+				r: Math.random() * 1.5 + 0.5,
+				a: Math.random() * 0.3 + 0.05
+			});
+		}
+
+		canvas.parentElement?.addEventListener('mousemove', (e) => {
+			const rect = canvas.getBoundingClientRect();
+			mouseX = e.clientX - rect.left;
+			mouseY = e.clientY - rect.top;
+		});
+
+		canvas.parentElement?.addEventListener('mouseleave', () => {
+			mouseX = -1000;
+			mouseY = -1000;
+		});
+
+		function draw() {
+			ctx!.clearRect(0, 0, w, h);
+			const isDark = document.documentElement.classList.contains('dark');
+			const color = isDark ? '255,255,255' : '0,0,0';
+
+			for (const p of particles) {
+				// Repel from cursor
+				const dx = p.x - mouseX;
+				const dy = p.y - mouseY;
+				const dist = Math.sqrt(dx * dx + dy * dy);
+				if (dist < 120) {
+					const force = (120 - dist) / 120 * 0.8;
+					p.vx += (dx / dist) * force;
+					p.vy += (dy / dist) * force;
+				}
+
+				p.vx *= 0.98;
+				p.vy *= 0.98;
+				p.x += p.vx;
+				p.y += p.vy;
+
+				if (p.x < 0) p.x = w;
+				if (p.x > w) p.x = 0;
+				if (p.y < 0) p.y = h;
+				if (p.y > h) p.y = 0;
+
+				ctx!.beginPath();
+				ctx!.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+				ctx!.fillStyle = `rgba(${color},${p.a})`;
+				ctx!.fill();
+			}
+
+			// Draw connections
+			for (let i = 0; i < particles.length; i++) {
+				for (let j = i + 1; j < particles.length; j++) {
+					const dx = particles[i].x - particles[j].x;
+					const dy = particles[i].y - particles[j].y;
+					const dist = Math.sqrt(dx * dx + dy * dy);
+					if (dist < 100) {
+						ctx!.beginPath();
+						ctx!.moveTo(particles[i].x, particles[i].y);
+						ctx!.lineTo(particles[j].x, particles[j].y);
+						ctx!.strokeStyle = `rgba(${color},${(1 - dist / 100) * 0.06})`;
+						ctx!.stroke();
+					}
+				}
+			}
+
+			requestAnimationFrame(draw);
+		}
+		draw();
+	}
+
+	// ── Feature card tilt on hover ──
+	function initCardTilt() {
+		document.querySelectorAll<HTMLElement>('.feature-card').forEach(card => {
+			card.addEventListener('mousemove', (e) => {
+				const rect = card.getBoundingClientRect();
+				const x = (e.clientX - rect.left) / rect.width - 0.5;
+				const y = (e.clientY - rect.top) / rect.height - 0.5;
+				card.style.transform = `perspective(600px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) scale(1.02)`;
+			});
+			card.addEventListener('mouseleave', () => {
+				card.style.transform = '';
+			});
+		});
+	}
+
+	// ── Konami code easter egg ──
+	function initKonami() {
+		const code = [38,38,40,40,37,39,37,39,66,65];
+		let pos = 0;
+		document.addEventListener('keydown', (e) => {
+			if (e.keyCode === code[pos]) {
+				pos++;
+				if (pos === code.length) {
+					pos = 0;
+					document.body.classList.add('konami-active');
+					setTimeout(() => document.body.classList.remove('konami-active'), 4000);
+				}
+			} else {
+				pos = 0;
+			}
+		});
+	}
+
+	// ── Secret coin click counter ──
+	function initSecretCoin() {
+		const item = document.querySelector('.inv-item.secret');
+		if (!item) return;
+		let clicks = 0;
+		item.addEventListener('click', () => {
+			clicks++;
+			if (clicks >= 5) {
+				item.classList.add('secret-revealed');
+				const label = item.querySelector('.secret-text');
+				const badge = item.querySelector('.secret-badge');
+				if (label) label.textContent = 'Secret Impact';
+				if (badge) badge.textContent = 'RARE';
+			} else {
+				item.classList.add('coin-shake');
+				setTimeout(() => item.classList.remove('coin-shake'), 400);
+			}
+		});
+	}
+
+	// ── Hero online count ticker ──
+	function initHeroCount() {
+		const el = document.getElementById('hero-online-count');
+		if (!el) return;
+		let count = 4218;
+		setInterval(() => {
+			count += Math.floor(Math.random() * 7) - 3;
+			count = Math.max(3800, Math.min(5000, count));
+			el.textContent = count.toLocaleString('en-US') + ' online';
+		}, 2500);
+	}
+
+	// ── Animated chat messages in hero mockup ──
+	function initHeroChat() {
+		const msgs = document.querySelectorAll<HTMLElement>('#hero-messages .app-msg');
+		const typing = document.getElementById('hero-typing');
+
+		// Hide all messages initially
+		msgs.forEach(m => { m.style.opacity = '0'; m.style.transform = 'translateY(8px)'; });
+		if (typing) typing.style.opacity = '0';
+
+		let i = 0;
+		function showNext() {
+			if (i < msgs.length) {
+				// Show typing indicator before message
+				if (typing && i > 0) {
+					typing.style.opacity = '1';
+					typing.style.transition = 'opacity 0.2s';
+				}
+				const msg = msgs[i];
+				const delay = parseInt(msg.dataset.delay || '0');
+				setTimeout(() => {
+					if (typing) typing.style.opacity = '0';
+					setTimeout(() => {
+						msg.style.transition = 'opacity 0.3s, transform 0.3s';
+						msg.style.opacity = '1';
+						msg.style.transform = 'translateY(0)';
+						// Scroll to bottom
+						const container = document.getElementById('hero-messages');
+						if (container) container.scrollTop = container.scrollHeight;
+						i++;
+						showNext();
+					}, i > 0 ? 300 : 0);
+				}, i === 0 ? 800 : delay);
+			}
+		}
+		showNext();
+	}
+
+	// ── Enrollment modal ──
+	const TURNSTILE_SITE_KEY = '0x4AAAAAAA0DPoxKcBNZt4vC';
+	let captchaToken: string | null = null;
+
+	function initEnrollModal() {
+		const modal = document.getElementById('enroll-modal');
+		const closeBtn = document.getElementById('enroll-modal-close');
+		const form = document.getElementById('enroll-form') as HTMLFormElement | null;
+		const emailInput = document.getElementById('enroll-email') as HTMLInputElement | null;
+		const errorEl = document.getElementById('enroll-error');
+		const submitBtn = document.getElementById('enroll-submit') as HTMLButtonElement | null;
+		const btnText = document.getElementById('enroll-btn-text');
+		const btnArrow = document.getElementById('enroll-btn-arrow');
+		const btnSpinner = document.getElementById('enroll-btn-spinner');
+		const formWrap = document.getElementById('enroll-form-wrap');
+		const successWrap = document.getElementById('enroll-success');
+		if (!modal) return;
+
+		// Open modal triggers
+		document.querySelectorAll('[data-open-enroll]').forEach(btn => {
+			btn.addEventListener('click', (e) => {
+				e.preventDefault();
+				modal.classList.remove('hidden');
+				modal.setAttribute('aria-hidden', 'false');
+				document.body.style.overflow = 'hidden';
+				emailInput?.focus();
+				loadTurnstile();
+			});
+		});
+
+		// Close
+		function close() {
+			modal.classList.add('hidden');
+			modal.setAttribute('aria-hidden', 'true');
+			document.body.style.overflow = '';
+		}
+
+		closeBtn?.addEventListener('click', close);
+		modal.querySelector('.enroll-modal-backdrop')?.addEventListener('click', close);
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && !modal.classList.contains('hidden')) close();
+		});
+
+		// Load Turnstile
+		function loadTurnstile() {
+			if (document.getElementById('turnstile-script')) return;
+			const script = document.createElement('script');
+			script.id = 'turnstile-script';
+			script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+			script.async = true;
+			script.onload = () => {
+				if (typeof (window as any).turnstile !== 'undefined') {
+					(window as any).turnstile.render('#turnstile-container', {
+						sitekey: TURNSTILE_SITE_KEY,
+						callback: (token: string) => { captchaToken = token; },
+						theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
+					});
+				}
+			};
+			document.body.appendChild(script);
+		}
+
+		// Submit
+		form?.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			const email = emailInput?.value.trim() || '';
+			if (!email || !email.includes('@')) {
+				if (errorEl) { errorEl.textContent = 'Please enter a valid email address.'; errorEl.classList.remove('hidden'); }
+				return;
+			}
+
+			errorEl?.classList.add('hidden');
+			if (submitBtn) submitBtn.disabled = true;
+			if (btnText) btnText.textContent = 'Submitting...';
+			btnArrow?.classList.add('hidden');
+			btnSpinner?.classList.remove('hidden');
+
+			try {
+				const res = await fetch('https://enroll.argon.gl', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ email, turnstile: captchaToken }),
+				});
+
+				if (res.status === 451) {
+					if (errorEl) { errorEl.textContent = 'Your region is not supported for enrollment.'; errorEl.classList.remove('hidden'); }
+					return;
+				}
+				if (!res.ok) throw new Error('fail');
+
+				formWrap?.classList.add('hidden');
+				successWrap?.classList.remove('hidden');
+				setTimeout(close, 5000);
+			} catch {
+				if (errorEl) { errorEl.textContent = 'Failed to submit. Please try again later.'; errorEl.classList.remove('hidden'); }
+			} finally {
+				if (submitBtn) submitBtn.disabled = false;
+				if (btnText) btnText.textContent = 'Request Invite';
+				btnArrow?.classList.remove('hidden');
+				btnSpinner?.classList.add('hidden');
+			}
+		});
+	}
+
+	// ── Confetti on download clicks ──
+	function initConfetti() {
+		import('canvas-confetti').then(({ default: confetti }) => {
+			document.querySelectorAll('.confetti-trigger').forEach(btn => {
+				btn.addEventListener('click', (e) => {
+					const rect = (btn as HTMLElement).getBoundingClientRect();
+					const x = (rect.left + rect.width / 2) / window.innerWidth;
+					const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+					// Side cannons
+					confetti({ particleCount: 60, angle: 60, spread: 55, origin: { x: 0, y: 0.65 }, colors: ['#8b5cf6', '#06b6d4', '#c084fc', '#a78bfa', '#22d3ee'] });
+					confetti({ particleCount: 60, angle: 120, spread: 55, origin: { x: 1, y: 0.65 }, colors: ['#8b5cf6', '#06b6d4', '#c084fc', '#a78bfa', '#22d3ee'] });
+
+					// From button
+					confetti({ particleCount: 30, spread: 70, origin: { x, y }, colors: ['#8b5cf6', '#06b6d4', '#c084fc', '#fbbf24', '#34d399'] });
+				});
+			});
+		});
+	}
+
+	// Init all
+	initScramble();
+	initHeroCount();
+	initHeroChat();
+	initParticles();
+	initCardTilt();
+	initKonami();
+	initSecretCoin();
+	initEnrollModal();
+	initConfetti();
+
+	// Auto-open enrollment if ?enroll=1 or #enroll
+	if (new URLSearchParams(window.location.search).has('enroll') || window.location.hash === '#enroll') {
+		const modal = document.getElementById('enroll-modal');
+		if (modal) {
+			modal.classList.remove('hidden');
+			modal.setAttribute('aria-hidden', 'false');
+			document.body.style.overflow = 'hidden';
+		}
+	}
+</script>

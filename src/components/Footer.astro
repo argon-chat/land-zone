@@ -1,0 +1,195 @@
+---
+---
+
+<footer class="footer-wrap mt-auto px-4 pt-16 pb-8">
+  <!-- Gradient divider with glow -->
+  <div class="footer-divider"></div>
+
+  <div class="mx-auto max-w-6xl">
+    <!-- Main grid -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+      <!-- Brand -->
+      <div class="col-span-2 md:col-span-1">
+        <a href="/" class="footer-brand group">
+          <div class="footer-logo-ring">
+            <img src="/argon-cat.svg" alt="Argon" class="footer-cat" />
+          </div>
+          <span class="text-sm font-bold text-text-primary group-hover:text-accent transition-colors">Argon</span>
+        </a>
+        <p class="text-xs text-text-muted leading-relaxed mt-3 max-w-[180px]">Where conversations come alive.</p>
+        <!-- Social row -->
+        <div class="flex items-center gap-3 mt-4">
+          <a href="https://github.com/argon-chat" target="_blank" rel="noopener" class="footer-social" aria-label="GitHub">
+            <svg class="size-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+          <a href="https://x.com/argonchat" target="_blank" rel="noopener" class="footer-social" aria-label="X / Twitter">
+            <svg class="size-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Product -->
+      <div>
+        <span class="footer-heading">Product</span>
+        <div class="flex flex-col gap-2.5">
+          <button type="button" data-open-enroll class="footer-link text-left cursor-pointer">Join Beta</button>
+          <a href="/#features" class="footer-link">Features</a>
+          <a href="https://meet.argon.gl" target="_blank" rel="noopener" class="footer-link">Argon Meet</a>
+          <a href="https://pew.red" target="_blank" rel="noopener" class="footer-link">Pew Pew Engine</a>
+          <a href="https://status.argon.gl" target="_blank" rel="noopener" class="footer-link">Status</a>
+        </div>
+      </div>
+
+      <!-- Developers -->
+      <div>
+        <span class="footer-heading">Developers</span>
+        <div class="flex flex-col gap-2.5">
+          <a href="https://docs.argon.gl" target="_blank" rel="noopener" class="footer-link">Documentation</a>
+          <a href="https://bots.argon.gl" target="_blank" rel="noopener" class="footer-link">Bot API</a>
+          <a href="https://console.argon.gl" target="_blank" rel="noopener" class="footer-link">Console</a>
+          <a href="https://github.com/argon-chat" target="_blank" rel="noopener" class="footer-link">GitHub</a>
+        </div>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <span class="footer-heading">Resources</span>
+        <div class="flex flex-col gap-2.5">
+          <a href="/branding/" class="footer-link">Branding</a>
+          <a href="/press/" class="footer-link">Press Kit</a>
+          <a href="/contact/" class="footer-link">Contact</a>
+          <a href="/terms/" class="footer-link">Terms</a>
+          <a href="/privacy/" class="footer-link">Privacy</a>
+        </div>
+      </div>
+
+      <!-- Live status from healthcare API -->
+      <div class="col-span-2 md:col-span-1">
+        <span class="footer-heading">Status</span>
+        <a href="https://status.argon.gl" target="_blank" rel="noopener" class="footer-status-badge" id="footer-status-badge">
+          <span class="footer-status-dot" id="footer-status-dot"></span>
+          <span class="text-[11px]" id="footer-status-text">Checking...</span>
+        </a>
+        <div class="footer-stats">
+          <div class="footer-stat">
+            <span class="footer-stat-val" id="footer-ping">--</span>
+            <span class="footer-stat-label">avg ping</span>
+          </div>
+          <div class="footer-stat">
+            <span class="footer-stat-val" id="footer-services">--</span>
+            <span class="footer-stat-label">services</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="footer-bottom-line"></div>
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6">
+      <p class="text-[11px] text-text-faint select-none">
+        &copy; 2026 Argon Inc. LLC &middot; Made with
+        <span class="footer-heart" id="footer-heart" title="Click me!">&hearts;</span>
+        in Yerevan
+      </p>
+      <div class="flex items-center gap-4">
+        <!-- Konami hint: invisible text, shows on hover -->
+        <span class="text-[10px] text-text-faint/0 hover:text-text-faint/40 transition-colors duration-700 select-none cursor-default" title="Try &uarr;&uarr;&darr;&darr;&larr;&rarr;&larr;&rarr;BA">&#x2191;&#x2191;&#x2193;&#x2193;&#x2190;&#x2192;&#x2190;&#x2192;BA</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function initFooterEggs() {
+    // ── Real status fetch ──
+    async function fetchStatus() {
+      const pingEl = document.getElementById('footer-ping');
+      const svcEl = document.getElementById('footer-services');
+      const dotEl = document.getElementById('footer-status-dot');
+      const textEl = document.getElementById('footer-status-text');
+      if (!pingEl) return;
+
+      try {
+        const res = await fetch('https://healthcare.argon.zone/api/status');
+        const data = await res.json();
+        const group = data[0];
+        if (!group) return;
+
+        const resources = group.resources || [];
+        const allUp = resources.every((r: any) => r.status === 'up');
+        const anyDown = resources.some((r: any) => r.status === 'down');
+        const upCount = resources.filter((r: any) => r.status === 'up').length;
+
+        // Average ping from all checks
+        const pings: number[] = [];
+        for (const r of resources) {
+          for (const c of (r.checks || [])) {
+            if (typeof c.responseTimeMs === 'number') pings.push(c.responseTimeMs);
+          }
+        }
+        const avgPing = pings.length ? pings.reduce((a: number, b: number) => a + b, 0) / pings.length : 0;
+
+        pingEl.textContent = avgPing > 0 ? Math.round(avgPing) + 'ms' : '--';
+        svcEl.textContent = upCount + '/' + resources.length;
+
+        if (allUp) {
+          textEl.textContent = 'All systems operational';
+          dotEl.className = 'footer-status-dot status-up';
+        } else if (anyDown) {
+          textEl.textContent = 'Partial outage';
+          dotEl.className = 'footer-status-dot status-down';
+        } else {
+          textEl.textContent = 'Degraded';
+          dotEl.className = 'footer-status-dot status-degraded';
+        }
+
+
+      } catch {
+        // Fallback on error
+        if (pingEl) pingEl.textContent = '--';
+        const textEl = document.getElementById('footer-status-text');
+        if (textEl) textEl.textContent = 'Unable to reach';
+      }
+    }
+
+    fetchStatus();
+    // Refresh every 60s
+    setInterval(fetchStatus, 60000);
+
+    // ── Heart click easter egg ──
+    const heart = document.getElementById('footer-heart');
+    if (heart) {
+      let clicks = 0;
+      const msgs = ['❤️', '💜', '💎', '🔥', '🚀', '✨', '🎮', '🐱', '🎉', '💫'];
+      heart.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        clicks++;
+        heart.textContent = msgs[clicks % msgs.length];
+
+        // Pop animation via keyframe
+        heart.animate([
+          { transform: 'scale(0.7)' },
+          { transform: `scale(${1 + Math.min(clicks * 0.08, 0.6)})` }
+        ], { duration: 200, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' });
+        if (clicks === 10) {
+          import('canvas-confetti').then(({ default: confetti }) => {
+            const rect = heart.getBoundingClientRect();
+            confetti({
+              particleCount: 60,
+              spread: 80,
+              origin: { x: rect.left / window.innerWidth, y: rect.top / window.innerHeight },
+              colors: ['#8b5cf6', '#c084fc', '#06b6d4', '#34d399']
+            });
+          }).catch(() => {});
+        }
+        if (clicks === 20) {
+          heart.title = 'You really love us! 🥺';
+        }
+      });
+    }
+  }
+
+  initFooterEggs();
+  document.addEventListener('astro:after-swap', initFooterEggs);
+</script>

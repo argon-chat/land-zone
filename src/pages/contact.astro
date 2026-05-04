@@ -1,0 +1,164 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { Mail, MessageCircle, Shield, Bug, Scale, UserCheck, Github } from 'lucide-astro';
+
+const enc = (e: string) => Buffer.from(e).toString('base64');
+
+const contacts = [
+	{
+		icon: 'general',
+		title: 'General Inquiries',
+		desc: 'Questions about Argon, partnerships, or anything else.',
+		encoded: enc('ask@argon.support'),
+	},
+	{
+		icon: 'privacy',
+		title: 'Data Protection Officer',
+		desc: 'GDPR requests, data deletion, privacy concerns.',
+		encoded: enc('dpo@argon.gl'),
+	},
+	{
+		icon: 'security',
+		title: 'Security',
+		desc: 'Vulnerability reports and security disclosures.',
+		encoded: enc('security@argon.gl'),
+	},
+	{
+		icon: 'abuse',
+		title: 'Abuse & Safety',
+		desc: 'Report abuse, harassment, or illegal content.',
+		encoded: enc('abuse@argon.gl'),
+	},
+	{
+		icon: 'legal',
+		title: 'Legal & DMCA',
+		desc: 'Copyright takedowns, legal notices, subpoenas.',
+		encoded: enc('legal@argon.gl'),
+	},
+	{
+		icon: 'press',
+		title: 'Press & Media',
+		desc: 'Interview requests, press resources, media inquiries.',
+		encoded: enc('press@argon.gl'),
+	},
+];
+---
+
+<Layout title="Contact — Argon Chat" description="Get in touch with Argon. Reach our support, DPO, security, abuse, legal, and press teams." image="/og/contact.png">
+	<Navbar current="/contact/" />
+
+	<!-- Hero -->
+	<section class="relative pt-32 sm:pt-40 pb-16 sm:pb-20 px-4 sm:px-6">
+		<div class="absolute left-1/2 top-1/4 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]"></div>
+
+		<div class="relative z-10 mx-auto max-w-4xl text-center">
+			<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/20 bg-accent/5 text-accent text-xs font-semibold mb-4">
+				<Mail class="size-3.5" />
+				Contact
+			</div>
+			<h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">Get in touch</h1>
+			<p class="text-text-secondary mt-3 text-sm sm:text-base max-w-xl mx-auto">
+				Pick the right inbox and we'll get back to you. Most inquiries are answered within 1–2 business days.
+			</p>
+		</div>
+	</section>
+
+	<!-- Contact cards -->
+	<section class="px-4 sm:px-6 pb-20 sm:pb-24">
+		<div class="mx-auto max-w-5xl">
+			<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+				{contacts.map((c) => (
+					<div class="rounded-2xl border border-oled-border bg-oled-surface p-6 hover:border-accent/20 transition-colors group flex flex-col">
+						<div class="w-10 h-10 rounded-xl bg-accent/10 border border-accent/15 flex items-center justify-center mb-4">
+							{c.icon === 'general' && <MessageCircle class="size-5 text-accent" />}
+							{c.icon === 'privacy' && <UserCheck class="size-5 text-accent" />}
+							{c.icon === 'security' && <Shield class="size-5 text-accent" />}
+							{c.icon === 'abuse' && <Bug class="size-5 text-accent" />}
+							{c.icon === 'legal' && <Scale class="size-5 text-accent" />}
+							{c.icon === 'press' && <Mail class="size-5 text-accent" />}
+						</div>
+						<h3 class="text-sm font-bold text-text-primary mb-1">{c.title}</h3>
+						<p class="text-xs text-text-secondary leading-relaxed mb-4 flex-1">{c.desc}</p>
+						<a
+							href="#"
+							class="contact-link text-xs font-semibold text-accent hover:text-accent-hover transition-colors inline-flex items-center gap-1"
+							data-e={c.encoded}
+						>
+							<span class="contact-label text-text-muted">Loading…</span> <span aria-hidden="true">→</span>
+						</a>
+					</div>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<!-- Community & Social -->
+	<section class="px-4 sm:px-6 pb-20 sm:pb-24">
+		<div class="mx-auto max-w-5xl">
+			<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-6">Community</h2>
+
+			<div class="grid sm:grid-cols-3 gap-4">
+				<a href="https://github.com/argon-chat" target="_blank" rel="noopener" class="rounded-2xl border border-oled-border bg-oled-surface p-6 hover:border-accent/20 transition-colors group block">
+					<Github class="size-6 text-text-muted group-hover:text-accent transition-colors mb-3" />
+					<h3 class="text-sm font-bold text-text-primary mb-1">GitHub</h3>
+					<p class="text-xs text-text-secondary">Bug reports, feature requests, and source code.</p>
+				</a>
+
+				<a href="https://x.com/argonchat" target="_blank" rel="noopener" class="rounded-2xl border border-oled-border bg-oled-surface p-6 hover:border-accent/20 transition-colors group block">
+					<svg class="size-6 text-text-muted group-hover:text-accent transition-colors mb-3" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+					<h3 class="text-sm font-bold text-text-primary mb-1">X / Twitter</h3>
+					<p class="text-xs text-text-secondary">Updates, announcements, and behind-the-scenes.</p>
+				</a>
+
+				<a href="https://status.argon.gl" target="_blank" rel="noopener" class="rounded-2xl border border-oled-border bg-oled-surface p-6 hover:border-accent/20 transition-colors group block">
+					<svg class="size-6 text-text-muted group-hover:text-accent transition-colors mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+					<h3 class="text-sm font-bold text-text-primary mb-1">Status Page</h3>
+					<p class="text-xs text-text-secondary">Real-time service health and incident history.</p>
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- Legal entity -->
+	<section class="px-4 sm:px-6 pb-20 sm:pb-28">
+		<div class="mx-auto max-w-5xl">
+			<div class="rounded-2xl border border-oled-border bg-oled-surface p-6 sm:p-8">
+				<h2 class="text-base font-bold mb-3">Legal Entity</h2>
+				<div class="text-sm text-text-secondary space-y-1">
+					<p><span class="text-text-muted">Company:</span> Argon Inc. LLC</p>
+					<p><span class="text-text-muted">Address:</span> 2 Sasna Tsrer str., Yerevan, 0054</p>
+					<p><span class="text-text-muted">Web:</span> <a href="https://argon.gl" class="text-accent hover:text-accent-hover transition-colors">argon.gl</a></p>
+					<p><span class="text-text-muted">Registered agent for legal process:</span> <a href="#" class="legal-email text-accent hover:text-accent-hover transition-colors" data-e={enc('legal@argon.gl')}>···</a></p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<Footer />
+</Layout>
+
+<script>
+	document.querySelectorAll<HTMLAnchorElement>('.contact-link').forEach((el) => {
+		const d = el.dataset.e;
+		if (!d) return;
+		const email = atob(d);
+		el.href = `mailto:${email}`;
+		const label = el.querySelector('.contact-label');
+		if (label) {
+			label.textContent = email;
+			label.classList.remove('text-text-muted');
+		}
+	});
+
+	document.querySelectorAll<HTMLAnchorElement>('.legal-email').forEach((el) => {
+		const d = el.dataset.e;
+		if (!d) return;
+		const email = atob(d);
+		el.href = `mailto:${email}`;
+		el.textContent = email;
+	});
+</script>
+
+

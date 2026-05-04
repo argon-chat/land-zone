@@ -1,0 +1,43 @@
+---
+---
+
+<div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <div class="cookie-inner">
+    <div class="cookie-icon">🍪</div>
+    <div class="cookie-text">
+      <p>We use <strong>Cloudflare Web Analytics</strong> to understand how our site is used. It's privacy-first — no cookies, no personal data, no tracking across sites.</p>
+    </div>
+    <div class="cookie-actions">
+      <button type="button" class="cookie-btn-accept" id="cookie-accept">Got it</button>
+      <a href="/privacy/" class="cookie-btn-learn">Learn more</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initCookieBanner() {
+    const banner = document.getElementById('cookie-banner');
+    const acceptBtn = document.getElementById('cookie-accept');
+    if (!banner || !acceptBtn) return;
+
+    if (localStorage.getItem('cookie-consent') === '1') {
+      banner.remove();
+      return;
+    }
+
+    // Show with delay
+    setTimeout(() => {
+      banner.classList.add('visible');
+    }, 1500);
+
+    acceptBtn.addEventListener('click', () => {
+      localStorage.setItem('cookie-consent', '1');
+      banner.classList.remove('visible');
+      banner.classList.add('hiding');
+      setTimeout(() => banner.remove(), 400);
+    });
+  }
+
+  initCookieBanner();
+  document.addEventListener('astro:after-swap', initCookieBanner);
+</script>
