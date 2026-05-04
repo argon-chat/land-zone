@@ -1,0 +1,213 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { Bot, Shield, Clock, Eye, Server, Link, FileText, Globe } from 'lucide-astro';
+---
+
+<Layout title="ArgonCrawler — Bot Information" description="Learn about ArgonCrawler, our web metadata bot. How it works, what it collects, and how to control its access to your site." image="/og/beaf.png">
+	<Navbar current="/beaf/" />
+
+	<!-- Hero -->
+	<section class="relative pt-32 sm:pt-40 pb-16 sm:pb-20 px-4 sm:px-6">
+		<div class="absolute left-1/2 top-1/4 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-2/5 blur-[120px]"></div>
+
+		<div class="relative z-10 mx-auto max-w-4xl text-center">
+			<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent-2/20 bg-accent-2/5 text-accent-2 text-xs font-semibold mb-4">
+				<Bot class="size-3.5" />
+				Web Crawler
+			</div>
+			<h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">ArgonCrawler</h1>
+			<p class="text-text-secondary mt-3 text-sm sm:text-base max-w-2xl mx-auto">
+				A lightweight metadata bot that fetches link previews for Argon Chat.
+				Respectful, transparent, and fully controllable.
+			</p>
+		</div>
+	</section>
+
+	<!-- What & Why -->
+	<section class="px-4 sm:px-6 pb-16 sm:pb-20">
+		<div class="mx-auto max-w-4xl">
+			<div class="rounded-2xl border border-oled-border bg-oled-surface p-6 sm:p-8">
+				<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-4 flex items-center gap-2">
+					<Eye class="size-5 text-accent-2" />
+					What is ArgonCrawler?
+				</h2>
+				<p class="text-sm sm:text-base text-text-secondary leading-relaxed mb-4">
+					When a user shares a link in an <span class="text-text-primary font-medium">Argon Chat</span> conversation, our service fetches a small amount of metadata from that page — title, description, and preview image — to render a rich link preview directly in the chat.
+				</p>
+				<p class="text-sm sm:text-base text-text-secondary leading-relaxed mb-4">
+					This is the same kind of behavior you'd see from Slack, Discord, Telegram, or Twitter when they "unfurl" a URL. ArgonCrawler exists solely to provide this functionality; it does not index content, follow links recursively, or store page contents beyond the metadata needed for a thumbnail card.
+				</p>
+				<p class="text-sm sm:text-base text-text-secondary leading-relaxed">
+					Every crawl is <strong class="text-text-primary">user-initiated</strong> — our bot never discovers or visits pages on its own. It only fetches a URL because a real person pasted it into a conversation.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Technical Details Grid -->
+	<section class="px-4 sm:px-6 pb-16 sm:pb-20">
+		<div class="mx-auto max-w-4xl">
+			<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-6 flex items-center gap-2">
+				<Server class="size-5 text-accent" />
+				Technical Details
+			</h2>
+
+			<div class="grid sm:grid-cols-2 gap-4">
+				<!-- User Agent -->
+				<div class="rounded-xl border border-oled-border bg-oled-surface p-5">
+					<div class="flex items-center gap-2 mb-3">
+						<Globe class="size-4 text-accent-2" />
+						<h3 class="text-sm font-semibold">User-Agent</h3>
+					</div>
+					<code class="block text-xs bg-oled-elevated rounded-lg px-3 py-2 text-accent-2 break-all font-mono">
+						ArgonCrawler/1.3 (+https://argon.gl/beaf; like TwitterBot)
+					</code>
+					<p class="text-xs text-text-muted mt-2">
+						You can identify our bot by this User-Agent string in your access logs.
+					</p>
+				</div>
+
+				<!-- What We Fetch -->
+				<div class="rounded-xl border border-oled-border bg-oled-surface p-5">
+					<div class="flex items-center gap-2 mb-3">
+						<Link class="size-4 text-accent-2" />
+						<h3 class="text-sm font-semibold">What We Collect</h3>
+					</div>
+					<ul class="text-xs text-text-secondary space-y-1">
+						<li class="flex items-start gap-1.5"><span class="text-accent-2 mt-0.5">•</span> <code class="text-text-primary">og:title</code>, <code class="text-text-primary">og:description</code></li>
+						<li class="flex items-start gap-1.5"><span class="text-accent-2 mt-0.5">•</span> <code class="text-text-primary">og:image</code> (stored for thumbnail)</li>
+						<li class="flex items-start gap-1.5"><span class="text-accent-2 mt-0.5">•</span> <code class="text-text-primary">og:site_name</code>, <code class="text-text-primary">og:type</code></li>
+						<li class="flex items-start gap-1.5"><span class="text-accent-2 mt-0.5">•</span> Favicon, canonical URL</li>
+					</ul>
+					<p class="text-xs text-text-muted mt-2">
+						That's it. No full-page content, no JavaScript execution.
+					</p>
+				</div>
+
+				<!-- Frequency -->
+				<div class="rounded-xl border border-oled-border bg-oled-surface p-5">
+					<div class="flex items-center gap-2 mb-3">
+						<Clock class="size-4 text-accent-2" />
+						<h3 class="text-sm font-semibold">Request Frequency</h3>
+					</div>
+					<p class="text-xs text-text-secondary leading-relaxed">
+						Each URL is fetched <strong class="text-text-primary">once</strong> and cached for up to 6 months.
+						Subsequent requests for the same URL are served from cache — your server won't see repeated hits.
+						We never batch-crawl, spider, or recursively follow links on your page.
+					</p>
+				</div>
+
+				<!-- Speed -->
+				<div class="rounded-xl border border-oled-border bg-oled-surface p-5">
+					<div class="flex items-center gap-2 mb-3">
+						<Clock class="size-4 text-accent-2" />
+						<h3 class="text-sm font-semibold">Timeouts & Limits</h3>
+					</div>
+					<p class="text-xs text-text-secondary leading-relaxed">
+						Our bot imposes a strict <strong class="text-text-primary">3-second timeout</strong> on page fetches. If your server doesn't respond within that window, we give up.
+						We read at most <strong class="text-text-primary">5 MB</strong> of HTML and follow a maximum of 3 redirects. The OG image is capped at <strong class="text-text-primary">2 MB</strong>.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- robots.txt Compliance -->
+	<section class="px-4 sm:px-6 pb-16 sm:pb-20">
+		<div class="mx-auto max-w-4xl">
+			<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-6 flex items-center gap-2">
+				<FileText class="size-5 text-accent" />
+				robots.txt Compliance
+			</h2>
+
+			<div class="rounded-2xl border border-oled-border bg-oled-surface p-6 sm:p-8">
+				<p class="text-sm sm:text-base text-text-secondary leading-relaxed mb-4">
+					ArgonCrawler <strong class="text-text-primary">fully respects</strong> your <code class="text-accent-2">robots.txt</code> directives. If your robots.txt disallows our User-Agent (or all bots) from accessing a path, we will not fetch that URL and the link preview will simply not be generated.
+				</p>
+
+				<h3 class="text-sm font-semibold mb-2 text-text-primary">To block ArgonCrawler specifically:</h3>
+				<div class="bg-oled-elevated rounded-lg p-4 mb-4">
+					<pre class="text-xs font-mono text-text-secondary"><code>User-agent: ArgonCrawler
+Disallow: /</code></pre>
+				</div>
+
+				<h3 class="text-sm font-semibold mb-2 text-text-primary">We also respect:</h3>
+				<ul class="text-sm text-text-secondary space-y-1.5">
+					<li class="flex items-start gap-2"><span class="text-success">✓</span> <code>Crawl-delay</code> — we honor per-domain rate limits</li>
+					<li class="flex items-start gap-2"><span class="text-success">✓</span> <code>Disallow</code> rules for <code>*</code> (wildcard user-agent)</li>
+					<li class="flex items-start gap-2"><span class="text-success">✓</span> Specific rules targeting <code>ArgonCrawler</code> or <code>TwitterBot</code></li>
+				</ul>
+
+				<div class="mt-4 p-3 rounded-lg bg-accent-2/5 border border-accent-2/10">
+					<p class="text-xs text-accent-2">
+						<strong>Note:</strong> If a URL is blocked by robots.txt, Argon Chat users will see a plain text link instead of a rich preview. No data from your page is fetched or stored.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Data & Privacy -->
+	<section class="px-4 sm:px-6 pb-16 sm:pb-20">
+		<div class="mx-auto max-w-4xl">
+			<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-6 flex items-center gap-2">
+				<Shield class="size-5 text-accent" />
+				Data Handling & Privacy
+			</h2>
+
+			<div class="space-y-4">
+				<div class="rounded-xl border border-oled-border bg-oled-surface p-5">
+					<h3 class="text-sm font-semibold mb-2">What we store</h3>
+					<p class="text-xs text-text-secondary leading-relaxed">
+						Only the extracted Open Graph metadata (title, description, image URL) and a cached copy of the OG image. We do <strong class="text-text-primary">not</strong> store the full HTML content of your page, and we do not execute JavaScript.
+					</p>
+				</div>
+
+				<div class="rounded-xl border border-oled-border bg-oled-surface p-5">
+					<h3 class="text-sm font-semibold mb-2">Cache duration</h3>
+					<p class="text-xs text-text-secondary leading-relaxed">
+						Metadata is cached for approximately <strong class="text-text-primary">6 months</strong> by default. Frequently accessed URLs may have their cache extended. Cached data (including stored images) is permanently deleted when the cache expires or is manually invalidated.
+					</p>
+				</div>
+
+				<div class="rounded-xl border border-oled-border bg-oled-surface p-5">
+					<h3 class="text-sm font-semibold mb-2">Image storage</h3>
+					<p class="text-xs text-text-secondary leading-relaxed">
+						If the page specifies an <code class="text-accent-2">og:image</code>, we download and store a copy on our CDN to ensure the preview remains available even if the original image URL changes or goes offline. When the cache entry is invalidated or expires, the stored image is deleted.
+					</p>
+				</div>
+
+				<div class="rounded-xl border border-oled-border bg-oled-surface p-5">
+					<h3 class="text-sm font-semibold mb-2">No tracking</h3>
+					<p class="text-xs text-text-secondary leading-relaxed">
+						ArgonCrawler does not set cookies, does not execute JavaScript, does not fingerprint users or devices, and does not participate in ad networks. It makes a single HTTP GET request for the HTML, optionally downloads the OG image, and that's the end of the interaction.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Contact / Opt-out -->
+	<section class="px-4 sm:px-6 pb-20 sm:pb-28">
+		<div class="mx-auto max-w-4xl">
+			<div class="rounded-2xl border border-oled-border bg-oled-surface p-6 sm:p-8 text-center">
+				<h2 class="text-lg sm:text-xl font-bold tracking-tight mb-3">Questions or Concerns?</h2>
+				<p class="text-sm text-text-secondary max-w-xl mx-auto mb-4">
+					If you'd like to request removal of cached data for your domain, have questions about our crawler's behavior, or need to report an issue, feel free to reach out.
+				</p>
+				<div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+					<a href="/contact" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:bg-accent-hover transition-colors">
+						Contact Us
+					</a>
+					<a href="/privacy" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-oled-border text-text-secondary text-sm font-medium hover:border-oled-hover hover:text-text-primary transition-colors">
+						Privacy Policy
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<Footer />
+</Layout>
