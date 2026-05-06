@@ -14,5 +14,7 @@
     "endpoints_v2": [
         "updates.argon.gl"
     ],
-    "componentManifest": "{component}.{channel}.json"
+    "componentManifest": "{component}.{channel}.json",
+    "altManifestAddr": "manifest.argon.gl",
+    "altSelfUpdateAddr": "manifest.argon.gl"
 }
