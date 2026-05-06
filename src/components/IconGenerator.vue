@@ -1,5 +1,29 @@
 <template>
-  <div class="flex flex-col lg:flex-row gap-8 items-start">
+  <!-- Password Gate -->
+  <div v-if="locked" class="flex flex-col items-center justify-center min-h-[50vh] gap-6">
+    <div class="text-center">
+      <div class="text-4xl mb-3">🔒</div>
+      <h2 class="text-xl font-bold text-text-primary mb-1">Access Required</h2>
+      <p class="text-sm text-text-secondary">This tool is for internal use only.</p>
+    </div>
+    <form @submit.prevent="tryUnlock" class="flex flex-col items-center gap-3 w-full max-w-xs">
+      <input
+        v-model="passwordInput"
+        type="password"
+        placeholder="Enter access key"
+        class="w-full px-4 py-2.5 rounded-lg bg-oled-surface border border-oled-border text-text-primary placeholder:text-text-faint focus:outline-none focus:border-accent text-sm"
+        autofocus
+      />
+      <button
+        type="submit"
+        class="w-full px-4 py-2.5 rounded-lg bg-accent text-white font-semibold text-sm hover:bg-accent/90 transition-colors cursor-pointer"
+      >Unlock</button>
+      <p v-if="passwordError" class="text-xs text-red-400">Invalid access key.</p>
+    </form>
+  </div>
+
+  <!-- Main Content -->
+  <div v-else class="flex flex-col lg:flex-row gap-8 items-start">
     <!-- Preview -->
     <div class="flex-1 flex flex-col items-center gap-6 w-full">
       <!-- Main preview -->
@@ -260,12 +284,98 @@
           </button>
         </div>
       </fieldset>
+
+      <!-- GPU Effects -->
+      <fieldset v-if="gpuAvailable">
+        <legend class="text-[11px] font-semibold uppercase tracking-wider text-text-muted mb-2">
+          <span class="text-accent">⚡</span> GPU Shader Background
+        </legend>
+        <div class="grid grid-cols-3 gap-1.5">
+          <button
+            v-for="opt in gpuBgOptions"
+            :key="opt.value"
+            @click="gpuBgEffect = opt.value"
+            :class="[
+              'px-2 py-1.5 text-[10px] rounded border cursor-pointer transition-all',
+              gpuBgEffect === opt.value
+                ? 'bg-accent/20 border-accent text-accent'
+                : 'bg-oled-surface border-oled-border text-text-secondary hover:border-accent/50'
+            ]"
+          >{{ opt.label }}</button>
+        </div>
+      </fieldset>
+
+      <fieldset v-if="gpuAvailable">
+        <legend class="text-[11px] font-semibold uppercase tracking-wider text-text-muted mb-2">
+          <span class="text-accent">⚡</span> GPU Post-Processing
+        </legend>
+        <div class="grid grid-cols-3 gap-1.5 mb-2">
+          <button
+            v-for="opt in gpuPostOptions"
+            :key="opt.value"
+            @click="gpuPost = opt.value"
+            :class="[
+              'px-2 py-1.5 text-[10px] rounded border cursor-pointer transition-all',
+              gpuPost === opt.value
+                ? 'bg-accent/20 border-accent text-accent'
+                : 'bg-oled-surface border-oled-border text-text-secondary hover:border-accent/50'
+            ]"
+          >{{ opt.label }}</button>
+        </div>
+        <div v-if="gpuPost === 'bloom'" class="mt-1">
+          <span class="text-[10px] text-text-faint">Bloom Intensity <span class="font-mono">{{ bloomIntensity.toFixed(1) }}</span></span>
+          <input type="range" v-model.number="bloomIntensity" min="0.5" max="4.0" step="0.1" class="w-full accent-accent" />
+        </div>
+        <div v-if="gpuPost === 'chromatic'" class="mt-1">
+          <span class="text-[10px] text-text-faint">Aberration <span class="font-mono">{{ (chromaticStrength * 100).toFixed(0) }}%</span></span>
+          <input type="range" v-model.number="chromaticStrength" min="0.005" max="0.05" step="0.005" class="w-full accent-accent" />
+        </div>
+      </fieldset>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, watch, onMounted, nextTick, computed } from 'vue';
+import { GpuEffectEngine, type GpuBgEffect, type GpuPostEffect } from '../lib/gpu-effects';
+
+// ── Password Gate ──
+const PASS_HASH = 'fd19cc3982e3916e91798e1f296e9358b320d8bbeacb581f120fdbf29b87c61e';
+const LS_KEY = 'argon-icon-gen-key';
+const locked = ref(true);
+const passwordInput = ref('');
+const passwordError = ref(false);
+
+async function sha256(str: string): Promise<string> {
+  const data = new TextEncoder().encode(str);
+  const buf = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function tryUnlock() {
+  passwordError.value = false;
+  const hash = await sha256(passwordInput.value);
+  if (hash === PASS_HASH) {
+    localStorage.setItem(LS_KEY, passwordInput.value);
+    locked.value = false;
+    passwordInput.value = '';
+    nextTick(renderAsync);
+  } else {
+    passwordError.value = true;
+  }
+}
+
+async function checkStoredPassword() {
+  const stored = localStorage.getItem(LS_KEY);
+  if (stored) {
+    const hash = await sha256(stored);
+    if (hash === PASS_HASH) {
+      locked.value = false;
+      return;
+    }
+    localStorage.removeItem(LS_KEY);
+  }
+}
 
 const canvasSize = 1024;
 const previewSize = 280;
@@ -273,6 +383,29 @@ const exportSizes = [1024, 512, 256, 128, 64, 32];
 
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 const thumbRefs = reactive<Record<number, HTMLCanvasElement>>({});
+
+// ── GPU State ──
+const gpu = ref<GpuEffectEngine | null>(null);
+const gpuAvailable = ref(false);
+const gpuBgEffect = ref<GpuBgEffect | 'none'>('none');
+const gpuPost = ref<GpuPostEffect>('none');
+const bloomIntensity = ref(1.5);
+const chromaticStrength = ref(0.01);
+let gpuTime = 3.7; // stable time seed for consistent GPU renders
+
+const gpuBgOptions: { value: GpuBgEffect | 'none'; label: string }[] = [
+  { value: 'none', label: 'Off' },
+  { value: 'plasma', label: 'Plasma' },
+  { value: 'voronoi', label: 'Crystal' },
+  { value: 'aurora', label: 'Aurora' },
+  { value: 'nebula', label: 'Nebula' },
+];
+
+const gpuPostOptions: { value: GpuPostEffect; label: string }[] = [
+  { value: 'none', label: 'None' },
+  { value: 'bloom', label: 'Bloom' },
+  { value: 'chromatic', label: 'Chromatic' },
+];
 
 // ── Options ──
 const shape = ref<'circle' | 'rounded' | 'square'>('rounded');
@@ -297,13 +430,14 @@ const shapes = [
 
 // ── Types ──
 type LogoEffect = 'none' | 'gradient' | 'metallic' | 'holographic' | 'neon' | 'glass' | 'outline' | 'emboss' | 'duotone';
-type OverlayType = 'none' | 'sparkles' | 'sakura' | 'hearts' | 'stars' | 'rings' | 'bubbles' | 'diamonds' | 'geometric';
+type OverlayType = 'none' | 'sparkles' | 'sakura' | 'hearts' | 'stars' | 'rings' | 'bubbles' | 'diamonds' | 'geometric' | 'snowflakes' | 'lightning' | 'crowns' | 'flames' | 'crystals' | 'moons' | 'chains' | 'feathers' | 'music' | 'butterflies' | 'crosses';
 
 interface BgDef {
   label: string;
-  type: 'solid' | 'gradient' | 'custom' | 'mesh' | 'conic' | 'radial' | 'aurora';
+  type: 'solid' | 'gradient' | 'custom' | 'mesh' | 'conic' | 'radial' | 'aurora' | 'gpu';
   colors?: string[];
   angle?: number;
+  gpuEffect?: GpuBgEffect;
 }
 
 // ── Logo Effects ──
@@ -330,6 +464,17 @@ const overlayTypes: { value: OverlayType; label: string; icon: string }[] = [
   { value: 'bubbles', label: 'Bubbles', icon: '🫧' },
   { value: 'diamonds', label: 'Diamonds', icon: '💎' },
   { value: 'geometric', label: 'Geo', icon: '⬡' },
+  { value: 'snowflakes', label: 'Snow', icon: '❄' },
+  { value: 'lightning', label: 'Lightning', icon: '⚡' },
+  { value: 'crowns', label: 'Crowns', icon: '👑' },
+  { value: 'flames', label: 'Flames', icon: '🔥' },
+  { value: 'crystals', label: 'Crystals', icon: '🔮' },
+  { value: 'moons', label: 'Moons', icon: '🌙' },
+  { value: 'chains', label: 'Chains', icon: '⛓' },
+  { value: 'feathers', label: 'Feathers', icon: '🪶' },
+  { value: 'music', label: 'Music', icon: '♪' },
+  { value: 'butterflies', label: 'Butterfly', icon: '🦋' },
+  { value: 'crosses', label: 'Cross', icon: '✦' },
 ];
 
 // ── Backgrounds ──
@@ -372,9 +517,13 @@ interface Preset {
   overlayDensity?: number;
   overlaySize?: number;
   overlayOpacity?: number;
+  gpuBg?: GpuBgEffect;
+  gpuPost?: GpuPostEffect;
+  bloomIntensity?: number;
+  chromaticStrength?: number;
 }
 
-const presetCategories = ['All', 'Classic', 'Premium', 'Kawaii', 'Luxury'];
+const presetCategories = ['All', 'Classic', 'Premium', 'Kawaii', 'Luxury', 'GPU'];
 const activeCategory = ref('All');
 
 const presets: Preset[] = [
@@ -433,6 +582,20 @@ const presets: Preset[] = [
   { name: 'Onyx', category: 'Luxury', logo: '#fafafa', logo2: '#a1a1aa', bg: { label: 'Onyx', type: 'solid', colors: ['#0a0a0a'] }, effect: 'outline', overlay: 'rings', overlayDensity: 5, overlaySize: 0.08, overlayOpacity: 0.3, noise: true },
   { name: 'Titanium', category: 'Luxury', logo: '#94a3b8', logo2: '#cbd5e1', bg: { label: 'Titan', type: 'gradient', colors: ['#1e293b', '#0f172a'], angle: 135 }, effect: 'metallic', overlay: 'geometric', overlayDensity: 6, overlaySize: 0.06, overlayOpacity: 0.25 },
   { name: 'Vermeil', category: 'Luxury', logo: '#fcd34d', logo2: '#b45309', bg: { label: 'Verm', type: 'gradient', colors: ['#27272a', '#18181b'], angle: 160 }, effect: 'metallic', overlay: 'sparkles', overlayDensity: 8, overlaySize: 0.06, overlayOpacity: 0.5, glow: true },
+
+  // ── GPU Powered ──
+  { name: 'Plasma Fire', category: 'GPU', logo: '#ffffff', logo2: '#fde68a', bg: { label: 'Dark', type: 'solid', colors: ['#ff4500', '#ff8c00', '#1a0a00'] }, effect: 'neon', overlay: 'sparkles', overlayDensity: 8, overlaySize: 0.05, overlayOpacity: 0.6, glow: true, gpuBg: 'plasma', gpuPost: 'bloom', bloomIntensity: 2.0 },
+  { name: 'Plasma Violet', category: 'GPU', logo: '#ffffff', logo2: '#e9d5ff', bg: { label: 'Dark', type: 'solid', colors: ['#8b5cf6', '#ec4899', '#0f0520'] }, effect: 'holographic', overlay: 'sparkles', overlayDensity: 10, overlaySize: 0.06, overlayOpacity: 0.7, glow: true, gpuBg: 'plasma', gpuPost: 'bloom', bloomIntensity: 1.8 },
+  { name: 'Crystal Ice', category: 'GPU', logo: '#ffffff', logo2: '#a5f3fc', bg: { label: 'Ice', type: 'solid', colors: ['#67e8f9', '#06b6d4', '#0c4a6e'] }, effect: 'glass', overlay: 'diamonds', overlayDensity: 8, overlaySize: 0.07, overlayOpacity: 0.5, gpuBg: 'voronoi' },
+  { name: 'Crystal Amethyst', category: 'GPU', logo: '#d8b4fe', logo2: '#7e22ce', bg: { label: 'Ameth', type: 'solid', colors: ['#a855f7', '#6d28d9', '#1e1b4b'] }, effect: 'metallic', overlay: 'sparkles', overlayDensity: 10, overlaySize: 0.06, overlayOpacity: 0.6, glow: true, gpuBg: 'voronoi', gpuPost: 'chromatic', chromaticStrength: 0.015 },
+  { name: 'GPU Aurora', category: 'GPU', logo: '#ffffff', logo2: '#a7f3d0', bg: { label: 'Aurora', type: 'solid', colors: ['#34d399', '#8b5cf6', '#0f172a'] }, effect: 'glass', overlay: 'sparkles', overlayDensity: 12, overlaySize: 0.05, overlayOpacity: 0.7, gpuBg: 'aurora', gpuPost: 'bloom', bloomIntensity: 1.5 },
+  { name: 'Northern Lights', category: 'GPU', logo: '#ffffff', logo2: '#93c5fd', bg: { label: 'North', type: 'solid', colors: ['#22d3ee', '#a78bfa', '#020617'] }, effect: 'neon', overlay: 'stars', overlayDensity: 14, overlaySize: 0.04, overlayOpacity: 0.8, gpuBg: 'aurora' },
+  { name: 'Cosmic Nebula', category: 'GPU', logo: '#e0e7ff', logo2: '#c4b5fd', bg: { label: 'Nebula', type: 'solid', colors: ['#8b5cf6', '#ec4899', '#0f0520'] }, effect: 'holographic', overlay: 'stars', overlayDensity: 16, overlaySize: 0.04, overlayOpacity: 0.9, glow: true, gpuBg: 'nebula', gpuPost: 'bloom', bloomIntensity: 2.0 },
+  { name: 'Galaxy Core', category: 'GPU', logo: '#fbbf24', logo2: '#f59e0b', bg: { label: 'Galaxy', type: 'solid', colors: ['#f59e0b', '#f97316', '#0c0a09'] }, effect: 'metallic', overlay: 'sparkles', overlayDensity: 12, overlaySize: 0.05, overlayOpacity: 0.7, glow: true, gpuBg: 'nebula', gpuPost: 'chromatic', chromaticStrength: 0.02 },
+  { name: 'Plasma Sakura', category: 'GPU', logo: '#ffffff', logo2: '#fecdd3', bg: { label: 'Sakura', type: 'solid', colors: ['#f472b6', '#e879f9', '#1c1917'] }, effect: 'neon', overlay: 'sakura', overlayDensity: 12, overlaySize: 0.08, overlayOpacity: 0.7, gpuBg: 'plasma', gpuPost: 'bloom', bloomIntensity: 1.5 },
+  { name: 'Void Crystal', category: 'GPU', logo: '#a1a1aa', logo2: '#d4d4d8', bg: { label: 'Void', type: 'solid', colors: ['#374151', '#111827', '#000000'] }, effect: 'metallic', overlay: 'geometric', overlayDensity: 6, overlaySize: 0.06, overlayOpacity: 0.3, gpuBg: 'voronoi', gpuPost: 'chromatic', chromaticStrength: 0.01 },
+  { name: 'Neon Nebula', category: 'GPU', logo: '#22d3ee', logo2: '#06b6d4', bg: { label: 'Neon', type: 'solid', colors: ['#06b6d4', '#8b5cf6', '#020617'] }, effect: 'neon', overlay: 'rings', overlayDensity: 6, overlaySize: 0.08, overlayOpacity: 0.5, glow: true, gpuBg: 'nebula', gpuPost: 'bloom', bloomIntensity: 2.5 },
+  { name: 'Plasma Ocean', category: 'GPU', logo: '#ffffff', logo2: '#bae6fd', bg: { label: 'Ocean', type: 'solid', colors: ['#0ea5e9', '#0d9488', '#0c4a6e'] }, effect: 'glass', overlay: 'bubbles', overlayDensity: 10, overlaySize: 0.07, overlayOpacity: 0.5, gpuBg: 'plasma' },
 ];
 
 const activePresetName = ref('Classic');
@@ -457,7 +620,11 @@ function applyPreset(p: Preset) {
   overlayDensity.value = p.overlayDensity ?? 10;
   overlaySize.value = p.overlaySize ?? 0.07;
   overlayOpacity.value = p.overlayOpacity ?? 0.75;
-  nextTick(render);
+  gpuBgEffect.value = p.gpuBg ?? 'none';
+  gpuPost.value = p.gpuPost ?? 'none';
+  bloomIntensity.value = p.bloomIntensity ?? 1.5;
+  chromaticStrength.value = p.chromaticStrength ?? 0.01;
+  nextTick(renderAsync);
 }
 
 function presetBgStyle(p: Preset) {
@@ -591,6 +758,256 @@ function createHexPath(size: number): Path2D {
   return path;
 }
 
+function createSnowflakePath(size: number): Path2D {
+  const path = new Path2D();
+  const s = size;
+  // 6 main arms with branches
+  for (let i = 0; i < 6; i++) {
+    const angle = (i / 6) * Math.PI * 2;
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+    // Main arm
+    path.moveTo(0, 0);
+    path.lineTo(cos * s, sin * s);
+    // Branch left
+    const bx = cos * s * 0.55;
+    const by = sin * s * 0.55;
+    const branchAngle = angle + Math.PI / 6;
+    path.moveTo(bx, by);
+    path.lineTo(bx + Math.cos(branchAngle) * s * 0.35, by + Math.sin(branchAngle) * s * 0.35);
+    // Branch right
+    const branchAngle2 = angle - Math.PI / 6;
+    path.moveTo(bx, by);
+    path.lineTo(bx + Math.cos(branchAngle2) * s * 0.35, by + Math.sin(branchAngle2) * s * 0.35);
+    // Tip branches
+    const tx = cos * s * 0.8;
+    const ty = sin * s * 0.8;
+    path.moveTo(tx, ty);
+    path.lineTo(tx + Math.cos(angle + Math.PI / 4) * s * 0.2, ty + Math.sin(angle + Math.PI / 4) * s * 0.2);
+    path.moveTo(tx, ty);
+    path.lineTo(tx + Math.cos(angle - Math.PI / 4) * s * 0.2, ty + Math.sin(angle - Math.PI / 4) * s * 0.2);
+  }
+  return path;
+}
+
+function createLightningPath(size: number): Path2D {
+  const path = new Path2D();
+  const s = size;
+  path.moveTo(s * 0.1, -s);
+  path.lineTo(-s * 0.2, -s * 0.15);
+  path.lineTo(s * 0.15, -s * 0.15);
+  path.lineTo(-s * 0.1, s * 0.5);
+  path.lineTo(s * 0.2, s * 0.5);
+  path.lineTo(-s * 0.15, s);
+  path.lineTo(s * 0.4, -s * 0.1);
+  path.lineTo(s * 0.1, -s * 0.1);
+  path.lineTo(s * 0.35, -s * 0.7);
+  path.lineTo(s * 0.1, -s * 0.7);
+  path.closePath();
+  return path;
+}
+
+function createCrownPath(size: number): Path2D {
+  const path = new Path2D();
+  const s = size;
+  // Crown base
+  path.moveTo(-s * 0.5, s * 0.3);
+  path.lineTo(-s * 0.5, -s * 0.1);
+  path.lineTo(-s * 0.3, s * 0.1);
+  path.lineTo(-s * 0.1, -s * 0.4);
+  path.lineTo(0, s * 0.0);
+  path.lineTo(s * 0.1, -s * 0.4);
+  path.lineTo(s * 0.3, s * 0.1);
+  path.lineTo(s * 0.5, -s * 0.1);
+  path.lineTo(s * 0.5, s * 0.3);
+  path.closePath();
+  // Jewels at tips
+  path.arc(-s * 0.1, -s * 0.45, s * 0.06, 0, Math.PI * 2);
+  path.arc(s * 0.1, -s * 0.45, s * 0.06, 0, Math.PI * 2);
+  path.arc(0, -s * 0.05, s * 0.05, 0, Math.PI * 2);
+  return path;
+}
+
+function createFlamePath(size: number): Path2D {
+  const path = new Path2D();
+  const s = size;
+  path.moveTo(0, s * 0.5);
+  path.bezierCurveTo(s * 0.1, s * 0.3, s * 0.4, s * 0.1, s * 0.3, -s * 0.2);
+  path.bezierCurveTo(s * 0.5, -s * 0.05, s * 0.45, -s * 0.5, s * 0.15, -s * 0.7);
+  path.bezierCurveTo(s * 0.25, -s * 0.4, s * 0.1, -s * 0.3, s * 0.05, -s * 0.85);
+  path.bezierCurveTo(0, -s * 0.5, -s * 0.05, -s * 0.4, -s * 0.05, -s * 0.85);
+  path.bezierCurveTo(-s * 0.1, -s * 0.3, -s * 0.25, -s * 0.4, -s * 0.15, -s * 0.7);
+  path.bezierCurveTo(-s * 0.45, -s * 0.5, -s * 0.5, -s * 0.05, -s * 0.3, -s * 0.2);
+  path.bezierCurveTo(-s * 0.4, s * 0.1, -s * 0.1, s * 0.3, 0, s * 0.5);
+  path.closePath();
+  return path;
+}
+
+function createCrystalPath(size: number): Path2D {
+  const path = new Path2D();
+  const s = size;
+  // Main crystal body - elongated hexagonal prism
+  path.moveTo(0, -s);
+  path.lineTo(s * 0.35, -s * 0.55);
+  path.lineTo(s * 0.35, s * 0.4);
+  path.lineTo(0, s * 0.7);
+  path.lineTo(-s * 0.35, s * 0.4);
+  path.lineTo(-s * 0.35, -s * 0.55);
+  path.closePath();
+  // Inner facet line
+  path.moveTo(0, -s);
+  path.lineTo(0, s * 0.7);
+  // Cross facets
+  path.moveTo(-s * 0.35, -s * 0.1);
+  path.lineTo(s * 0.35, -s * 0.1);
+  path.moveTo(-s * 0.35, s * 0.2);
+  path.lineTo(s * 0.35, s * 0.2);
+  return path;
+}
+
+function createMoonPath(size: number): Path2D {
+  const path = new Path2D();
+  const s = size;
+  // Crescent moon
+  path.arc(0, 0, s * 0.8, 0, Math.PI * 2);
+  // Cut out inner circle (draw counterclockwise)
+  path.arc(s * 0.3, -s * 0.1, s * 0.6, 0, Math.PI * 2, true);
+  return path;
+}
+
+function createChainLinkPath(size: number): Path2D {
+  const path = new Path2D();
+  const s = size;
+  // Rounded rectangle link - outer
+  const w = s * 0.4;
+  const h = s * 0.8;
+  const r = w * 0.5;
+  path.moveTo(-w + r, -h);
+  path.arcTo(w, -h, w, -h + r, r);
+  path.arcTo(w, h, w - r, h, r);
+  path.arcTo(-w, h, -w, h - r, r);
+  path.arcTo(-w, -h, -w + r, -h, r);
+  path.closePath();
+  // Inner hole
+  const iw = w * 0.4;
+  const ih = h * 0.5;
+  const ir = iw * 0.5;
+  path.moveTo(-iw + ir, -ih);
+  path.arcTo(iw, -ih, iw, -ih + ir, ir);
+  path.arcTo(iw, ih, iw - ir, ih, ir);
+  path.arcTo(-iw, ih, -iw, ih - ir, ir);
+  path.arcTo(-iw, -ih, -iw + ir, -ih, ir);
+  return path;
+}
+
+function createFeatherPath(size: number): Path2D {
+  const path = new Path2D();
+  const s = size;
+  // Feather quill
+  path.moveTo(0, s);
+  path.quadraticCurveTo(s * 0.05, s * 0.5, 0, -s * 0.8);
+  // Right barbs
+  for (let i = 0; i < 6; i++) {
+    const t = i / 6;
+    const y = s - t * s * 1.6;
+    const spread = (1 - t * 0.7) * s * 0.5;
+    path.moveTo(0, y);
+    path.quadraticCurveTo(spread * 0.5, y - s * 0.05, spread, y - s * 0.1);
+  }
+  // Left barbs
+  for (let i = 0; i < 6; i++) {
+    const t = i / 6;
+    const y = s - t * s * 1.6;
+    const spread = (1 - t * 0.7) * s * 0.5;
+    path.moveTo(0, y);
+    path.quadraticCurveTo(-spread * 0.5, y - s * 0.05, -spread, y - s * 0.1);
+  }
+  return path;
+}
+
+function createMusicNotePath(size: number): Path2D {
+  const path = new Path2D();
+  const s = size;
+  // Note head (filled ellipse)
+  path.ellipse(-s * 0.15, s * 0.3, s * 0.22, s * 0.16, -0.4, 0, Math.PI * 2);
+  // Stem
+  path.moveTo(s * 0.05, s * 0.25);
+  path.lineTo(s * 0.05, -s * 0.6);
+  // Flag
+  path.moveTo(s * 0.05, -s * 0.6);
+  path.bezierCurveTo(s * 0.4, -s * 0.5, s * 0.4, -s * 0.2, s * 0.1, -s * 0.1);
+  path.moveTo(s * 0.05, -s * 0.45);
+  path.bezierCurveTo(s * 0.35, -s * 0.35, s * 0.35, -s * 0.1, s * 0.1, s * 0.0);
+  return path;
+}
+
+function createButterflyPath(size: number): Path2D {
+  const path = new Path2D();
+  const s = size;
+  // Right upper wing
+  path.moveTo(0, 0);
+  path.bezierCurveTo(s * 0.3, -s * 0.6, s * 0.8, -s * 0.5, s * 0.6, -s * 0.1);
+  path.bezierCurveTo(s * 0.8, 0, s * 0.3, s * 0.1, 0, 0);
+  // Right lower wing
+  path.moveTo(0, 0);
+  path.bezierCurveTo(s * 0.2, s * 0.1, s * 0.6, s * 0.2, s * 0.5, s * 0.5);
+  path.bezierCurveTo(s * 0.4, s * 0.6, s * 0.1, s * 0.3, 0, 0);
+  // Left upper wing
+  path.moveTo(0, 0);
+  path.bezierCurveTo(-s * 0.3, -s * 0.6, -s * 0.8, -s * 0.5, -s * 0.6, -s * 0.1);
+  path.bezierCurveTo(-s * 0.8, 0, -s * 0.3, s * 0.1, 0, 0);
+  // Left lower wing
+  path.moveTo(0, 0);
+  path.bezierCurveTo(-s * 0.2, s * 0.1, -s * 0.6, s * 0.2, -s * 0.5, s * 0.5);
+  path.bezierCurveTo(-s * 0.4, s * 0.6, -s * 0.1, s * 0.3, 0, 0);
+  // Body
+  path.ellipse(0, 0, s * 0.04, s * 0.25, 0, 0, Math.PI * 2);
+  // Antennae
+  path.moveTo(0, -s * 0.2);
+  path.quadraticCurveTo(s * 0.1, -s * 0.45, s * 0.15, -s * 0.5);
+  path.moveTo(0, -s * 0.2);
+  path.quadraticCurveTo(-s * 0.1, -s * 0.45, -s * 0.15, -s * 0.5);
+  return path;
+}
+
+function createCrossSparkPath(size: number): Path2D {
+  // A decorative 4-pointed ornate cross with curved arms
+  const path = new Path2D();
+  const s = size;
+  // 4 ornate pointed arms with inner curves
+  for (let i = 0; i < 4; i++) {
+    const angle = (i / 4) * Math.PI * 2;
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+    const nextAngle = ((i + 0.5) / 4) * Math.PI * 2;
+    const ncos = Math.cos(nextAngle);
+    const nsin = Math.sin(nextAngle);
+    const prevAngle = ((i - 0.5) / 4) * Math.PI * 2;
+    const pcos = Math.cos(prevAngle);
+    const psin = Math.sin(prevAngle);
+
+    if (i === 0) {
+      path.moveTo(pcos * s * 0.15, psin * s * 0.15);
+    }
+    // Curve to arm tip
+    path.quadraticCurveTo(
+      cos * s * 0.3 + pcos * s * 0.1,
+      sin * s * 0.3 + psin * s * 0.1,
+      cos * s * 0.9,
+      sin * s * 0.9
+    );
+    // Curve back to next indent
+    path.quadraticCurveTo(
+      cos * s * 0.3 + ncos * s * 0.1,
+      sin * s * 0.3 + nsin * s * 0.1,
+      ncos * s * 0.15,
+      nsin * s * 0.15
+    );
+  }
+  path.closePath();
+  return path;
+}
+
 // ── Overlay color palettes per type ──
 function getOverlayColors(type: OverlayType): string[] {
   switch (type) {
@@ -602,6 +1019,17 @@ function getOverlayColors(type: OverlayType): string[] {
     case 'bubbles': return [logoColor.value, '#ffffff', logoColor2.value, 'rgba(255,255,255,0.6)'];
     case 'diamonds': return [logoColor.value, '#ffffff', '#a5f3fc', '#c4b5fd'];
     case 'geometric': return [logoColor.value, logoColor2.value, 'rgba(255,255,255,0.4)'];
+    case 'snowflakes': return ['#ffffff', '#e0f2fe', '#bae6fd', '#7dd3fc', '#a5f3fc'];
+    case 'lightning': return ['#fbbf24', '#fde68a', '#ffffff', '#f59e0b', logoColor.value];
+    case 'crowns': return ['#fbbf24', '#f59e0b', '#d97706', '#fde68a', '#ffffff'];
+    case 'flames': return ['#f97316', '#ef4444', '#fbbf24', '#fde68a', '#dc2626'];
+    case 'crystals': return ['#a78bfa', '#c4b5fd', '#8b5cf6', '#e0e7ff', '#ffffff'];
+    case 'moons': return ['#fde68a', '#fbbf24', '#e2e8f0', '#f8fafc', logoColor.value];
+    case 'chains': return [logoColor.value, '#d4d4d8', '#a1a1aa', '#e5e7eb', logoColor2.value];
+    case 'feathers': return ['#ffffff', '#e0e7ff', '#c4b5fd', '#a5f3fc', logoColor.value];
+    case 'music': return [logoColor.value, '#ffffff', logoColor2.value, '#fbbf24', '#a78bfa'];
+    case 'butterflies': return ['#a78bfa', '#f472b6', '#67e8f9', '#fbbf24', '#34d399', '#ffffff'];
+    case 'crosses': return [logoColor.value, '#ffffff', logoColor2.value, '#fbbf24'];
     default: return [logoColor.value];
   }
 }
@@ -699,6 +1127,85 @@ function drawOverlays(ctx: CanvasRenderingContext2D, size: number) {
         ctx.lineWidth = elSize * 0.08;
         ctx.shadowColor = color;
         ctx.shadowBlur = elSize * 0.3;
+        break;
+      case 'snowflakes':
+        path = createSnowflakePath(elSize);
+        useStroke = true;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = elSize * 0.06;
+        ctx.lineCap = 'round';
+        ctx.shadowColor = '#bae6fd';
+        ctx.shadowBlur = elSize * 0.6;
+        break;
+      case 'lightning':
+        path = createLightningPath(elSize);
+        ctx.fillStyle = color;
+        ctx.shadowColor = '#fde68a';
+        ctx.shadowBlur = elSize * 1.0;
+        break;
+      case 'crowns':
+        path = createCrownPath(elSize);
+        ctx.fillStyle = color;
+        ctx.shadowColor = '#fbbf24';
+        ctx.shadowBlur = elSize * 0.6;
+        break;
+      case 'flames':
+        path = createFlamePath(elSize);
+        ctx.fillStyle = color;
+        ctx.shadowColor = '#f97316';
+        ctx.shadowBlur = elSize * 0.8;
+        break;
+      case 'crystals':
+        path = createCrystalPath(elSize);
+        useStroke = true;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = elSize * 0.07;
+        ctx.shadowColor = '#a78bfa';
+        ctx.shadowBlur = elSize * 0.7;
+        break;
+      case 'moons':
+        path = createMoonPath(elSize);
+        ctx.fillStyle = color;
+        ctx.shadowColor = '#fde68a';
+        ctx.shadowBlur = elSize * 0.5;
+        break;
+      case 'chains':
+        path = createChainLinkPath(elSize);
+        useStroke = true;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = elSize * 0.12;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = elSize * 0.3;
+        break;
+      case 'feathers':
+        path = createFeatherPath(elSize);
+        useStroke = true;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = elSize * 0.05;
+        ctx.lineCap = 'round';
+        ctx.shadowColor = '#e0e7ff';
+        ctx.shadowBlur = elSize * 0.4;
+        break;
+      case 'music':
+        path = createMusicNotePath(elSize);
+        useStroke = true;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = elSize * 0.08;
+        ctx.lineCap = 'round';
+        ctx.shadowColor = color;
+        ctx.shadowBlur = elSize * 0.5;
+        break;
+      case 'butterflies':
+        path = createButterflyPath(elSize);
+        ctx.fillStyle = color;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = elSize * 0.5;
+        break;
+      case 'crosses':
+        path = createCrossSparkPath(elSize);
+        ctx.fillStyle = color;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = elSize * 0.7;
         break;
       default:
         path = createSparkle4Path(elSize);
@@ -1172,11 +1679,151 @@ function render() {
   }
 }
 
-function download(size: number) {
+function getGpuColors(): [string, string, string] {
+  return [
+    selectedBg.value.colors?.[0] ?? '#8b5cf6',
+    selectedBg.value.colors?.[1] ?? '#ec4899',
+    selectedBg.value.colors?.[2] ?? '#0e0e0e',
+  ];
+}
+
+async function renderCanvasWithGpu(canvas: HTMLCanvasElement, size: number) {
+  if (!gpu.value || gpuBgEffect.value === 'none') {
+    drawToCanvas(canvas, size);
+    return;
+  }
+
+  const colors = getGpuColors();
+  const bgBitmap = await gpu.value.renderBackground(
+    gpuBgEffect.value, size, colors, gpuTime, 1.0
+  );
+  drawToCanvasWithGpuBg(canvas, size, bgBitmap);
+
+  // Post-processing
+  if (gpuPost.value === 'bloom' && gpu.value) {
+    const bloomBitmap = await gpu.value.applyBloom(canvas, bloomIntensity.value);
+    const ctx = canvas.getContext('2d')!;
+    ctx.globalCompositeOperation = 'screen';
+    ctx.drawImage(bloomBitmap, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  if (gpuPost.value === 'chromatic') {
+    applyChromaticAberration(canvas, chromaticStrength.value);
+  }
+}
+
+async function renderAsync() {
+  // Regenerate time seed on each render for fresh look
+  gpuTime = Math.random() * 10;
+
+  if (gpuBgEffect.value !== 'none' && gpu.value) {
+    try {
+      // Render main canvas
+      if (canvasRef.value) {
+        await renderCanvasWithGpu(canvasRef.value, canvasSize);
+      }
+      // Render all thumbnails with the same time seed
+      for (const [s, el] of Object.entries(thumbRefs)) {
+        await renderCanvasWithGpu(el, Number(s));
+      }
+    } catch (e) {
+      console.warn('GPU render failed, falling back to canvas2d:', e);
+      render();
+    }
+  } else {
+    render();
+    // Apply post-processing even without GPU bg
+    if (gpuPost.value === 'chromatic' && canvasRef.value) {
+      applyChromaticAberration(canvasRef.value, chromaticStrength.value);
+    }
+  }
+}
+
+function applyChromaticAberration(canvas: HTMLCanvasElement, strength: number) {
+  const ctx = canvas.getContext('2d')!;
+  const size = canvas.width;
+  const imgData = ctx.getImageData(0, 0, size, size);
+  const src = new Uint8ClampedArray(imgData.data);
+  const dst = imgData.data;
+  const offset = Math.round(size * strength);
+
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const i = (y * size + x) * 4;
+      // Shift red channel outward from center
+      const dx = x - size / 2;
+      const dy = y - size / 2;
+      const dist = Math.sqrt(dx * dx + dy * dy) / (size / 2);
+      const shift = Math.round(offset * dist);
+
+      const rx = Math.min(size - 1, Math.max(0, x + Math.round(dx / (size/2) * shift)));
+      const ry = Math.min(size - 1, Math.max(0, y + Math.round(dy / (size/2) * shift)));
+      const ri = (ry * size + rx) * 4;
+      dst[i] = src[ri]; // Red shifted out
+
+      const bx = Math.min(size - 1, Math.max(0, x - Math.round(dx / (size/2) * shift)));
+      const by = Math.min(size - 1, Math.max(0, y - Math.round(dy / (size/2) * shift)));
+      const bi = (by * size + bx) * 4;
+      dst[i + 2] = src[bi]; // Blue shifted in
+    }
+  }
+  ctx.putImageData(imgData, 0, 0);
+}
+
+function drawToCanvasWithGpuBg(canvas: HTMLCanvasElement, size: number, bgBitmap: ImageBitmap) {
+  const ctx = canvas.getContext('2d')!;
+  ctx.clearRect(0, 0, size, size);
+
+  // Clip shape
+  ctx.save();
+  if (shape.value === 'circle') {
+    ctx.beginPath();
+    ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+    ctx.clip();
+  } else if (shape.value === 'rounded') {
+    const r = size * 0.18;
+    ctx.beginPath();
+    ctx.roundRect(0, 0, size, size, r);
+    ctx.clip();
+  }
+
+  // Draw GPU-rendered background
+  ctx.drawImage(bgBitmap, 0, 0, size, size);
+
+  // Noise
+  if (noise.value) {
+    const imgData = ctx.getImageData(0, 0, size, size);
+    const d = imgData.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const n = (Math.random() - 0.5) * 20;
+      d[i] += n; d[i + 1] += n; d[i + 2] += n;
+    }
+    ctx.putImageData(imgData, 0, 0);
+  }
+
+  // Glow
+  if (glow.value) {
+    const glowGrad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size * 0.5);
+    glowGrad.addColorStop(0, logoColor.value + '30');
+    glowGrad.addColorStop(1, 'transparent');
+    ctx.fillStyle = glowGrad;
+    ctx.fillRect(0, 0, size, size);
+  }
+
+  // Overlays
+  drawOverlays(ctx, size);
+
+  // Logo
+  drawLogoWithEffect(ctx, size);
+
+  ctx.restore();
+}
+
+async function download(size: number) {
   const offscreen = document.createElement('canvas');
   offscreen.width = size;
   offscreen.height = size;
-  drawToCanvas(offscreen, size);
+  await renderCanvasWithGpu(offscreen, size);
   const a = document.createElement('a');
   const presetSlug = activePresetName.value ? activePresetName.value.toLowerCase().replace(/\s+/g, '-') : 'custom';
   a.download = `argon-${presetSlug}-${shape.value}-${size}x${size}.png`;
@@ -1184,12 +1831,23 @@ function download(size: number) {
   a.click();
 }
 
-watch([shape, selectedBg, customBgColor, logoColor, logoColor2, logoScale, padding, glow, noise, logoEffect, overlayType, overlayDensity, overlaySize, overlayOpacity], () => {
+watch([shape, selectedBg, customBgColor, logoColor, logoColor2, logoScale, padding, glow, noise, logoEffect, overlayType, overlayDensity, overlaySize, overlayOpacity, gpuBgEffect, gpuPost, bloomIntensity, chromaticStrength], () => {
   activePresetName.value = '';
-  nextTick(render);
+  nextTick(renderAsync);
 }, { deep: true });
 
-onMounted(() => {
-  nextTick(render);
+onMounted(async () => {
+  // Check password
+  await checkStoredPassword();
+
+  // Initialize WebGPU
+  const engine = await GpuEffectEngine.create();
+  if (engine) {
+    gpu.value = engine;
+    gpuAvailable.value = true;
+  }
+  if (!locked.value) {
+    nextTick(renderAsync);
+  }
 });
 </script>
