@@ -115,6 +115,11 @@ const { current = '/' } = Astro.props;
             </div>
           </div>
 
+          <a href="/pricing/" class:list={["hud-link", current === '/pricing/' && 'active']}>
+            <span class="hud-link-indicator"></span>
+            Billing
+          </a>
+
           <a href="https://beta.argon.gl" class="hud-link">
             <span class="hud-link-indicator"></span>
             Enrollment Portal
@@ -159,6 +164,9 @@ const { current = '/' } = Astro.props;
         </a>
         <a href="/#features" class="hud-mobile-link">
           <span class="hud-ml-dot"></span>Features
+        </a>
+        <a href="/pricing/" class:list={["hud-mobile-link", current === '/pricing/' && 'active']}>
+          <span class="hud-ml-dot"></span>Billing
         </a>
         <button type="button" data-open-enroll class="hud-mobile-link w-full text-left">
           <span class="hud-ml-dot"></span>Enrollment

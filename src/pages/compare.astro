@@ -1,0 +1,698 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { Check, X, Minus, ArrowRight, Download, Shield, Zap, Gamepad2, Users, Heart, Lock, Crown } from 'lucide-astro';
+---
+
+<Layout
+	title="Compare Argon Chat — How We Stack Up Against Other Platforms"
+	description="Honest comparison of Argon Chat with Discord, TeamSpeak, Guilded, Revolt and other communication platforms. See where Argon excels and where others might fit better. Make an informed choice."
+>
+	<Navbar />
+
+	<!-- Hero -->
+	<section class="pt-36 sm:pt-44 pb-16 sm:pb-24 px-4 sm:px-6 relative overflow-hidden">
+		<div class="absolute inset-0 hero-bg-gradient opacity-50"></div>
+		<div class="relative z-10 mx-auto max-w-4xl text-center">
+			<span class="inline-block text-xs font-bold uppercase tracking-wider text-accent bg-accent/10 px-3 py-1 rounded-full border border-accent/20 mb-6">Comparison</span>
+			<h1 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight">
+				Choosing a platform<br/>for your community
+			</h1>
+			<p class="mt-6 text-lg sm:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed">
+				There are many ways to communicate online. Here's an honest look at how Argon compares — where we shine, and where we're still growing.
+			</p>
+		</div>
+	</section>
+
+	<!-- Comparison Table -->
+	<section class="pb-20 sm:pb-28 px-4 sm:px-6">
+		<div class="mx-auto max-w-6xl">
+			<h2 class="text-2xl sm:text-3xl font-bold text-center mb-10">Feature comparison</h2>
+			
+			<div class="overflow-x-auto -mx-4 px-4">
+				<table class="w-full text-sm border-collapse min-w-[800px]">
+					<thead>
+						<tr class="border-b border-oled-border">
+							<th class="text-left py-4 px-3 text-text-muted font-medium">Feature</th>
+							<th class="py-4 px-3 text-center">
+								<span class="text-accent font-bold">Argon</span>
+							</th>
+							<th class="py-4 px-3 text-center text-text-muted">Discord</th>
+							<th class="py-4 px-3 text-center text-text-muted">TeamSpeak</th>
+							<th class="py-4 px-3 text-center text-text-muted">Guilded</th>
+							<th class="py-4 px-3 text-center text-text-muted">Revolt</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-oled-border/50">
+						<tr>
+							<td class="py-3 px-3 font-medium">Voice channels</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">AI noise suppression</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Built-in games</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">PlayFrame</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Activities</span></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">XP & collectibles</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Screen sharing</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">1080p/30, 4K paid</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Nitro for HD</span></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Minus class="size-5 text-text-muted mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Video calls</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Reactions</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Markdown formatting</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Passkey / 2FA auth</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Guest access (no account)</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Self-hosting</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Open source</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Partial</span></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Activity / rich status</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Streamer mode</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Server boosts</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Soundboard</td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Plugins</span></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Server discovery</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Planned</span></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Bot / integration API</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Minus class="size-5 text-text-muted mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">File upload (free tier)</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">15 MB</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">25 MB</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">N/A</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Unlimited</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">20 MB</span></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Threads</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Planned</span></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Custom emoji & stickers</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Planned</span></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Emoji only</span></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Moderation tools</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Basic</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">AutoMod</span></td>
+							<td class="py-3 px-3 text-center"><Minus class="size-5 text-text-muted mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Basic</span></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Scheduled events</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Planned</span></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Mobile apps</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Coming soon</span></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">PWA</span></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">E2E encrypted calls</td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Established community</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Growing</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">200M+</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Legacy</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Niche</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Small</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<p class="text-xs text-text-muted text-center mt-6">Last updated May 2026. We try to keep this accurate — if something's wrong, <a href="/contact/" class="text-accent hover:underline">let us know</a>.</p>
+		</div>
+	</section>
+
+	<!-- For Gamers -->
+	<section class="py-20 sm:py-28 px-4 sm:px-6 bg-oled-surface/30">
+		<div class="mx-auto max-w-6xl">
+			<div class="flex items-center justify-center gap-3 mb-4">
+				<Gamepad2 class="size-7 text-accent" />
+				<h2 class="text-2xl sm:text-3xl font-bold text-center">For gamers</h2>
+			</div>
+			<p class="text-text-secondary text-center max-w-2xl mx-auto mb-10">
+				You just want to hop in, talk with friends, and play. Here's what actually matters.
+			</p>
+
+			<div class="overflow-x-auto -mx-4 px-4">
+				<table class="w-full text-sm border-collapse min-w-[800px]">
+					<thead>
+						<tr class="border-b border-oled-border">
+							<th class="text-left py-4 px-3 text-text-muted font-medium">What gamers care about</th>
+							<th class="py-4 px-3 text-center"><span class="text-accent font-bold">Argon</span></th>
+							<th class="py-4 px-3 text-center text-text-muted">Discord</th>
+							<th class="py-4 px-3 text-center text-text-muted">TeamSpeak</th>
+							<th class="py-4 px-3 text-center text-text-muted">Guilded</th>
+							<th class="py-4 px-3 text-center text-text-muted">Revolt</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-oled-border/50">
+						<tr>
+							<td class="py-3 px-3 font-medium">Voice quality</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">AI denoise</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Krisp</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Codec-only</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Basic</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Basic</span></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Screen share quality</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">1080p/30 free</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">HD = Nitro</span></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">1080p free</span></td>
+							<td class="py-3 px-3 text-center"><Minus class="size-5 text-text-muted mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Built-in games</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">PlayFrame</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Activities</span></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">XP & progression</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Guest join (no signup)</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Streamer mode</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Activity / game status</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Soundboard</td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Plugins</span></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Video calls</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Mobile app</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Soon</span></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">PWA</span></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Friends already there</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Growing</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">200M+</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Legacy</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Niche</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Small</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="mt-8 glass rounded-xl p-5 border border-oled-border/50">
+				<h3 class="font-semibold mb-2 text-text-primary">Bottom line</h3>
+				<p class="text-sm text-text-secondary">Argon gives you top-tier voice, free HD streaming, and games built in. If your whole squad is on Discord, migration takes effort — but if you're starting fresh or want a cleaner setup, it's worth a try.</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- For Community Creators -->
+	<section class="py-20 sm:py-28 px-4 sm:px-6">
+		<div class="mx-auto max-w-6xl">
+			<div class="flex items-center justify-center gap-3 mb-4">
+				<Crown class="size-7 text-accent" />
+				<h2 class="text-2xl sm:text-3xl font-bold text-center">For community creators</h2>
+			</div>
+			<p class="text-text-secondary text-center max-w-2xl mx-auto mb-10">
+				You run a server, moderate members, and care about retention. Here's the admin perspective.
+			</p>
+
+			<div class="overflow-x-auto -mx-4 px-4">
+				<table class="w-full text-sm border-collapse min-w-[800px]">
+					<thead>
+						<tr class="border-b border-oled-border">
+							<th class="text-left py-4 px-3 text-text-muted font-medium">What creators care about</th>
+							<th class="py-4 px-3 text-center"><span class="text-accent font-bold">Argon</span></th>
+							<th class="py-4 px-3 text-center text-text-muted">Discord</th>
+							<th class="py-4 px-3 text-center text-text-muted">TeamSpeak</th>
+							<th class="py-4 px-3 text-center text-text-muted">Guilded</th>
+							<th class="py-4 px-3 text-center text-text-muted">Revolt</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-oled-border/50">
+						<tr>
+							<td class="py-3 px-3 font-medium">Moderation tools</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Basic</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">AutoMod</span></td>
+							<td class="py-3 px-3 text-center"><Minus class="size-5 text-text-muted mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Basic</span></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Built-in engagement (XP, games)</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Via bots</span></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Bot / integration API</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Huge ecosystem</span></td>
+							<td class="py-3 px-3 text-center"><Minus class="size-5 text-text-muted mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Threads</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Planned</span></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Scheduled events</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Planned</span></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Custom emoji & stickers</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Planned</span></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Emoji only</span></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Server boosts</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Server discovery</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Planned</span></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Passkey / 2FA for admins</td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">File upload (free)</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">15 MB</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">25 MB</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">N/A</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Unlimited</span></td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">20 MB</span></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Self-hosting (enterprise)</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Standalone</span></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+						</tr>
+						<tr>
+							<td class="py-3 px-3 font-medium">Open source</td>
+							<td class="py-3 px-3 text-center"><span class="text-text-muted text-xs">Partial</span></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><X class="size-5 text-red-400/70 mx-auto" /></td>
+							<td class="py-3 px-3 text-center"><Check class="size-5 text-green-400 mx-auto" /></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="mt-8 glass rounded-xl p-5 border border-oled-border/50">
+				<h3 class="font-semibold mb-2 text-text-primary">Bottom line</h3>
+				<p class="text-sm text-text-secondary">Discord has the richest admin tooling and the biggest bot marketplace. Guilded offers unlimited uploads and built-in scheduling. Argon stands out with native engagement features (XP, games) that don't require third-party bots — less setup, more organic activity. Best fit for smaller, quality-focused communities.</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- What makes Argon different -->
+	<section class="py-20 sm:py-28 px-4 sm:px-6 bg-oled-surface/30">
+		<div class="mx-auto max-w-4xl">
+			<h2 class="text-2xl sm:text-3xl font-bold text-center mb-4">What makes Argon different</h2>
+			<p class="text-text-secondary text-center max-w-2xl mx-auto mb-12">
+				We're not trying to clone anyone. Argon was built from scratch with a clear philosophy: quality communication, community engagement, and respect for users.
+			</p>
+
+			<div class="grid sm:grid-cols-2 gap-6">
+				<div class="glass rounded-2xl p-6">
+					<Zap class="size-6 text-accent mb-3" />
+					<h3 class="font-semibold text-lg mb-2">Voice-first architecture</h3>
+					<p class="text-sm text-text-secondary">WebRTC SFU with AI-powered noise suppression (DTLN). Voice isn't an afterthought — it's our core.</p>
+				</div>
+				<div class="glass rounded-2xl p-6">
+					<Gamepad2 class="size-6 text-accent mb-3" />
+					<h3 class="font-semibold text-lg mb-2">PlayFrame</h3>
+					<p class="text-sm text-text-secondary">Built-in multiplayer games right inside voice channels. No installs, no tab switching. A unique social layer.</p>
+				</div>
+				<div class="glass rounded-2xl p-6">
+					<Shield class="size-6 text-accent mb-3" />
+					<h3 class="font-semibold text-lg mb-2">Privacy-conscious</h3>
+					<p class="text-sm text-text-secondary">No ads. Minimal data collection. We make money from subscriptions, not from selling your activity data.</p>
+				</div>
+				<div class="glass rounded-2xl p-6">
+					<Heart class="size-6 text-accent mb-3" />
+					<h3 class="font-semibold text-lg mb-2">Community-shaped</h3>
+					<p class="text-sm text-text-secondary">Our roadmap is public. Features come from user feedback, not quarterly revenue targets.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Honest takes -->
+	<section class="py-20 sm:py-28 px-4 sm:px-6">
+		<div class="mx-auto max-w-3xl">
+			<h2 class="text-2xl sm:text-3xl font-bold text-center mb-4">The honest take</h2>
+			<p class="text-text-secondary text-center max-w-2xl mx-auto mb-10">
+				We're not going to pretend we're perfect. Here's where we stand.
+			</p>
+
+			<div class="space-y-6">
+				<div class="glass rounded-xl p-5">
+					<h3 class="font-semibold mb-2 text-text-primary">We're newer and smaller</h3>
+					<p class="text-sm text-text-secondary">Discord has hundreds of millions of users. We don't — yet. If you need a massive ecosystem of third-party bots and integrations today, Discord is hard to beat. But if you want something fresh and focused, give us a shot.</p>
+				</div>
+				<div class="glass rounded-xl p-5">
+					<h3 class="font-semibold mb-2 text-text-primary">We have a subscription too</h3>
+					<p class="text-sm text-text-secondary">Yes, Argon has a paid tier. The difference is we don't lock basic features behind it. Core communication — voice, text, screen sharing — works fully without paying. Premium is for extras like extended storage, cosmetics, and priority support.</p>
+				</div>
+				<div class="glass rounded-xl p-5">
+					<h3 class="font-semibold mb-2 text-text-primary">Not everything is open source</h3>
+					<p class="text-sm text-text-secondary">Parts of Argon are open source and we contribute to the ecosystem. But we're a business, and some components remain proprietary. We're transparent about what's open and what isn't.</p>
+				</div>
+				<div class="glass rounded-xl p-5">
+					<h3 class="font-semibold mb-2 text-text-primary">Mobile is coming — but not here yet</h3>
+					<p class="text-sm text-text-secondary">Right now we're desktop-only (Windows, macOS, Linux). If you need mobile today, that's a valid reason to look elsewhere. We're working on it.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- FAQ Section -->
+	<section class="py-20 sm:py-28 px-4 sm:px-6 bg-oled-surface/30">
+		<div class="mx-auto max-w-3xl">
+			<h2 class="text-2xl sm:text-3xl font-bold text-center mb-10">Common questions</h2>
+
+			<div class="space-y-4">
+				<details class="glass rounded-xl p-5 group" open>
+					<summary class="font-semibold cursor-pointer list-none flex items-center justify-between">
+						Who is Argon for?
+						<svg class="size-4 text-text-muted transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+					</summary>
+					<p class="mt-3 text-sm text-text-secondary leading-relaxed">Argon is built for communities that care about voice quality, engagement, and a clean experience. Gamers, creative groups, friend circles, small teams — anyone who wants more than just a chat box.</p>
+				</details>
+
+				<details class="glass rounded-xl p-5 group">
+					<summary class="font-semibold cursor-pointer list-none flex items-center justify-between">
+						Is Argon free to use?
+						<svg class="size-4 text-text-muted transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+					</summary>
+					<p class="mt-3 text-sm text-text-secondary leading-relaxed">Argon has a generous free tier that covers all core features: voice chat, messaging, screen sharing, and channels. There's an optional subscription for extras like cosmetics, extended file storage, and priority support.</p>
+				</details>
+
+				<details class="glass rounded-xl p-5 group">
+					<summary class="font-semibold cursor-pointer list-none flex items-center justify-between">
+						Can I switch my community from another platform?
+						<svg class="size-4 text-text-muted transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+					</summary>
+					<p class="mt-3 text-sm text-text-secondary leading-relaxed">Yes. The interface is familiar if you've used other community platforms — channels, roles, voice rooms, DMs. We're also working on import tools to make transitions smoother.</p>
+				</details>
+
+				<details class="glass rounded-xl p-5 group">
+					<summary class="font-semibold cursor-pointer list-none flex items-center justify-between">
+						What platforms does Argon support?
+						<svg class="size-4 text-text-muted transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+					</summary>
+					<p class="mt-3 text-sm text-text-secondary leading-relaxed">Windows, macOS, and Linux with a native desktop app. Mobile apps are in development.</p>
+				</details>
+
+				<details class="glass rounded-xl p-5 group">
+					<summary class="font-semibold cursor-pointer list-none flex items-center justify-between">
+						What makes the voice quality better?
+						<svg class="size-4 text-text-muted transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+					</summary>
+					<p class="mt-3 text-sm text-text-secondary leading-relaxed">We use WebRTC with a custom SFU (Selective Forwarding Unit) and DTLN-based AI noise suppression. The result is low-latency, crystal-clear audio with automatic background noise removal — even on noisy setups.</p>
+				</details>
+			</div>
+		</div>
+	</section>
+
+	<!-- CTA -->
+	<section class="py-20 sm:py-28 px-4 sm:px-6">
+		<div class="mx-auto max-w-3xl text-center">
+			<h2 class="text-3xl sm:text-4xl font-bold">Curious? Try it yourself.</h2>
+			<p class="text-text-secondary mt-4 text-lg max-w-xl mx-auto">
+				The best comparison is your own experience. Join the beta and see if Argon fits your community.
+			</p>
+			<div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+				<button type="button" data-open-enroll class="confetti-trigger w-full sm:w-auto inline-flex items-center justify-center gap-3 rounded-2xl bg-accent px-8 py-4 text-base font-bold text-white transition-all hover:bg-accent-hover hover:shadow-lg hover:shadow-accent/20 hover:-translate-y-0.5 cursor-pointer">
+					<Download class="size-5" />
+					Request Invite
+				</button>
+				<a href="/" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-oled-border bg-oled-surface/50 px-8 py-4 text-base font-semibold text-text-primary backdrop-blur-sm transition-all hover:border-oled-border hover:bg-oled-hover hover:-translate-y-0.5">
+					Explore features
+					<ArrowRight class="size-4" />
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<Footer />
+</Layout>
+
+<!-- FAQ Structured Data for Rich Snippets -->
+<script type="application/ld+json" set:html={JSON.stringify({
+	"@context": "https://schema.org",
+	"@type": "FAQPage",
+	"mainEntity": [
+		{
+			"@type": "Question",
+			"name": "Who is Argon Chat for?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Argon is built for communities that care about voice quality, engagement, and a clean experience. Gamers, creative groups, friend circles, small teams — anyone who wants more than just a chat box."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Is Argon Chat free to use?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Argon has a generous free tier that covers all core features: voice chat, messaging, screen sharing, and channels. There's an optional subscription for extras like cosmetics, extended file storage, and priority support."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Can I switch my community from Discord or another platform to Argon?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Yes. The interface is familiar if you've used other community platforms — channels, roles, voice rooms, DMs. Import tools are in development to make transitions smoother."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "What platforms does Argon support?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Windows, macOS, and Linux with a native desktop app. Mobile apps are in development."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "What makes Argon voice quality better than other platforms?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Argon uses WebRTC with a custom SFU (Selective Forwarding Unit) and DTLN-based AI noise suppression. The result is low-latency, crystal-clear audio with automatic background noise removal."
+			}
+		}
+	]
+})} />

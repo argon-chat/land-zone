@@ -1,0 +1,158 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import {
+	CreditCard, ShieldCheck, RefreshCw, Zap,
+	Landmark, Clock, FileText, Lock
+} from 'lucide-astro';
+
+const obf = (e: string) => Buffer.from(e).toString('base64');
+const eBilling = obf('billing@argon.gl');
+const eSupport = obf('support@argon.gl');
+---
+
+<Layout
+	title="Billing & Payments — Argon Chat"
+	description="Argon Chat billing information: accepted payment methods, fees, refund and cancellation policy, regulatory disclosure, and account recovery."
+	image="/og/index.png"
+>
+	<Navbar current="/pricing/" />
+
+	<!-- Hero -->
+	<section class="relative pt-32 sm:pt-40 pb-12 sm:pb-16 px-4 sm:px-6">
+		<div class="absolute left-1/2 top-1/4 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]"></div>
+		<div class="relative z-10 mx-auto max-w-4xl text-center">
+			<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/20 bg-accent/5 text-accent text-xs font-semibold mb-4">
+				<CreditCard class="size-3.5" />
+				Billing &amp; Payments
+			</div>
+			<h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">Billing &amp; payments</h1>
+			<p class="text-text-secondary mt-3 text-sm sm:text-base max-w-xl mx-auto">
+				Argon&rsquo;s core features are free to use. Accepted payment methods, fees, refund and cancellation
+				terms, and security details are set out below.
+			</p>
+		</div>
+	</section>
+
+	<!-- Payment methods -->
+	<section class="px-4 sm:px-6 pb-16">
+		<div class="mx-auto max-w-4xl rounded-2xl border border-oled-border bg-oled-surface p-6 sm:p-8">
+			<div class="flex items-center gap-2 mb-2">
+				<Lock class="size-4 text-accent" />
+				<h2 class="text-base font-bold">Accepted payment methods</h2>
+			</div>
+			<p class="text-sm text-text-secondary max-w-2xl">
+				Card payments are accepted through the payment systems serviced by our acquiring bank. All card data is
+				entered on the bank&rsquo;s secure, PCI&nbsp;DSS-compliant payment page and is transmitted over an encrypted
+				(TLS) connection. Argon never sees or stores your full card number.
+			</p>
+			<div class="flex flex-wrap items-center gap-2.5 mt-5">
+				<span class="inline-flex items-center justify-center h-9 px-2.5 rounded-md bg-white shadow-sm"><img src="/payments/visa_logo.svg" alt="Visa" class="h-4 w-auto" /></span>
+				<span class="inline-flex items-center justify-center h-9 px-2.5 rounded-md bg-white shadow-sm"><img src="/payments/mastercard.svg" alt="Mastercard" class="h-6 w-auto" /></span>
+				<span class="inline-flex items-center justify-center h-9 px-2.5 rounded-md bg-white shadow-sm"><img src="/payments/maestro.svg" alt="Maestro" class="h-6 w-auto" /></span>
+				<span class="inline-flex items-center justify-center h-9 px-2.5 rounded-md bg-white shadow-sm"><img src="/payments/arca.svg" alt="ArCa" class="h-4 w-auto" /></span>
+			</div>
+		</div>
+	</section>
+
+	<!-- Legal / billing details -->
+	<section class="px-4 sm:px-6 pb-24">
+		<div class="mx-auto max-w-3xl">
+			<div class="legal-prose">
+
+				<section>
+					<div class="flex items-center gap-2"><FileText class="size-5 text-accent" /><h2 class="!mt-0">Fees &amp; commissions</h2></div>
+					<p>Argon does not add any surcharge or commission on top of a product&rsquo;s price — the amount confirmed
+					at checkout is the amount charged to your card. Your card issuer or bank may apply its own
+					currency-conversion or cross-border fees over which we have no control; please consult your bank for
+					details.</p>
+				</section>
+
+				<section>
+					<div class="flex items-center gap-2"><Zap class="size-5 text-accent" /><h2>Delivery &amp; activation</h2></div>
+					<p>All products are <strong>digital</strong>. Paid features, cosmetics, and subscription benefits are
+					activated on your account <strong>immediately</strong> after a successful payment is confirmed —
+					typically within a few seconds and no later than 24 hours. No physical goods are shipped.</p>
+				</section>
+
+				<section>
+					<div class="flex items-center gap-2"><RefreshCw class="size-5 text-accent" /><h2>Refunds &amp; cancellation</h2></div>
+					<p>You can cancel a subscription at any time from your account settings. After cancellation you keep
+					access to paid features until the end of the current billing period; the subscription is not renewed
+					afterwards.</p>
+					<div class="def-grid cols-1">
+						<div class="def-card">
+							<p class="def-term">Subscriptions</p>
+							<p>If you cancel within <strong>14 days</strong> of the initial purchase and have not substantially
+							used the paid features, you may request a full refund. Renewals are non-refundable once the new
+							period has started, except where required by law.</p>
+						</div>
+						<div class="def-card">
+							<p class="def-term">One-time purchases &amp; cosmetics</p>
+							<p>Consumable or already-redeemed items (e.g. activated cosmetics, redeemed codes) are
+							non-refundable once delivered, except where required by applicable consumer-protection law.</p>
+						</div>
+						<div class="def-card">
+							<p class="def-term">How to request</p>
+							<p>Contact <span class="obf-email" data-e={eBilling}></span> with your account email and the
+							transaction reference. Approved refunds are returned to the original card within 5&ndash;10
+							business days, depending on your bank.</p>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<div class="flex items-center gap-2"><Clock class="size-5 text-accent" /><h2>Service rules, terms &amp; limits</h2></div>
+					<p>The full rules governing the use of paid and free services — including billing cycles,
+					auto-renewal, acceptable use, and account limits — are set out in our
+					<a href="/terms/">Terms of Service</a>. These rules are published and available to you in full
+					<strong>before</strong> you enter into any paid relationship with us. By completing a purchase you
+					confirm that you have read and accepted them.</p>
+				</section>
+
+				<section>
+					<div class="flex items-center gap-2"><Landmark class="size-5 text-accent" /><h2>Payments &amp; regulatory information</h2></div>
+					<p>Card payments are processed by our acquiring bank under its licence. Banking and payment activity in
+					Armenia is regulated and supervised by the <strong>Central Bank of the Republic of Armenia</strong>.</p>
+					<ul>
+						<li>Financial regulator &mdash; Central Bank of Armenia: <a href="https://www.cba.am/en/" target="_blank" rel="noopener" class="legal-email-link">cba.am</a></li>
+						<li>Consumer financial-information portal: <a href="https://www.abcfinance.am/en/" target="_blank" rel="noopener" class="legal-email-link">abcfinance.am</a></li>
+						<li>Card processing via the <strong>ArCa</strong> national payment system and the international
+						<strong>Visa</strong> / <strong>Mastercard</strong> networks.</li>
+					</ul>
+					<div class="legal-note note-info">
+						<p>The merchant of record is <strong>&ldquo;ARGON INCORPORATED&rdquo; LLC</strong>, 2 Sasna Tsrer
+						street, Yerevan, Armenia. Billing questions: <span class="obf-email" data-e={eSupport}></span>.</p>
+					</div>
+				</section>
+
+				<section>
+					<div class="flex items-center gap-2"><ShieldCheck class="size-5 text-accent" /><h2>Security of your data</h2></div>
+					<p>All data you submit on this website is transmitted over an encrypted HTTPS/TLS connection. Sign-up is
+					protected against automated abuse by Cloudflare Turnstile, and the site is served behind Cloudflare&rsquo;s
+					network protection. How we handle your personal data is described in our
+					<a href="/privacy/">Privacy Policy</a>.</p>
+				</section>
+
+			</div>
+		</div>
+	</section>
+
+	<Footer />
+</Layout>
+
+<script>
+	document.querySelectorAll('.obf-email').forEach(el => {
+		const d = (el as HTMLElement).dataset.e;
+		if (!d) return;
+		try {
+			const v = atob(d);
+			const a = document.createElement('a');
+			a.href = 'mailto:' + v;
+			a.textContent = v;
+			a.className = 'legal-email-link';
+			el.replaceWith(a);
+		} catch {}
+	});
+</script>

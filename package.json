@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.2",
-    "@astrojs/vue": "5",
+    "@astrojs/vue": "6.0.1",
     "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/vite": "^4.2.1",
-    "astro": "^5.17.1",
+    "astro": "6.3.7",
     "canvas-confetti": "^1.9.4",
     "lucide-astro": "^0.556.0",
     "satori": "^0.26.0",

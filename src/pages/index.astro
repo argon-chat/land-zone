@@ -13,7 +13,10 @@ import {
 } from 'lucide-astro';
 ---
 
-<Layout>
+<Layout
+	title="Argon Chat — Voice, Messaging & Games for Communities"
+	description="Argon is a modern communication platform with crystal-clear voice chat, rich messaging, screen sharing, and built-in games. Designed for communities that value quality and privacy. Windows, macOS & Linux."
+>
 	<Navbar current="/" />
 
 	<!-- ═══════════════════════════════════════════════ -->
@@ -740,6 +743,23 @@ import {
 						<!-- Cloudflare Turnstile -->
 						<div id="turnstile-container" class="flex justify-center"></div>
 
+						<!-- Personal-data consent (required) -->
+						<label class="flex items-start gap-2.5 text-left cursor-pointer select-none">
+							<input
+								type="checkbox"
+								id="enroll-consent"
+								name="consent"
+								required
+								class="mt-0.5 size-4 shrink-0 rounded border-oled-border bg-oled-surface accent-accent cursor-pointer"
+							/>
+							<span class="text-[11px] leading-relaxed text-text-muted">
+								I have read and agree to the
+								<a href="/terms/" class="text-accent hover:underline">Terms of Service</a>,
+								<a href="/privacy/" class="text-accent hover:underline">Privacy Policy</a>, and
+								consent to the processing of my personal data as described therein.
+							</span>
+						</label>
+
 						<!-- Error message -->
 						<p id="enroll-error" class="text-red-400 text-sm text-center hidden"></p>
 
@@ -764,6 +784,38 @@ import {
 
 	<Footer />
 </Layout>
+
+<!-- FAQ Schema for rich snippets in search results -->
+<script type="application/ld+json" set:html={JSON.stringify({
+	"@context": "https://schema.org",
+	"@type": "FAQPage",
+	"mainEntity": [
+		{
+			"@type": "Question",
+			"name": "What is Argon Chat?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Argon Chat is a communication platform that combines voice chat, messaging, screen sharing, and built-in games into one app. It's designed for communities that value quality audio, engagement features, and a clean experience."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Is Argon Chat free?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Argon has a free tier that covers all core features: voice channels, messaging, screen sharing, and channels. There's also an optional subscription for extras like cosmetics, extended storage, and priority support."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "What platforms does Argon support?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Argon Chat is available as a native desktop app for Windows, macOS, and Linux with auto-updates. Mobile apps are in development."
+			}
+		}
+	]
+})} />
 
 <script>
 	const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
@@ -1067,6 +1119,12 @@ import {
 			const email = emailInput?.value.trim() || '';
 			if (!email || !email.includes('@')) {
 				if (errorEl) { errorEl.textContent = 'Please enter a valid email address.'; errorEl.classList.remove('hidden'); }
+				return;
+			}
+
+			const consent = document.getElementById('enroll-consent') as HTMLInputElement | null;
+			if (!consent?.checked) {
+				if (errorEl) { errorEl.textContent = 'Please accept the Terms and consent to data processing to continue.'; errorEl.classList.remove('hidden'); }
 				return;
 			}
 

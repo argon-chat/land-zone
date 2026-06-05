@@ -1,0 +1,5 @@
+Contact: mailto:security@argon.gl
+Expires: 2027-06-05T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://argon.gl/.well-known/security.txt
+Policy: https://argon.gl/terms/

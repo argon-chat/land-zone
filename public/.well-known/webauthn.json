@@ -1,0 +1,13 @@
+{
+  "origins": [
+    "https://argon.gl",
+    "https://enroll.argon.gl",
+    "https://status.argon.gl",
+    "https://healthcare.argon.zone",
+    "https://releases.argon.zone",
+    "https://localhost:5005",
+    "https://localhost",
+    "https://app.argon.gl",
+    "app://index"
+  ]
+}

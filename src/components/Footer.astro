@@ -55,6 +55,8 @@
       <div>
         <span class="footer-heading">Resources</span>
         <div class="flex flex-col gap-2.5">
+          <a href="/pricing/" class="footer-link">Billing</a>
+          {/* <a href="/compare/" class="footer-link">Compare platforms</a> */}
           <a href="/branding/" class="footer-link">Branding</a>
           <a href="/press/" class="footer-link">Press Kit</a>
           <a href="/contact/" class="footer-link">Contact</a>
@@ -83,6 +85,16 @@
       </div>
     </div>
 
+    <!-- Payment methods -->
+    <div class="flex flex-wrap items-center gap-2.5 mb-6">
+      <span class="text-[10px] uppercase tracking-wider text-text-faint mr-1">Secure payments</span>
+      <span class="inline-flex items-center justify-center h-7 px-2 rounded-md bg-white"><img src="/payments/visa_logo.svg" alt="Visa" class="h-3.5 w-auto" loading="lazy" /></span>
+      <span class="inline-flex items-center justify-center h-7 px-2 rounded-md bg-white"><img src="/payments/mastercard.svg" alt="Mastercard" class="h-5 w-auto" loading="lazy" /></span>
+      <span class="inline-flex items-center justify-center h-7 px-2 rounded-md bg-white"><img src="/payments/maestro.svg" alt="Maestro" class="h-5 w-auto" loading="lazy" /></span>
+      <span class="inline-flex items-center justify-center h-7 px-2 rounded-md bg-white"><img src="/payments/arca.svg" alt="ArCa" class="h-3.5 w-auto" loading="lazy" /></span>
+      <a href="/pricing/" class="text-[10px] text-text-faint hover:text-text-muted transition-colors ml-1">Billing &amp; refunds →</a>
+    </div>
+
     <!-- Bottom bar -->
     <div class="footer-bottom-line"></div>
     <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6">
@@ -104,9 +116,9 @@
     // ── Real status fetch ──
     async function fetchStatus() {
       const pingEl = document.getElementById('footer-ping');
-      const svcEl = document.getElementById('footer-services');
-      const dotEl = document.getElementById('footer-status-dot');
-      const textEl = document.getElementById('footer-status-text');
+      const svcEl = document.getElementById('footer-services')!;
+      const dotEl = document.getElementById('footer-status-dot')!;
+      const textEl = document.getElementById('footer-status-text')!;
       if (!pingEl) return;
 
       try {
@@ -147,7 +159,7 @@
       } catch {
         // Fallback on error
         if (pingEl) pingEl.textContent = '--';
-        const textEl = document.getElementById('footer-status-text');
+        const textEl = document.getElementById('footer-status-text')!;
         if (textEl) textEl.textContent = 'Unable to reach';
       }
     }
@@ -187,6 +199,82 @@
           heart.title = 'You really love us! 🥺';
         }
       });
+    }
+
+    // ── Konami Code easter egg ──
+    const konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
+    let konamiIdx = 0;
+    function onKonamiKey(e: KeyboardEvent) {
+      if (e.code === konamiSeq[konamiIdx]) {
+        konamiIdx++;
+        if (konamiIdx === konamiSeq.length) {
+          konamiIdx = 0;
+          triggerKonami();
+        }
+      } else {
+        konamiIdx = e.code === konamiSeq[0] ? 1 : 0;
+      }
+    }
+    document.addEventListener('keydown', onKonamiKey);
+
+    function triggerKonami() {
+      // CRT overlay
+      const overlay = document.createElement('div');
+      overlay.style.cssText = `
+        position:fixed;inset:0;z-index:99999;pointer-events:none;
+        background:repeating-linear-gradient(0deg,rgba(0,0,0,0.03) 0px,rgba(0,0,0,0.03) 1px,transparent 1px,transparent 2px);
+        animation:konami-crt 3s forwards;
+      `;
+      document.body.appendChild(overlay);
+
+      // Toast
+      const toast = document.createElement('div');
+      toast.innerHTML = '🎮 <b>Achievement Unlocked:</b> Retro Gamer';
+      toast.style.cssText = `
+        position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-100px);z-index:100000;
+        background:#1a1a2e;border:1px solid #8b5cf6;color:#e2e8f0;
+        padding:12px 24px;border-radius:12px;font-size:14px;font-family:system-ui;
+        box-shadow:0 0 30px rgba(139,92,246,0.3);
+        animation:konami-toast 3s ease forwards;
+      `;
+      document.body.appendChild(toast);
+
+      // Invert + hue-rotate the page briefly
+      document.documentElement.style.transition = 'filter 0.3s';
+      document.documentElement.style.filter = 'hue-rotate(180deg)';
+      setTimeout(() => { document.documentElement.style.filter = ''; }, 1500);
+
+      // Confetti burst
+      import('canvas-confetti').then(({ default: confetti }) => {
+        const end = Date.now() + 2000;
+        const colors = ['#8b5cf6', '#06b6d4', '#34d399', '#f59e0b', '#ec4899'];
+        (function frame() {
+          confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 }, colors });
+          confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 }, colors });
+          if (Date.now() < end) requestAnimationFrame(frame);
+        })();
+      }).catch(() => {});
+
+      // Cleanup
+      setTimeout(() => { overlay.remove(); toast.remove(); }, 3500);
+    }
+
+    // Inject keyframes once
+    if (!document.getElementById('konami-styles')) {
+      const style = document.createElement('style');
+      style.id = 'konami-styles';
+      style.textContent = `
+        @keyframes konami-crt {
+          0% { opacity:1 } 100% { opacity:0 }
+        }
+        @keyframes konami-toast {
+          0% { transform:translateX(-50%) translateY(-100px);opacity:0 }
+          15% { transform:translateX(-50%) translateY(0);opacity:1 }
+          80% { transform:translateX(-50%) translateY(0);opacity:1 }
+          100% { transform:translateX(-50%) translateY(-20px);opacity:0 }
+        }
+      `;
+      document.head.appendChild(style);
     }
   }
 
