@@ -45,7 +45,7 @@ import {
 
 		<!-- Bottom: live app preview — faithful, isolated <argon-client-mock> replica -->
 		<div class="relative z-10 flex-1 flex items-end justify-center px-2 sm:px-6 pb-0">
-			<div class="hero-mock animate-fade-in-up-delay-2">
+			<div class="hero-mock animate-fade-in-up-delay-2 min-w-0 max-w-full">
 				<argon-client-mock></argon-client-mock>
 			</div>
 		</div>
@@ -90,7 +90,7 @@ import {
 				</div>
 
 				<!-- PlayFrame mockup -->
-				<div class="reveal reveal-delay-2 flex justify-center w-full">
+				<div class="reveal reveal-delay-2 flex justify-center w-full min-w-0">
 					<argon-client-mock view="playframe"></argon-client-mock>
 				</div>
 			</div>
@@ -101,11 +101,11 @@ import {
 	<!-- ═══════════════════════════════════════════════ -->
 	<!-- SECTION: Crystal Clear Voice (+ overlay)       -->
 	<!-- ═══════════════════════════════════════════════ -->
-	<section class="py-24 sm:py-32 px-4 sm:px-6 bg-oled-surface/30">
+	<section id="m-voice-test" class="py-24 sm:py-32 px-4 sm:px-6 bg-oled-surface/30 scroll-mt-0">
 		<div class="mx-auto max-w-6xl">
 			<div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 				<!-- Voice channel mockup -->
-				<div class="reveal reveal-delay-2 order-2 lg:order-1 flex justify-center w-full">
+				<div class="reveal reveal-delay-2 order-2 lg:order-1 flex justify-center w-full min-w-0">
 					<argon-client-mock view="voice"></argon-client-mock>
 				</div>
 
@@ -183,53 +183,8 @@ import {
 				</div>
 
 				<!-- Inventory mockup -->
-				<div class="reveal reveal-delay-2 flex justify-center w-full">
+				<div class="reveal reveal-delay-2 flex justify-center w-full min-w-0">
 					<argon-client-mock view="inventory"></argon-client-mock>
-				</div>
-			</div>
-		</div>
-	</section>
-
-
-	<!-- ═══════════════════════════════════════════════ -->
-	<!-- SECTION: More Than Text                        -->
-	<!-- ═══════════════════════════════════════════════ -->
-	<section class="py-24 sm:py-32 px-4 sm:px-6 bg-oled-surface/30">
-		<div class="mx-auto max-w-6xl">
-			<div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-				<!-- Chat mockup -->
-				<div class="reveal order-2 lg:order-1 flex justify-center w-full">
-					<argon-client-mock view="chat"></argon-client-mock>
-				</div>
-
-				<div class="reveal order-1 lg:order-2">
-					<span class="section-label">Messaging</span>
-					<h2 class="mt-3 text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-						More than just text
-					</h2>
-					<p class="text-text-secondary mt-4 text-base sm:text-lg leading-relaxed max-w-lg">
-						Bold, spoilers, code blocks, mentions, reactions, GIFs, drag-and-drop files. Reply in threads
-						so chat doesn't turn to chaos — and it's all there when you come back, right where you left off.
-					</p>
-
-					<div class="mt-6 space-y-3">
-						<div class="flex items-center gap-3">
-							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-subtle text-[10px] font-bold text-accent">✓</span>
-							<span class="text-sm text-text-secondary"><strong class="text-text-primary">Rich text</strong> — bold, italic, spoilers, code, mentions</span>
-						</div>
-						<div class="flex items-center gap-3">
-							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-subtle text-[10px] font-bold text-accent">✓</span>
-							<span class="text-sm text-text-secondary"><strong class="text-text-primary">File sharing</strong> — up to 8 MB with instant previews</span>
-						</div>
-						<div class="flex items-center gap-3">
-							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-subtle text-[10px] font-bold text-accent">✓</span>
-							<span class="text-sm text-text-secondary"><strong class="text-text-primary">DMs & channels</strong> — text, voice, and announcements</span>
-						</div>
-						<div class="flex items-center gap-3">
-							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-subtle text-[10px] font-bold text-accent">✓</span>
-							<span class="text-sm text-text-secondary"><strong class="text-text-primary">Offline cache</strong> — pick up where you left off</span>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>

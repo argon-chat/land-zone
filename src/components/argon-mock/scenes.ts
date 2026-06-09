@@ -24,12 +24,12 @@ export interface Category {
 
 export interface Message {
   author: string;
-  color: string;
-  avatar: string;
-  time: string;
   text: string;
+  color?: string; // resolved from ROSTER if omitted
+  avatar?: string; // resolved from ROSTER if omitted; falls back to a colored initial
+  time?: string; // assigned by the component if omitted
   date?: string; // date divider shown ABOVE this message
-  reply?: { author: string; color: string; text: string };
+  reply?: { author: string; color?: string; text: string };
   own?: boolean;
   grouped?: boolean; // continuation of previous author (no avatar/meta)
 }
@@ -88,6 +88,22 @@ const C = {
   chiff: "#fbbf24",
   koda: "#5eead4",
   luna: "#fda4af",
+};
+
+// author name → display colour + avatar. Lean preset messages (author + text)
+// are resolved through this; bowieknife99 has no avatar → spooky red fallback.
+export const ROSTER: Record<string, { color: string; avatar?: string }> = {
+  Kuku: { color: "#c4b5fd", avatar: AV.luci },
+  Nova: { color: C.nova, avatar: AV.dox },
+  Yuuki: { color: C.yuuki, avatar: AV.yuuki },
+  Ren: { color: C.ren, avatar: AV.ren },
+  Boba: { color: C.boba, avatar: AV.boba },
+  Chiff: { color: C.chiff, avatar: AV.chiff },
+  Mochi: { color: C.mochi, avatar: AV.gox },
+  Koda: { color: C.koda, avatar: AV.koda },
+  Luna: { color: C.luna, avatar: AV.ava },
+  Kai: { color: C.kai, avatar: AV.kai },
+  bowieknife99: { color: "#ef4444" },
 };
 
 export const demoScene: Scene = {
@@ -270,14 +286,29 @@ export const demoVoicePool: VoiceMember[] = [
 // Rich-presence pool the animator rotates through — themed to match the chat
 // (pong/PlayFrame, the games people mention, streaming the match, music while waiting).
 export const demoPresences: { kind: PresenceKind; title: string }[] = [
-  { kind: "game", title: "VALORANT — ranked" },
-  { kind: "game", title: "Apex Legends" },
+  { kind: "game", title: "Strinova" },
+  { kind: "game", title: "ELDEN RING NIGHTREIGN" },
+  { kind: "game", title: "DEATH STRANDING 2: ON THE BEACH" },
+  { kind: "game", title: "PRAGMATA" },
+  { kind: "game", title: "Forza Horizon 6" },
+  { kind: "game", title: "Dead Cells" },
+  { kind: "game", title: "Elementary Sandbox" },
+  { kind: "game", title: "Elite Dangerous" },
+  { kind: "game", title: "Space Engineers 2" },
+  { kind: "game", title: "Dota 2" },
+  { kind: "game", title: "Rust" },
+  { kind: "game", title: "Warframe" },
+  { kind: "game", title: "Half-Life: Alyx" },
   { kind: "game", title: "Counter-Strike 2" },
-  { kind: "game", title: "Pong — PlayFrame" },
-  { kind: "game", title: "Baldur's Gate 3" },
   { kind: "stream", title: "ranked grind (on tilt)" },
-  { kind: "stream", title: "reading patch notes" },
-  { kind: "software", title: "downloading update…" },
+  { kind: "stream", title: "BONK" },
+  { kind: "stream", title: "Watching a movie" },
+  { kind: "software", title: "Visual Studio 2026" },
+  { kind: "software", title: "Pew Pew Engine" },
+  { kind: "software", title: "Aseprite" },
+  { kind: "software", title: "VS Code" },
+  { kind: "software", title: "KeyShot 11" },
+  { kind: "software", title: "CLIP STUDIO" },
   { kind: "listen", title: "Lofi Girl" },
   { kind: "listen", title: "dinner playlist" },
 ];

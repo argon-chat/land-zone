@@ -8,9 +8,10 @@
 
 import sheet from "./argon-mock.css?raw";
 import {
-  demoScene, demoCoins, demoGames, demoChatQueue, demoVoicePool, demoPresences,
+  demoScene, demoCoins, demoGames, demoVoicePool, demoPresences, ROSTER,
   type Scene, type Message, type Member, type VoiceMember,
 } from "./scenes";
+import { chatPresets } from "./presets";
 import {
   Hash, Volume2, Antenna, Mic, MicOff, Headphones, ScreenShare, Camera,
   Gamepad2, PhoneOff, OctagonMinus, ChevronDown, Rocket, BadgeCheck, Plus,
@@ -20,12 +21,14 @@ import {
 
 type View = "shell" | "chat" | "voice" | "inventory" | "playframe";
 
+// Design widths = inner card width + the 36px stage padding (18px each side),
+// so the scaled content never overflows / clips.
 const DESIGN: Record<View, number> = {
   shell: 1240,
-  chat: 480,
-  voice: 520,
-  inventory: 460,
-  playframe: 460,
+  chat: 516,
+  voice: 556,
+  inventory: 496,
+  playframe: 496,
 };
 
 /* ---- icons from the Lucide library, rendered to SVG strings ------------- */
@@ -53,9 +56,22 @@ const esc = (s: string) =>
 
 const initial = (name: string) => name.trim().charAt(0).toUpperCase();
 
+// Rolling timestamp for preset messages (starts ~11:50 PM, +1 min per 2 messages).
+const clock = (i: number) => {
+  const mins = 23 * 60 + 50 + Math.floor(i / 2);
+  const h24 = Math.floor(mins / 60) % 24;
+  const mm = String(mins % 60).padStart(2, "0");
+  const h = h24 % 12 || 12;
+  return `${h}:${mm} ${h24 >= 12 ? "PM" : "AM"}`;
+};
+
 const PRESENCE_ICON: Record<string, string> = {
   game: "gamepad", listen: "headphones", software: "monitor", stream: "radio",
 };
+
+// ONE dialogue preset per page load — shared by every <argon-client-mock> on the
+// page so the whole landing tells a single coherent conversation (not all four at once).
+const PAGE_PRESET = chatPresets[Math.floor(Math.random() * chatPresets.length)] ?? [];
 
 /* ---- panel builders ----------------------------------------------------- */
 
@@ -132,19 +148,22 @@ function serverPanel(s: Scene) {
 }
 
 function oneMessage(m: Message, grouped = false) {
+  const r = ROSTER[m.author];
+  const color = m.color ?? r?.color ?? "#9aa0aa";
+  const avatar = m.avatar ?? r?.avatar;
+  const av = avatar
+    ? `<img class="msg-av" src="${avatar}" alt="">`
+    : `<div class="msg-av msg-av-fb" style="background:${color}">${esc(initial(m.author))}</div>`;
   const div = m.date ? `<div class="divider"><span>${esc(m.date)}</span></div>` : "";
-  const reply = m.reply
-    ? `<div class="reply" style="border-color:${m.reply.color}">
-        <span class="rn" style="color:${m.reply.color}">${esc(m.reply.author)}</span>
-        <span class="rt">${esc(m.reply.text)}</span></div>`
-    : "";
+  let reply = "";
+  if (m.reply) {
+    const rc = m.reply.color ?? ROSTER[m.reply.author]?.color ?? "#9aa0aa";
+    reply = `<div class="reply" style="border-color:${rc}"><span class="rn" style="color:${rc}">${esc(m.reply.author)}</span><span class="rt">${esc(m.reply.text)}</span></div>`;
+  }
   const meta = grouped
     ? ""
-    : `<div class="msg-meta"><span class="msg-name" style="color:${m.color}">${esc(m.author)}</span>
-        <span class="msg-time">${esc(m.time)}</span></div>`;
-  return `${div}<div class="msg${grouped ? " grouped" : ""}">
-    <img class="msg-av" src="${m.avatar}" alt="">
-    <div class="msg-body">${meta}${reply}<div class="bubble">${esc(m.text)}</div></div></div>`;
+    : `<div class="msg-meta"><span class="msg-name" style="color:${color}">${esc(m.author)}</span><span class="msg-time">${esc(m.time ?? "")}</span></div>`;
+  return `${div}<div class="msg${grouped ? " grouped" : ""}">${av}<div class="msg-body">${meta}${reply}<div class="bubble">${esc(m.text)}</div></div></div>`;
 }
 
 function buildVuser(m: VoiceMember, speaking = false) {
@@ -247,7 +266,9 @@ function renderVoice(s: Scene) {
   const tiles = (vc.members ?? [])
     .map((m) => {
       if (m.state === "screen")
-        return `<div class="vc-tile screen"><div class="screenlabel">${icon("screen")} Sharing screen</div>
+        return `<div class="vc-tile screen">
+          <video class="vc-stream" src="/stream.webm" autoplay muted loop playsinline preload="auto"></video>
+          <span class="screenlabel">${icon("screen")} Sharing screen</span>
           <span class="tag"><img src="${m.avatar}" style="width:18px;height:18px;border-radius:50%">${esc(m.name)}</span></div>`;
       const cls = m.state === "speaking" ? " speaking" : "";
       const st =
@@ -321,6 +342,8 @@ class ArgonClientMock extends HTMLElement {
   private fit?: HTMLElement;
   private outer?: HTMLElement;
   private timers: number[] = [];
+  private stream: Message[] = [];
+  private voiceJoinIv?: number;
 
   connectedCallback() {
     const view = ((this.getAttribute("view") as View) || "shell") in DESIGN
@@ -340,9 +363,27 @@ class ArgonClientMock extends HTMLElement {
     const fit = document.createElement("div");
     fit.className = "fit";
     fit.style.width = DESIGN[view] + "px";
-    fit.innerHTML = RENDER[view](demoScene);
+
+    // Chat-bearing views: pick a random dialogue preset, show the first slice, stream the rest.
+    let sceneForRender = demoScene;
+    if (view === "shell" || view === "chat") {
+      const stamped: Message[] = PAGE_PRESET.map((m, i) => ({ ...m, time: m.time ?? clock(i) }));
+      if (stamped.length) stamped[0] = { ...stamped[0], date: "Today" };
+      const INITIAL = 6;
+      sceneForRender = { ...demoScene, messages: stamped.slice(0, INITIAL) };
+      this.stream = stamped.slice(INITIAL);
+    }
+
+    fit.innerHTML = RENDER[view](sceneForRender);
     outer.appendChild(fit);
     root.appendChild(outer);
+
+    // Nudge any screen-share videos into muted autoplay (innerHTML-inserted <video>
+    // doesn't always honor the muted-autoplay attributes on its own).
+    root.querySelectorAll<HTMLVideoElement>("video.vc-stream").forEach((v) => {
+      v.muted = true;
+      v.play().catch(() => {});
+    });
 
     this.fit = fit;
     this.outer = outer;
@@ -383,19 +424,20 @@ class ArgonClientMock extends HTMLElement {
     this.timers.push(iv);
   }
 
-  /** Stream new messages in — typing pill under the header (real-client style) → bubble. */
+  /** Stream the chosen preset one message at a time — typing pill (real-client style)
+   *  under the header → bubble. Plays through once, then everyone winds down. */
   private animChat(root: ShadowRoot) {
     const box = root.querySelector<HTMLElement>(".chat-msgs");
     const pill = root.querySelector<HTMLElement>(".typing-pill");
     const pillText = root.querySelector<HTMLElement>(".typing-pill .tp-text");
-    if (!box) return;
-    const cap = 9;
-    let qi = 0;
+    if (!box || !this.stream.length) return;
+    const cap = 14;
+    let si = 0;
     const scrollDown = () => { box.scrollTop = box.scrollHeight; };
     scrollDown();
     const iv = window.setInterval(() => {
-      const m = demoChatQueue[qi % demoChatQueue.length];
-      qi++;
+      if (si >= this.stream.length) { clearInterval(iv); this.windDown(root); return; }
+      const m = this.stream[si++];
       if (pill && pillText) { pillText.textContent = `${m.author} is typing`; pill.classList.add("show"); }
       const t = window.setTimeout(() => {
         pill?.classList.remove("show");
@@ -414,10 +456,30 @@ class ArgonClientMock extends HTMLElement {
           box.querySelector(".msg")?.remove();
           msgs = box.querySelectorAll(".msg");
         }
-      }, 1400);
+      }, 1200);
       this.timers.push(t);
-    }, 4500);
+    }, 3800);
     this.timers.push(iv);
+  }
+
+  /** End of the night: stop people joining; drain voice down to the local user + one. */
+  private windDown(root: ShadowRoot) {
+    if (this.voiceJoinIv) { clearInterval(this.voiceJoinIv); this.voiceJoinIv = undefined; }
+    const vusers = root.querySelector<HTMLElement>(".vusers");
+    const countEl = root.querySelector<HTMLElement>(".chan.voice.live .count");
+    if (!vusers) return;
+    const drain = window.setInterval(() => {
+      const removable = Array.from(vusers.querySelectorAll<HTMLElement>(".vuser:not(.me)"));
+      if (removable.length <= 1) { clearInterval(drain); return; } // Kuku + 1 stay chilling
+      const row = removable[removable.length - 1];
+      row.classList.add("v-leaving");
+      const t = window.setTimeout(() => {
+        row.remove();
+        if (countEl) countEl.textContent = String(vusers.querySelectorAll(".vuser").length);
+      }, 320);
+      this.timers.push(t);
+    }, 1500);
+    this.timers.push(drain);
   }
 
   /** Rich presences drift over time (themed to the chat). */
@@ -461,7 +523,7 @@ class ArgonClientMock extends HTMLElement {
     if (!vusers) return;
     const bench: VoiceMember[] = [...demoVoicePool];
     const updateCount = () => { if (countEl) countEl.textContent = String(vusers.querySelectorAll(".vuser").length); };
-    const iv = window.setInterval(() => {
+    this.voiceJoinIv = window.setInterval(() => {
       const all = Array.from(vusers.querySelectorAll<HTMLElement>(".vuser"));
       const removable = all.filter((r) => !r.classList.contains("me")); // never drop the local account
       const n = all.length;
@@ -484,15 +546,19 @@ class ArgonClientMock extends HTMLElement {
         updateCount();
       }
     }, 6500);
-    this.timers.push(iv);
+    this.timers.push(this.voiceJoinIv);
   }
 
   private scale(view: View) {
     if (!this.fit || !this.outer) return;
     const avail = this.clientWidth || this.getBoundingClientRect().width;
     if (!avail) return;
-    const s = Math.min(1, avail / DESIGN[view]);
-    this.fit.style.setProperty("--s", String(s));
+    const design = DESIGN[view];
+    // Scale to fit; on narrow screens clamp to a minimum and center-crop the
+    // overflow — so on mobile you see a legible middle slice (the chat), not a thumbnail.
+    const s = Math.max(0.6, Math.min(1, avail / design));
+    const offsetX = Math.round((avail - design * s) / 2); // negative => crop, centered
+    this.fit.style.transform = `translateX(${offsetX}px) scale(${s})`;
     this.outer.style.height = this.fit.offsetHeight * s + "px";
   }
 }
