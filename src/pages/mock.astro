@@ -1,0 +1,34 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Argon UI mock — preview" noindex>
+	<main style="padding:96px 24px 80px; max-width:1280px; margin:0 auto; display:flex; flex-direction:column; gap:56px;">
+		<section>
+			<h2 style="font-size:14px; text-transform:uppercase; letter-spacing:.08em; color:#9a9a9a; margin:0 0 16px;">view="shell"</h2>
+			<argon-client-mock></argon-client-mock>
+		</section>
+
+		<section style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:32px; align-items:start;">
+			<div>
+				<h2 style="font-size:14px; text-transform:uppercase; letter-spacing:.08em; color:#9a9a9a; margin:0 0 16px;">view="chat"</h2>
+				<argon-client-mock view="chat"></argon-client-mock>
+			</div>
+			<div>
+				<h2 style="font-size:14px; text-transform:uppercase; letter-spacing:.08em; color:#9a9a9a; margin:0 0 16px;">view="voice"</h2>
+				<argon-client-mock view="voice"></argon-client-mock>
+			</div>
+			<div>
+				<h2 style="font-size:14px; text-transform:uppercase; letter-spacing:.08em; color:#9a9a9a; margin:0 0 16px;">view="inventory"</h2>
+				<argon-client-mock view="inventory"></argon-client-mock>
+			</div>
+			<div>
+				<h2 style="font-size:14px; text-transform:uppercase; letter-spacing:.08em; color:#9a9a9a; margin:0 0 16px;">view="playframe"</h2>
+				<argon-client-mock view="playframe"></argon-client-mock>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<script>
+	import '../components/argon-mock/argon-client-mock.ts';
+</script>
