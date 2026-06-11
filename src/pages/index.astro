@@ -25,21 +25,25 @@ import {
 
 		<!-- Hero heading + CTA -->
 		<div class="relative z-10 pt-40 sm:pt-48 md:pt-56 pb-10 sm:pb-14 px-4 sm:px-6 text-center">
-			<h1 class="hero-title text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl" id="hero-scramble">
-				<span class="hero-word" data-word="Drop in.">Drop in.</span>
-				<span class="hero-word" data-word="Talk.">Talk.</span>
-				<span class="hero-word hero-gradient" data-word="Play.">Play.</span>
-			</h1>
+			<div class="relative inline-block">
+				<h1 class="hero-title text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl" id="hero-scramble">
+					<span class="hero-word" data-word="Drop in.">Drop in.</span>
+					<span class="hero-word" data-word="Talk.">Talk.</span>
+					<span class="hero-word hero-gradient" data-word="Play.">Play.</span>
+				</h1>
+				<!-- Minecraft-style splash text -->
+				<span class="mc-splash" aria-hidden="true">Open Beta Now!</span>
+			</div>
 			<p class="animate-fade-in-up-delay-1 mx-auto mt-6 max-w-lg text-sm sm:text-base md:text-lg leading-relaxed text-text-secondary">
 				Crystal-clear voice. Real games right inside the call. Loot just for showing up.<br class="hidden sm:block" />
 				The hangout your squad's been looking for.
 			</p>
 			<div class="animate-fade-in-up-delay-2 mt-8 flex flex-wrap items-center justify-center gap-3">
-				<button type="button" class="hero-cta-primary group confetti-trigger" data-open-enroll>
+				<a href="/download/" class="hero-cta-primary group confetti-trigger">
 					<Download class="size-4" />
-					Request Invite
+					Download Argon Chat
 					<span class="hero-cta-shine"></span>
-				</button>
+				</a>
 			</div>
 		</div>
 
@@ -56,52 +60,9 @@ import {
 
 
 	<!-- ═══════════════════════════════════════════════ -->
-	<!-- SECTION: PlayFrame — Games (lead with the wow) -->
-	<!-- ═══════════════════════════════════════════════ -->
-	<section class="py-24 sm:py-32 px-4 sm:px-6 relative overflow-hidden">
-		<div class="mx-auto max-w-6xl">
-			<div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-				<div class="reveal">
-					<div class="flex items-center gap-2 mb-3">
-						<span class="section-label">PlayFrame</span>
-						<span class="text-[9px] font-bold uppercase tracking-wider bg-accent/10 text-accent px-2 py-0.5 rounded-full border border-accent/20">No installs</span>
-					</div>
-					<h2 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-						Games inside<br/>your calls
-					</h2>
-					<p class="text-text-secondary mt-4 text-base sm:text-lg leading-relaxed max-w-lg">
-						Queue dropped you? Waiting on a lobby? Don't go hunting for something to do — PlayFrame drops real multiplayer games straight into your voice channel. No installs, no downloads, nobody leaves the call. Loser shares their screen.
-					</p>
-
-					<div class="mt-6 space-y-3">
-						<div class="flex items-center gap-3">
-							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-3/10 text-[10px] font-bold text-accent-3">⚡</span>
-							<span class="text-sm text-text-secondary">One click and you're in — everyone playing in seconds</span>
-						</div>
-						<div class="flex items-center gap-3">
-							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-3/10 text-[10px] font-bold text-accent-3">⚡</span>
-							<span class="text-sm text-text-secondary">Games can't touch your account, your chats, or your files</span>
-						</div>
-						<div class="flex items-center gap-3">
-							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-3/10 text-[10px] font-bold text-accent-3">⚡</span>
-							<span class="text-sm text-text-secondary">Fresh games dropping all the time</span>
-						</div>
-					</div>
-				</div>
-
-				<!-- PlayFrame mockup -->
-				<div class="reveal reveal-delay-2 flex justify-center w-full min-w-0">
-					<argon-client-mock view="playframe"></argon-client-mock>
-				</div>
-			</div>
-		</div>
-	</section>
-
-
-	<!-- ═══════════════════════════════════════════════ -->
 	<!-- SECTION: Crystal Clear Voice (+ overlay)       -->
 	<!-- ═══════════════════════════════════════════════ -->
-	<section id="m-voice-test" class="py-24 sm:py-32 px-4 sm:px-6 bg-oled-surface/30 scroll-mt-0">
+	<section id="m-voice-test" class="py-24 sm:py-32 px-4 sm:px-6 scroll-mt-0">
 		<div class="mx-auto max-w-6xl">
 			<div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 				<!-- Voice channel mockup -->
@@ -136,6 +97,49 @@ import {
 							<p class="text-[11px] text-text-muted mt-1">Your voice channel sits right on top of your game. Never tab out to see who's talking.</p>
 						</div>
 					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- SECTION: PlayFrame — Games                     -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section class="py-24 sm:py-32 px-4 sm:px-6 bg-oled-surface/30 relative overflow-hidden">
+		<div class="mx-auto max-w-6xl">
+			<div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+				<div class="reveal">
+					<div class="flex items-center gap-2 mb-3">
+						<span class="section-label">PlayFrame</span>
+						<span class="text-[9px] font-bold uppercase tracking-wider bg-accent/10 text-accent px-2 py-0.5 rounded-full border border-accent/20">No installs</span>
+					</div>
+					<h2 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
+						Games inside<br/>your calls
+					</h2>
+					<p class="text-text-secondary mt-4 text-base sm:text-lg leading-relaxed max-w-lg">
+						Queue dropped you? Waiting on a lobby? Don't go hunting for something to do — PlayFrame drops real multiplayer games straight into your voice channel. No installs, no downloads, nobody leaves the call. Loser shares their screen.
+					</p>
+
+					<div class="mt-6 space-y-3">
+						<div class="flex items-center gap-3">
+							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-3/10 text-[10px] font-bold text-accent-3">⚡</span>
+							<span class="text-sm text-text-secondary">One click and you're in — everyone playing in seconds</span>
+						</div>
+						<div class="flex items-center gap-3">
+							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-3/10 text-[10px] font-bold text-accent-3">⚡</span>
+							<span class="text-sm text-text-secondary">Games can't touch your account, your chats, or your files</span>
+						</div>
+						<div class="flex items-center gap-3">
+							<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-3/10 text-[10px] font-bold text-accent-3">⚡</span>
+							<span class="text-sm text-text-secondary">Fresh games dropping all the time</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- PlayFrame mockup -->
+				<div class="reveal reveal-delay-2 flex justify-center w-full min-w-0">
+					<argon-client-mock view="playframe"></argon-client-mock>
 				</div>
 			</div>
 		</div>
@@ -272,14 +276,14 @@ import {
 				</h2>
 				<p class="text-text-secondary mt-6 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
 					No paywall on the basics. No ads. No data mining. No investor-driven enshittification.
-					Just voice, games, and your people — the way it should be. Free to start, in closed beta now.
+					Just voice, games, and your people — the way it should be. Free to start.
 				</p>
 
 				<div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
-					<button type="button" data-open-enroll class="confetti-trigger w-full sm:w-auto inline-flex items-center justify-center gap-3 rounded-2xl bg-accent px-8 py-4 text-base font-bold text-white transition-all hover:bg-accent-hover hover:shadow-lg hover:shadow-accent/20 hover:-translate-y-0.5 cursor-pointer">
+					<a href="/download/" class="confetti-trigger w-full sm:w-auto inline-flex items-center justify-center gap-3 rounded-2xl bg-accent px-8 py-4 text-base font-bold text-white transition-all hover:bg-accent-hover hover:shadow-lg hover:shadow-accent/20 hover:-translate-y-0.5 cursor-pointer">
 						<Download class="size-5" />
-						Request Invite
-					</button>
+						Download Argon Chat
+					</a>
 					<a href="https://github.com/argon-chat" target="_blank" rel="noopener" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-oled-border bg-oled-surface/50 px-8 py-4 text-base font-semibold text-text-primary backdrop-blur-sm transition-all hover:border-oled-border hover:bg-oled-hover hover:-translate-y-0.5">
 						View on GitHub
 						<ArrowRight class="size-4" />
@@ -288,101 +292,6 @@ import {
 			</div>
 		</div>
 	</section>
-
-	<!-- ═══════════════════════════════════════════════ -->
-	<!-- ENROLLMENT MODAL                               -->
-	<!-- ═══════════════════════════════════════════════ -->
-	<div id="enroll-modal" class="enroll-modal-overlay hidden" aria-hidden="true">
-		<div class="enroll-modal-backdrop"></div>
-		<div class="enroll-modal-container">
-			<div class="enroll-modal-card">
-				<!-- Close btn -->
-				<button type="button" id="enroll-modal-close" class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-lg text-text-muted hover:text-text-primary hover:bg-oled-hover transition-colors" aria-label="Close">
-					<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-				</button>
-
-				<!-- Success state -->
-				<div id="enroll-success" class="hidden text-center py-4">
-					<div class="w-14 h-14 rounded-full bg-success/10 border border-success/20 flex items-center justify-center mx-auto mb-5">
-						<svg class="size-7 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-					</div>
-					<h3 class="text-xl font-black tracking-tight">You're on the list!</h3>
-					<p class="text-text-secondary mt-3 text-sm max-w-xs mx-auto">
-						We'll send you an invitation email when your spot opens up.
-					</p>
-					<p class="text-text-muted mt-2 text-xs">Check your inbox (and spam) 😊</p>
-				</div>
-
-				<!-- Form state -->
-				<div id="enroll-form-wrap">
-					<div class="text-center mb-6">
-						<div class="w-11 h-11 rounded-xl bg-accent/10 border border-accent/15 flex items-center justify-center mx-auto mb-3">
-							<svg class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-						</div>
-						<h3 class="text-xl font-black tracking-tight">Request an Invite</h3>
-						<p class="text-text-secondary mt-2 text-sm max-w-xs mx-auto">
-							Argon's in closed beta. Drop your email and we'll save your spot.
-						</p>
-						<p class="text-text-muted mt-3 text-xs max-w-xs mx-auto">
-							Already received an invitation? Visit the <a href="https://beta.argon.gl" target="_blank" rel="noopener" class="text-accent hover:underline">Beta Portal</a> to access builds.
-						</p>
-					</div>
-
-					<form id="enroll-form" class="space-y-3">
-						<div class="relative">
-							<svg class="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-text-muted pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-							<input
-								type="email"
-								id="enroll-email"
-								name="email"
-								required
-								placeholder="you@example.com"
-								autocomplete="email"
-								class="w-full pl-10 pr-4 py-3 rounded-xl bg-oled-surface border border-oled-border text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/25 transition-colors"
-							/>
-						</div>
-
-						<!-- Cloudflare Turnstile -->
-						<div id="turnstile-container" class="flex justify-center"></div>
-
-						<!-- Personal-data consent (required) -->
-						<label class="flex items-start gap-2.5 text-left cursor-pointer select-none">
-							<input
-								type="checkbox"
-								id="enroll-consent"
-								name="consent"
-								required
-								class="mt-0.5 size-4 shrink-0 rounded border-oled-border bg-oled-surface accent-accent cursor-pointer"
-							/>
-							<span class="text-[11px] leading-relaxed text-text-muted">
-								I have read and agree to the
-								<a href="/terms/" class="text-accent hover:underline">Terms of Service</a>,
-								<a href="/privacy/" class="text-accent hover:underline">Privacy Policy</a>, and
-								consent to the processing of my personal data as described therein.
-							</span>
-						</label>
-
-						<!-- Error message -->
-						<p id="enroll-error" class="text-red-400 text-sm text-center hidden"></p>
-
-						<button
-							type="submit"
-							id="enroll-submit"
-							class="w-full flex items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-white hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-						>
-							<span id="enroll-btn-text">Request Invite</span>
-							<svg id="enroll-btn-arrow" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-							<svg id="enroll-btn-spinner" class="size-4 animate-spin hidden" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-						</button>
-					</form>
-
-					<p class="text-center text-[10px] text-text-faint mt-3">
-						By signing up you agree to our <a href="/terms/" class="underline hover:text-text-muted">Terms</a> & <a href="/privacy/" class="underline hover:text-text-muted">Privacy</a>.
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
 
 	<Footer />
 </Layout>
@@ -588,116 +497,6 @@ import {
 	}
 
 
-	// ── Enrollment modal ──
-	const TURNSTILE_SITE_KEY = '0x4AAAAAAA0DPoxKcBNZt4vC';
-	let captchaToken: string | null = null;
-
-	function initEnrollModal() {
-		const modal = document.getElementById('enroll-modal');
-		const closeBtn = document.getElementById('enroll-modal-close');
-		const form = document.getElementById('enroll-form') as HTMLFormElement | null;
-		const emailInput = document.getElementById('enroll-email') as HTMLInputElement | null;
-		const errorEl = document.getElementById('enroll-error');
-		const submitBtn = document.getElementById('enroll-submit') as HTMLButtonElement | null;
-		const btnText = document.getElementById('enroll-btn-text');
-		const btnArrow = document.getElementById('enroll-btn-arrow');
-		const btnSpinner = document.getElementById('enroll-btn-spinner');
-		const formWrap = document.getElementById('enroll-form-wrap');
-		const successWrap = document.getElementById('enroll-success');
-		if (!modal) return;
-
-		// Open modal triggers
-		document.querySelectorAll('[data-open-enroll]').forEach(btn => {
-			btn.addEventListener('click', (e) => {
-				e.preventDefault();
-				modal.classList.remove('hidden');
-				modal.setAttribute('aria-hidden', 'false');
-				document.body.style.overflow = 'hidden';
-				emailInput?.focus();
-				loadTurnstile();
-			});
-		});
-
-		// Close
-		function close() {
-			modal.classList.add('hidden');
-			modal.setAttribute('aria-hidden', 'true');
-			document.body.style.overflow = '';
-		}
-
-		closeBtn?.addEventListener('click', close);
-		modal.querySelector('.enroll-modal-backdrop')?.addEventListener('click', close);
-		document.addEventListener('keydown', (e) => {
-			if (e.key === 'Escape' && !modal.classList.contains('hidden')) close();
-		});
-
-		// Load Turnstile
-		function loadTurnstile() {
-			if (document.getElementById('turnstile-script')) return;
-			const script = document.createElement('script');
-			script.id = 'turnstile-script';
-			script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-			script.async = true;
-			script.onload = () => {
-				if (typeof (window as any).turnstile !== 'undefined') {
-					(window as any).turnstile.render('#turnstile-container', {
-						sitekey: TURNSTILE_SITE_KEY,
-						callback: (token: string) => { captchaToken = token; },
-						theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
-					});
-				}
-			};
-			document.body.appendChild(script);
-		}
-
-		// Submit
-		form?.addEventListener('submit', async (e) => {
-			e.preventDefault();
-			const email = emailInput?.value.trim() || '';
-			if (!email || !email.includes('@')) {
-				if (errorEl) { errorEl.textContent = 'Please enter a valid email address.'; errorEl.classList.remove('hidden'); }
-				return;
-			}
-
-			const consent = document.getElementById('enroll-consent') as HTMLInputElement | null;
-			if (!consent?.checked) {
-				if (errorEl) { errorEl.textContent = 'Please accept the Terms and consent to data processing to continue.'; errorEl.classList.remove('hidden'); }
-				return;
-			}
-
-			errorEl?.classList.add('hidden');
-			if (submitBtn) submitBtn.disabled = true;
-			if (btnText) btnText.textContent = 'Submitting...';
-			btnArrow?.classList.add('hidden');
-			btnSpinner?.classList.remove('hidden');
-
-			try {
-				const res = await fetch('https://enroll.argon.gl', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ email, turnstile: captchaToken }),
-				});
-
-				if (res.status === 451) {
-					if (errorEl) { errorEl.textContent = 'Your region is not supported for enrollment.'; errorEl.classList.remove('hidden'); }
-					return;
-				}
-				if (!res.ok) throw new Error('fail');
-
-				formWrap?.classList.add('hidden');
-				successWrap?.classList.remove('hidden');
-				setTimeout(close, 5000);
-			} catch {
-				if (errorEl) { errorEl.textContent = 'Failed to submit. Please try again later.'; errorEl.classList.remove('hidden'); }
-			} finally {
-				if (submitBtn) submitBtn.disabled = false;
-				if (btnText) btnText.textContent = 'Request Invite';
-				btnArrow?.classList.remove('hidden');
-				btnSpinner?.classList.add('hidden');
-			}
-		});
-	}
-
 	// ── Confetti on download clicks ──
 	function initConfetti() {
 		import('canvas-confetti').then(({ default: confetti }) => {
@@ -723,16 +522,5 @@ import {
 	initParticles();
 	initCardTilt();
 	initKonami();
-	initEnrollModal();
 	initConfetti();
-
-	// Auto-open enrollment if ?enroll=1 or #enroll
-	if (new URLSearchParams(window.location.search).has('enroll') || window.location.hash === '#enroll') {
-		const modal = document.getElementById('enroll-modal');
-		if (modal) {
-			modal.classList.remove('hidden');
-			modal.setAttribute('aria-hidden', 'false');
-			document.body.style.overflow = 'hidden';
-		}
-	}
 </script>

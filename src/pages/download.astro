@@ -2,34 +2,309 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
-import { Shield, ArrowRight } from 'lucide-astro';
+import { ArrowRight, Check } from 'lucide-astro';
+
+// Brand glyphs (single-path SVGs)
+const glyphs: Record<string, string> = {
+	windows: 'M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801',
+	apple: 'M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-2.987 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.572-2.27 1.206-2.98.804-.94 2.142-1.64 3.248-1.68.03.13.05.28.05.43zm4.565 15.71c-.03.07-.463 1.58-1.518 3.12-.945 1.34-1.94 2.71-3.43 2.71-1.517 0-1.9-.88-3.63-.88-1.698 0-2.302.91-3.67.91-1.377 0-2.332-1.26-3.428-2.8-1.287-1.82-2.323-4.63-2.323-7.28 0-4.28 2.797-6.55 5.552-6.55 1.448 0 2.675.95 3.6.95.865 0 2.222-1.01 3.902-1.01.613 0 2.886.06 4.374 2.19-.13.09-2.383 1.37-2.383 4.19 0 3.26 2.854 4.42 2.955 4.45z',
+	linux: 'M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139zm.529 3.405h.013c.213 0 .396.062.584.198.19.135.33.332.438.533.105.259.158.459.166.724 0-.02.006-.04.006-.06v.105a.086.086 0 01-.004-.021l-.004-.024a1.807 1.807 0 01-.15.706.953.953 0 01-.213.335.71.71 0 00-.088-.042c-.104-.045-.198-.064-.284-.133a1.312 1.312 0 00-.22-.066c.05-.06.146-.133.183-.198.053-.128.082-.264.088-.402v-.02a1.21 1.21 0 00-.061-.4c-.045-.134-.101-.2-.183-.333-.084-.066-.167-.132-.267-.132h-.016c-.093 0-.176.03-.262.132a.8.8 0 00-.205.334 1.18 1.18 0 00-.09.4v.019c.002.089.008.179.02.267-.193-.067-.438-.135-.607-.202a1.635 1.635 0 01-.018-.2v-.02a1.772 1.772 0 01.15-.768c.082-.22.232-.406.43-.533a.985.985 0 01.594-.2zm-2.962.059h.036c.142 0 .27.048.399.135.146.129.264.288.344.465.09.199.14.4.153.667v.004c.007.134.006.2-.002.266v.08c-.03.007-.056.018-.083.024-.152.055-.274.135-.393.2.012-.09.013-.18.003-.267v-.015c-.012-.133-.04-.2-.082-.333a.613.613 0 00-.166-.267.248.248 0 00-.183-.064h-.021c-.071.006-.13.04-.186.132a.552.552 0 00-.12.27.944.944 0 00-.023.33v.015c.012.135.037.2.08.334.046.134.098.2.166.268.01.009.02.018.034.024-.07.057-.117.07-.176.136a.304.304 0 01-.131.068 2.62 2.62 0 01-.275-.402 1.772 1.772 0 01-.155-.667 1.759 1.759 0 01.08-.668 1.43 1.43 0 01.283-.535c.128-.133.26-.2.418-.2zm1.37 1.706c.332 0 .733.065 1.216.399.293.2.523.269 1.052.468h.003c.255.136.405.266.478.399v-.131a.571.571 0 01.016.47c-.123.31-.516.643-1.063.842v.002c-.268.135-.501.333-.775.465-.276.135-.588.292-1.012.267a1.139 1.139 0 01-.448-.067 3.566 3.566 0 01-.322-.198c-.195-.135-.363-.332-.612-.465v-.005h-.005c-.4-.246-.616-.512-.686-.71-.07-.268-.005-.47.193-.6.224-.135.38-.271.483-.336.104-.074.143-.102.176-.131h.002v-.003c.169-.202.436-.47.839-.601.139-.036.294-.065.466-.065zm2.8 2.142c.358 1.417 1.196 3.475 1.735 4.473.286.534.855 1.659 1.102 3.024.156-.005.33.018.513.064.646-1.671-.546-3.467-1.089-3.966-.22-.2-.232-.335-.123-.335.59.534 1.365 1.572 1.646 2.757.13.535.16 1.104.021 1.67.067.028.135.06.205.067 1.032.534 1.413.938 1.23 1.537v-.043c-.06-.003-.12 0-.18 0h-.016c.151-.467-.182-.825-1.065-1.224-.915-.4-1.646-.336-1.77.465-.008.043-.013.066-.018.135-.068.023-.139.053-.209.064-.43.268-.662.669-.793 1.187-.13.533-.17 1.156-.205 1.869v.003c-.02.334-.17.838-.319 1.35-1.5 1.072-3.58 1.538-5.348.334a2.645 2.645 0 00-.402-.533 1.45 1.45 0 00-.275-.333c.182 0 .338-.03.465-.067a.615.615 0 00.314-.334c.108-.267 0-.697-.345-1.163-.345-.467-.931-.995-1.788-1.521-.63-.4-.986-.87-1.15-1.396-.165-.534-.143-1.085-.015-1.645.245-1.07.873-2.11 1.274-2.763.107-.065.037.135-.408.974-.396.751-1.14 2.497-.122 3.854a8.123 8.123 0 01.647-2.876c.564-1.278 1.743-3.504 1.836-5.268.048.036.217.135.289.202.218.133.38.333.59.465.21.201.477.335.876.335.039.003.075.006.11.006.412 0 .73-.134.997-.268.29-.134.52-.334.74-.4h.005c.467-.135.835-.402 1.044-.7zm2.185 8.958c.037.6.343 1.245.882 1.377.588.134 1.434-.333 1.791-.765l.211-.01c.315-.007.577.01.847.268l.003.003c.208.199.305.53.391.876.085.4.154.78.409 1.066.486.527.645.906.636 1.14l.003-.007v.018l-.003-.012c-.015.262-.185.396-.498.595-.63.401-1.746.712-2.457 1.57-.618.737-1.37 1.14-2.036 1.191-.664.053-1.237-.2-1.574-.898l-.005-.003c-.21-.4-.12-1.025.056-1.69.176-.668.428-1.344.463-1.897.037-.714.076-1.335.195-1.814.12-.465.308-.797.641-.984l.045-.022zm-10.814.049h.01c.053 0 .105.005.157.014.376.055.706.333 1.023.752l.91 1.664.003.003c.243.533.754 1.064 1.189 1.637.434.598.77 1.131.729 1.57v.006c-.057.744-.48 1.148-1.125 1.294-.645.135-1.52.002-2.395-.464-.968-.536-2.118-.469-2.857-.602-.369-.066-.61-.2-.723-.4-.11-.2-.113-.602.123-1.23v-.004l.002-.003c.117-.334.03-.752-.027-1.118-.055-.401-.083-.71.043-.94.16-.334.396-.4.69-.533.294-.135.64-.202.915-.47h.002v-.002c.256-.268.445-.601.668-.838.19-.201.38-.336.663-.336zm7.159-9.074c-.435.201-.945.535-1.488.535-.542 0-.97-.267-1.28-.466-.154-.134-.28-.268-.373-.335-.164-.134-.144-.333-.074-.333.109.016.129.134.199.2.096.066.215.2.36.333.292.2.68.467 1.167.467.485 0 1.053-.267 1.398-.466.195-.135.445-.334.648-.467.156-.136.149-.267.279-.267.128.016.034.134-.147.332a8.097 8.097 0 01-.69.468zm-1.082-1.583V5.64c-.006-.02.013-.042.029-.05.074-.043.18-.027.26.004.063 0 .16.067.15.135-.006.049-.085.066-.135.066-.055 0-.092-.043-.141-.068-.052-.018-.146-.008-.163-.065zm-.551 0c-.02.058-.113.049-.166.066-.047.025-.086.068-.14.068-.05 0-.13-.02-.136-.068-.01-.066.088-.133.15-.133.08-.031.184-.047.259-.005.019.009.036.03.03.05v.02h.003z',
+	android: 'M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993.0001.5511-.4482.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.2439 13.8533 7.8508 12 7.8508s-3.5902.3931-5.1367 1.0989L4.841 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3435-4.1021-2.6892-7.5743-6.1185-9.4396',
+	steam: 'M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z',
+	xbox: 'M4.102 21.033C6.211 22.881 8.977 24 12 24c3.026 0 5.789-1.119 7.902-2.967 1.877-1.912-4.316-8.709-7.902-11.417-3.582 2.708-9.779 9.505-7.898 11.417zm11.16-14.406c2.5 2.961 7.484 10.313 6.076 12.912C23.002 17.48 24 14.861 24 12.004c0-3.34-1.365-6.362-3.57-8.536 0 0-.027-.022-.082-.042-.063-.022-.152-.045-.281-.045-.592 0-1.985.434-4.805 3.246zM3.654 3.426c-.057.02-.082.041-.086.042C1.365 5.642 0 8.664 0 12.004c0 2.854.998 5.473 2.661 7.533-1.401-2.605 3.579-9.951 6.08-12.91-2.82-2.813-4.216-3.245-4.806-3.245-.131 0-.223.021-.281.046v-.002zM12 3.551S9.055 1.828 6.755 1.746c-.903-.033-1.454.295-1.521.339C7.379.646 9.659 0 11.984 0H12c2.334 0 4.605.646 6.766 2.085-.068-.046-.615-.372-1.52-.339C14.946 1.828 12 3.545 12 3.545v.006z',
+};
+
+const primary = [
+	{
+		name: 'Windows',
+		sub: 'Windows 11 · 64-bit',
+		icon: 'windows',
+		href: 'https://ru-central-updates.argon.gl/ArgonChat_Setup.exe',
+		cta: 'Download for Windows',
+		ext: '.exe',
+	},
+	{
+		name: 'macOS',
+		sub: 'macOS 26+ · Apple Silicon',
+		icon: 'apple',
+		href: 'https://ru-central-updates.argon.gl/ArgonChat_Setup.dmg',
+		cta: 'Download for macOS',
+		ext: '.dmg',
+	},
+];
+
+const others = [
+	{ name: 'Linux', sub: 'In the works', icon: 'linux', status: 'Soon' },
+	{ name: 'iOS', sub: 'On the roadmap', icon: 'apple', status: 'Planned' },
+	{ name: 'Android', sub: 'In the works', icon: 'android', status: 'Soon' },
+	{ name: 'SteamOS', sub: 'On the roadmap', icon: 'steam', status: 'Planned' },
+	{ name: 'Xbox', sub: 'On the roadmap', icon: 'xbox', status: 'Planned' },
+];
 ---
 
-<Layout title="Download — Argon Chat" description="Argon Chat is in closed beta. Join the enrollment queue." image="/og/download.png">
+<Layout title="Download — Argon Chat" description="Download Argon Chat for Windows and macOS. Crystal-clear voice, games inside your calls, and an overlay that keeps you in the game." image="/og/download.png">
 	<Navbar current="/download/" />
 
-	<section class="relative pt-32 pb-16 sm:pb-24 px-4 sm:px-6 min-h-[70vh] flex items-center justify-center">
-		<!-- Background -->
-		<div class="absolute left-1/2 top-1/4 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]"></div>
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- HERO                                            -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section class="dl-hero relative overflow-hidden pt-36 sm:pt-44 pb-16 px-4 sm:px-6">
+		<!-- Ambient glows -->
+		<div class="dl-glow dl-glow-1"></div>
+		<div class="dl-glow dl-glow-2"></div>
+		<div class="dl-grid-overlay"></div>
 
-		<div class="relative z-10 mx-auto max-w-lg text-center">
-			<div class="w-16 h-16 rounded-2xl bg-accent/10 border border-accent/15 flex items-center justify-center mx-auto mb-6">
-				<Shield class="size-8 text-accent" />
-			</div>
-			<h1 class="animate-fade-in-up text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">
-				Closed Beta
+		<div class="relative z-10 mx-auto max-w-5xl text-center">
+			<span class="animate-fade-in-up section-label">Argon Chat · Desktop</span>
+			<h1 class="animate-fade-in-up-delay-1 mt-4 text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.05]">
+				Argon Chat,<br class="hidden sm:block" />
+				<span class="dl-gradient">right on your desktop</span>
 			</h1>
-			<p class="animate-fade-in-up-delay-1 text-text-secondary mt-4 text-base sm:text-lg max-w-md mx-auto">
-				Argon Chat is currently in closed beta. Sign up for enrollment to get early access when your spot opens.
+			<p class="animate-fade-in-up-delay-2 mx-auto mt-5 max-w-xl text-base sm:text-lg leading-relaxed text-text-secondary">
+				One download. Crystal-clear voice, real games inside your calls, and an overlay
+				that keeps you in the game.
 			</p>
-			<div class="animate-fade-in-up-delay-2 mt-8">
-				<a href="/?enroll=1" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-accent px-8 py-4 text-base font-bold text-white hover:bg-accent-hover hover:shadow-lg hover:shadow-accent/20 transition-all hover:-translate-y-0.5">
-					Join Beta Enrollment
-					<ArrowRight class="size-4" />
-				</a>
+
+			<!-- Primary download cards -->
+			<div class="animate-fade-in-up-delay-3 mt-12 grid gap-4 sm:grid-cols-2 max-w-2xl mx-auto text-left">
+				{primary.map((p) => (
+					<a href={p.href} class="dl-card group" data-detect={p.name.toLowerCase()} data-track={`download_${p.name.toLowerCase()}`}>
+						<div class="dl-card-glow"></div>
+						<div class="relative flex items-center gap-4">
+							<div class="dl-icon">
+								<svg viewBox="0 0 24 24" fill="currentColor" class="size-7"><path d={glyphs[p.icon]} /></svg>
+							</div>
+							<div class="min-w-0 flex-1">
+								<div class="flex items-center gap-2">
+									<h2 class="text-lg font-bold text-text-primary">{p.name}</h2>
+									<span class="dl-badge dl-badge-live">
+										<span class="dl-dot"></span>Available
+									</span>
+								</div>
+								<p class="text-xs text-text-muted mt-0.5">{p.sub}</p>
+							</div>
+						</div>
+						<div class="relative mt-5 dl-btn">
+							{p.cta}
+							<span class="dl-btn-ext">{p.ext}</span>
+							<ArrowRight class="size-4 transition-transform group-hover:translate-x-1" />
+						</div>
+					</a>
+				))}
+			</div>
+
+		</div>
+	</section>
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- MORE PLATFORMS                                  -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section class="px-4 sm:px-6 pb-24">
+		<div class="mx-auto max-w-5xl">
+			<div class="text-center mb-8">
+				<h2 class="text-xl sm:text-2xl font-bold tracking-tight">More platforms</h2>
+				<p class="text-text-muted text-sm mt-2">We're bringing Argon everywhere your squad hangs out.</p>
+			</div>
+
+			<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+				{others.map((o) => (
+					<div class={`dl-soon-card ${o.status === 'Soon' ? 'is-soon' : 'is-planned'}`}>
+						<div class="dl-soon-icon">
+							<svg viewBox="0 0 24 24" fill="currentColor" class="size-6"><path d={glyphs[o.icon]} /></svg>
+						</div>
+						<h3 class="text-sm font-semibold text-text-primary mt-3">{o.name}</h3>
+						<p class="text-[11px] text-text-faint">{o.sub}</p>
+						<span class={`dl-status ${o.status === 'Soon' ? 'status-soon' : 'status-planned'}`}>{o.status}</span>
+					</div>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<!-- ═══════════════════════════════════════════════ -->
+	<!-- WHAT YOU GET                                     -->
+	<!-- ═══════════════════════════════════════════════ -->
+	<section class="px-4 sm:px-6 pb-28">
+		<div class="mx-auto max-w-3xl">
+			<div class="glass rounded-3xl p-8 sm:p-10 relative overflow-hidden">
+				<div class="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-accent/10 blur-[80px]"></div>
+				<h2 class="relative text-xl sm:text-2xl font-bold tracking-tight">In the box</h2>
+				<div class="relative mt-6 grid sm:grid-cols-2 gap-x-8 gap-y-3.5">
+					{[
+						'AI noise suppression on every call',
+						'PlayFrame — games inside your voice channel',
+						'In-game overlay that shows who\'s talking',
+						'Coins, levels & loot just for showing up',
+						'Passwordless login & full session control',
+						'Self-updating — always on the latest build',
+					].map((f) => (
+						<div class="flex items-start gap-3">
+							<span class="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-accent/12 text-accent">
+								<Check class="size-3.5" />
+							</span>
+							<span class="text-sm text-text-secondary leading-snug">{f}</span>
+						</div>
+					))}
+				</div>
+				<div class="relative mt-8 pt-6 border-t border-oled-border flex flex-col sm:flex-row items-center justify-between gap-3">
+					<p class="text-xs text-text-muted">Questions before you install?</p>
+					<a href="/contact/" class="inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline">
+						Talk to us <ArrowRight class="size-3.5" />
+					</a>
+				</div>
 			</div>
 		</div>
 	</section>
 
 	<Footer />
 </Layout>
+
+<style>
+	.dl-hero { min-height: 60vh; }
+
+	.dl-gradient {
+		background: linear-gradient(120deg, var(--color-accent), var(--color-accent-2) 60%, var(--color-accent-3));
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+
+	/* Ambient glows */
+	.dl-glow { position: absolute; border-radius: 9999px; filter: blur(120px); pointer-events: none; z-index: 0; }
+	.dl-glow-1 { top: -10%; left: 15%; width: 480px; height: 480px; background: rgba(139,92,246,0.14); }
+	.dl-glow-2 { top: 10%; right: 10%; width: 380px; height: 380px; background: rgba(6,182,212,0.10); }
+
+	.dl-grid-overlay {
+		position: absolute; inset: 0; z-index: 0; pointer-events: none;
+		background-image:
+			linear-gradient(to right, rgba(139,92,246,0.04) 1px, transparent 1px),
+			linear-gradient(to bottom, rgba(139,92,246,0.04) 1px, transparent 1px);
+		background-size: 48px 48px;
+		mask-image: radial-gradient(ellipse 70% 50% at 50% 0%, #000 30%, transparent 75%);
+		-webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 0%, #000 30%, transparent 75%);
+	}
+
+	/* Primary download cards */
+	.dl-card {
+		position: relative;
+		display: block;
+		padding: 22px;
+		border-radius: 20px;
+		background: linear-gradient(160deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+		border: 1px solid rgba(255,255,255,0.08);
+		overflow: hidden;
+		transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), border-color 0.35s, box-shadow 0.35s;
+	}
+	.dl-card:hover {
+		transform: translateY(-4px);
+		border-color: rgba(139,92,246,0.4);
+		box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 60px rgba(139,92,246,0.12);
+	}
+	html:not(.dark) .dl-card {
+		background: linear-gradient(160deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));
+		border-color: rgba(0,0,0,0.08);
+	}
+	html:not(.dark) .dl-card:hover { box-shadow: 0 20px 50px rgba(0,0,0,0.1), 0 0 50px rgba(139,92,246,0.1); }
+
+	.dl-card-glow {
+		position: absolute; top: -40%; left: 50%; transform: translateX(-50%);
+		width: 120%; height: 120%;
+		background: radial-gradient(ellipse at top, rgba(139,92,246,0.18), transparent 60%);
+		opacity: 0; transition: opacity 0.35s; pointer-events: none;
+	}
+	.dl-card:hover .dl-card-glow { opacity: 1; }
+
+	.dl-icon {
+		display: flex; align-items: center; justify-content: center;
+		width: 52px; height: 52px; border-radius: 14px;
+		background: rgba(139,92,246,0.12);
+		border: 1px solid rgba(139,92,246,0.18);
+		color: var(--color-text-primary);
+		flex-shrink: 0;
+		transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+	}
+	.dl-card:hover .dl-icon { transform: scale(1.08) rotate(-4deg); }
+
+	.dl-btn {
+		display: flex; align-items: center; justify-content: center; gap: 8px;
+		width: 100%; padding: 12px 16px; border-radius: 12px;
+		background: var(--color-accent); color: #fff;
+		font-size: 14px; font-weight: 700;
+		transition: background 0.25s;
+	}
+	.dl-card:hover .dl-btn { background: var(--color-accent-hover); }
+	.dl-btn-ext {
+		font-size: 11px; font-weight: 600; opacity: 0.7;
+		padding: 2px 7px; border-radius: 6px; background: rgba(255,255,255,0.15);
+		margin-left: -2px;
+	}
+
+	/* Badges */
+	.dl-badge {
+		display: inline-flex; align-items: center; gap: 5px;
+		font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+		padding: 2px 8px; border-radius: 9999px;
+	}
+	.dl-badge-live { background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.2); }
+	.dl-dot { width: 6px; height: 6px; border-radius: 9999px; background: #34d399; box-shadow: 0 0 0 0 rgba(52,211,153,0.6); animation: dl-pulse 2s infinite; }
+	@keyframes dl-pulse {
+		0% { box-shadow: 0 0 0 0 rgba(52,211,153,0.5); }
+		70% { box-shadow: 0 0 0 6px rgba(52,211,153,0); }
+		100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); }
+	}
+
+	/* Soon / planned cards */
+	.dl-soon-card {
+		position: relative;
+		display: flex; flex-direction: column; align-items: center; text-align: center;
+		padding: 20px 14px;
+		border-radius: 16px;
+		background: rgba(255,255,255,0.02);
+		border: 1px solid rgba(255,255,255,0.06);
+		transition: transform 0.3s, border-color 0.3s, background 0.3s;
+	}
+	html:not(.dark) .dl-soon-card { background: rgba(0,0,0,0.015); border-color: rgba(0,0,0,0.07); }
+	.dl-soon-card:hover { transform: translateY(-3px); border-color: rgba(139,92,246,0.25); }
+
+	.dl-soon-icon {
+		display: flex; align-items: center; justify-content: center;
+		width: 44px; height: 44px; border-radius: 12px;
+		background: rgba(255,255,255,0.04);
+		color: var(--color-text-secondary);
+		transition: color 0.3s;
+	}
+	.dl-soon-card:hover .dl-soon-icon { color: var(--color-text-primary); }
+	.dl-soon-card.is-soon .dl-soon-icon { color: var(--color-text-primary); }
+
+	.dl-status {
+		margin-top: 10px;
+		font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+		padding: 3px 10px; border-radius: 9999px;
+	}
+	.status-soon { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+	.status-planned { background: rgba(255,255,255,0.05); color: var(--color-text-muted); border: 1px solid rgba(255,255,255,0.08); }
+	html:not(.dark) .status-planned { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); }
+
+	/* Highlight the card matching the visitor's OS */
+	.dl-card.os-match { border-color: rgba(139,92,246,0.45); box-shadow: 0 0 0 1px rgba(139,92,246,0.25), 0 20px 50px rgba(139,92,246,0.12); }
+
+	@media (prefers-reduced-motion: reduce) {
+		.dl-dot { animation: none; }
+		.dl-card, .dl-soon-card, .dl-icon { transition: none; }
+	}
+</style>
+
+<script>
+	// Surface the download that matches the visitor's OS.
+	function highlightOS() {
+		const ua = navigator.userAgent.toLowerCase();
+		let match: string | null = null;
+		if (ua.includes('win')) match = 'windows';
+		else if (ua.includes('mac')) match = 'macos';
+		if (!match) return;
+		const card = document.querySelector(`.dl-card[data-detect="${match}"]`);
+		card?.classList.add('os-match');
+	}
+	highlightOS();
+	document.addEventListener('astro:page-load', highlightOS);
+</script>

@@ -115,14 +115,9 @@ const { current = '/' } = Astro.props;
             </div>
           </div>
 
-          <a href="/pricing/" class:list={["hud-link", current === '/pricing/' && 'active']}>
+          <a href="/download/" class:list={["hud-link", current === '/download/' && 'active']}>
             <span class="hud-link-indicator"></span>
-            Billing
-          </a>
-
-          <a href="https://beta.argon.gl" class="hud-link">
-            <span class="hud-link-indicator"></span>
-            Enrollment Portal
+            Download
           </a>
         </div>
       </div>
@@ -139,11 +134,11 @@ const { current = '/' } = Astro.props;
           <X class="size-4 mobile-close-icon hidden" />
         </button>
 
-        <button type="button" data-open-enroll class="hud-cta hidden sm:inline-flex">
+        <a href="/download/" class="hud-cta hidden sm:inline-flex" data-track="nav_cta_download">
           <Download class="size-3.5" />
-          <span>JOIN BETA</span>
+          <span>DOWNLOAD</span>
           <div class="hud-cta-pulse"></div>
-        </button>
+        </a>
       </div>
     </div>
 
@@ -165,12 +160,9 @@ const { current = '/' } = Astro.props;
         <a href="/#features" class="hud-mobile-link">
           <span class="hud-ml-dot"></span>Features
         </a>
-        <a href="/pricing/" class:list={["hud-mobile-link", current === '/pricing/' && 'active']}>
-          <span class="hud-ml-dot"></span>Billing
+        <a href="/download/" class:list={["hud-mobile-link", current === '/download/' && 'active']}>
+          <span class="hud-ml-dot"></span>Download
         </a>
-        <button type="button" data-open-enroll class="hud-mobile-link w-full text-left">
-          <span class="hud-ml-dot"></span>Enrollment
-        </button>
 
         <div class="hud-mobile-sep"></div>
         <div class="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-text-faint">Products</div>
@@ -233,17 +225,6 @@ const { current = '/' } = Astro.props;
       if (!(e.target as HTMLElement).closest('.hud-dropdown')) {
         document.querySelectorAll('.hud-dropdown.open').forEach(dd => dd.classList.remove('open'));
       }
-    });
-  }
-
-  // ── Enroll button fallback: navigate to home if no modal on page ──
-  function initEnrollFallback() {
-    document.querySelectorAll('[data-open-enroll]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (!document.getElementById('enroll-modal')) {
-          window.location.href = '/?enroll=1';
-        }
-      });
     });
   }
 
@@ -315,9 +296,8 @@ const { current = '/' } = Astro.props;
     });
   }
 
-  document.addEventListener('astro:page-load', () => { initDropdowns(); initEnrollFallback(); initThemeToggle(); initMobileMenu(); initHudScroll(); });
+  document.addEventListener('astro:page-load', () => { initDropdowns(); initThemeToggle(); initMobileMenu(); initHudScroll(); });
   initDropdowns();
-  initEnrollFallback();
   initThemeToggle();
   initMobileMenu();
   initHudScroll();

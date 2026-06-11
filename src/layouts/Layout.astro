@@ -101,6 +101,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 		<slot />
 
+		<!-- Client-side telemetry: Sentry errors + click metrics -->
+		<script>
+			import { initAnalytics, trackPageview } from '../lib/analytics';
+			initAnalytics();
+			// Re-count page views on client-side (View Transitions) navigation.
+			document.addEventListener('astro:after-swap', trackPageview);
+		</script>
+
 		<CookieBanner />
 
 		<!-- Back to top -->

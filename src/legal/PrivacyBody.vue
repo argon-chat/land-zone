@@ -45,12 +45,19 @@
           <p class="def-term">Website Analytics</p>
           <p>Aggregated, anonymous page-view and performance metrics collected via <strong>Cloudflare Web Analytics</strong> on our public websites (landing pages, docs, status).</p>
         </div>
+        <div class="def-card">
+          <p class="def-term">Diagnostics &amp; Product Analytics</p>
+          <p>Error reports, performance data, and product interaction metrics (such as which features and buttons are used) collected through our self-hosted <strong>Sentry</strong> across Argon products.</p>
+        </div>
       </div>
       <div class="legal-note note-green">
         <p>We <strong>do not</strong> collect sensitive categories of data (biometric, health, political beliefs) unless required by law.</p>
       </div>
       <div class="legal-note note-info">
         <p><strong>About our website analytics:</strong> Cloudflare Web Analytics does <strong>not</strong> use cookies, does not collect personal data, and does not track users across sites. It only records anonymous, aggregated metrics such as page views, referrers, and page load times. No IP addresses or device fingerprints are stored. This tool is enabled on all Argon public websites.</p>
+      </div>
+      <div class="legal-note note-info">
+        <p><strong>About our diagnostics (Sentry):</strong> We operate a <strong>self-hosted</strong> Sentry instance across all Argon products to monitor errors and understand how the products are used &mdash; including interactions such as clicks and navigation. On our <strong>public websites</strong> this telemetry is <strong>anonymous</strong>: we do not record who performed an action. When you are <strong>signed in</strong> to an Argon product, these diagnostic and usage events are associated with your account, so we can investigate issues affecting you and improve the features you actually use. Because Sentry is self-hosted, this data stays within Argon&rsquo;s own infrastructure and is never sold or shared with advertisers.</p>
       </div>
     </section>
 
