@@ -1,0 +1,23 @@
+# Argon Chat
+
+> Argon Chat is a free desktop voice, messaging and community app built for gamers. It pairs crystal-clear, AI-denoised voice with PlayFrame (real multiplayer games inside a voice call), an in-game overlay that shows who's talking, and coins/levels earned just for hanging out. Core features — voice, messaging, screen sharing and communities — are free; an optional subscription, Ultima, adds cosmetics, larger uploads, higher-quality audio/video and more. Available for Windows and macOS (Linux and mobile in development).
+
+## Product
+- [Home](https://argon.gl/): What Argon Chat is — voice, games and community for gamers.
+- [Download](https://argon.gl/download/): Desktop downloads for Windows and macOS.
+- [Billing](https://argon.gl/pricing/): Accepted payment methods, fees, refund policy and regulatory disclosure.
+
+## Company & resources
+- [Contact](https://argon.gl/contact/): Support, DPO, security, abuse, legal and press contacts.
+- [Press Kit](https://argon.gl/press/): Logos, screenshots and company info for media.
+- [Branding](https://argon.gl/branding/): Brand assets, colors and usage guidelines.
+- [ArgonCrawler](https://argon.gl/beaf/): Technical disclosure for Argon's metadata bot.
+
+## Legal
+- [Privacy Policy](https://argon.gl/privacy/)
+- [Terms of Service](https://argon.gl/terms/)
+
+## About
+- Company: "ARGON INCORPORATED" LLC, 2 Sasna Tsrer str., Yerevan, 0054, Armenia.
+- Founded: 2025. Card payments processed by an acquiring bank supervised by the Central Bank of Armenia.
+- Social: https://x.com/argonchat · https://github.com/argon-chat

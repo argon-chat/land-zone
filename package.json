@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "deploy": "astro build && wrangler pages deploy dist --branch=master",
+    "deploy:firebase": "astro build && firebase deploy --only hosting",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -24,9 +25,11 @@
     "vue": "^3.5.32"
   },
   "devDependencies": {
+    "firebase-tools": "^15.20.0",
     "wrangler": "^4.69.0"
   },
   "trustedDependencies": [
-    "@sentry/cli"
+    "@sentry/cli",
+    "protobufjs"
   ]
 }

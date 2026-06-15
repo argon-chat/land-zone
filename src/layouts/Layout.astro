@@ -59,11 +59,34 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			"url": "https://argon.gl",
 			"description": description,
 			"applicationCategory": "CommunicationApplication",
-			"operatingSystem": "Windows, macOS, Linux",
-			"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+			"operatingSystem": "Windows, macOS",
+			"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "description": "Free plan — all core features. Optional Ultima subscription adds extras." },
 			"author": { "@type": "Organization", "name": "Argon Incorporated LLC", "url": "https://argon.gl" },
 			"keywords": "voice chat, messaging app, community platform, screen sharing, gaming communication, voice channels",
 			"alternateName": ["Argon", "Argon Voice Chat"]
+		})} />
+
+		<!-- Organization entity (logo, social profiles) for knowledge-graph / AI entity resolution -->
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "Organization",
+			"name": "Argon Incorporated LLC",
+			"alternateName": "Argon Chat",
+			"url": "https://argon.gl",
+			"logo": "https://argon.gl/argon-cat.svg",
+			"foundingDate": "2025",
+			"sameAs": ["https://x.com/argonchat", "https://github.com/argon-chat"],
+			"address": {
+				"@type": "PostalAddress",
+				"streetAddress": "2 Sasna Tsrer str.",
+				"addressLocality": "Yerevan",
+				"postalCode": "0054",
+				"addressCountry": "AM"
+			},
+			"contactPoint": [
+				{ "@type": "ContactPoint", "contactType": "customer support", "email": "support@argon.gl" },
+				{ "@type": "ContactPoint", "contactType": "security", "email": "security@argon.gl" }
+			]
 		})} />
 
 		<style>
@@ -317,9 +340,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 	  `color: #94A3B8; font-size: 11px;`
 	);
 
+	// Decorative pointer effects (cursor glow + canvas trail) are skipped when the
+	// visitor prefers reduced motion, and only run on fine pointers (not touch).
+	const allowMotion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+		&& window.matchMedia('(pointer: fine)').matches;
+
 	initBackToTop();
-	initCursorGlow();
 	initReveal();
-	initCursorTrail();
-	document.addEventListener('astro:page-load', () => { initBackToTop(); initCursorGlow(); initReveal(); initCursorTrail(); });
+	if (allowMotion) { initCursorGlow(); initCursorTrail(); }
+	document.addEventListener('astro:page-load', () => {
+		initBackToTop();
+		initReveal();
+		if (allowMotion) { initCursorGlow(); initCursorTrail(); }
+	});
 </script>
