@@ -8,8 +8,10 @@ import {
 } from 'lucide-astro';
 
 const obf = (e: string) => Buffer.from(e).toString('base64');
-const eBilling = obf('billing@argon.gl');
-const eSupport = obf('support@argon.gl');
+const BILLING = 'billing@argon.gl';
+const SUPPORT = 'support@argon.gl';
+const eBilling = obf(BILLING);
+const eSupport = obf(SUPPORT);
 ---
 
 <Layout
@@ -94,7 +96,7 @@ const eSupport = obf('support@argon.gl');
 						</div>
 						<div class="def-card">
 							<p class="def-term">How to request</p>
-							<p>Contact <span class="obf-email" data-e={eBilling}></span> with your account email and the
+							<p>Contact <span class="obf-email" data-e={eBilling}></span><noscript><a class="legal-email-link" href={`mailto:${BILLING}`}>{BILLING}</a></noscript> with your account email and the
 							transaction reference. Approved refunds are returned to the original card within 5&ndash;10
 							business days, depending on your bank.</p>
 						</div>
@@ -122,7 +124,7 @@ const eSupport = obf('support@argon.gl');
 					</ul>
 					<div class="legal-note note-info">
 						<p>The merchant of record is <strong>&ldquo;ARGON INCORPORATED&rdquo; LLC</strong>, 2 Sasna Tsrer
-						street, Yerevan, Armenia. Billing questions: <span class="obf-email" data-e={eSupport}></span>.</p>
+						street, Yerevan, Armenia. Billing questions: <span class="obf-email" data-e={eSupport}></span><noscript><a class="legal-email-link" href={`mailto:${SUPPORT}`}>{SUPPORT}</a></noscript>.</p>
 					</div>
 				</section>
 

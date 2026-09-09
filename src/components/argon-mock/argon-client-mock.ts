@@ -267,7 +267,7 @@ function renderVoice(s: Scene) {
     .map((m) => {
       if (m.state === "screen")
         return `<div class="vc-tile screen">
-          <video class="vc-stream" src="/stream.webm" autoplay muted loop playsinline preload="auto"></video>
+          <video class="vc-stream" data-src="/stream.webm" muted loop playsinline preload="none"></video>
           <span class="screenlabel">${icon("screen")} Sharing screen</span>
           <span class="tag"><img src="${m.avatar}" style="width:18px;height:18px;border-radius:50%">${esc(m.name)}</span></div>`;
       const cls = m.state === "speaking" ? " speaking" : "";
@@ -339,6 +339,7 @@ const RENDER: Record<View, (s: Scene) => string> = {
 
 class ArgonClientMock extends HTMLElement {
   private ro?: ResizeObserver;
+  private videoObserver?: IntersectionObserver;
   private fit?: HTMLElement;
   private outer?: HTMLElement;
   private timers: number[] = [];
@@ -378,12 +379,29 @@ class ArgonClientMock extends HTMLElement {
     outer.appendChild(fit);
     root.appendChild(outer);
 
-    // Nudge any screen-share videos into muted autoplay (innerHTML-inserted <video>
-    // doesn't always honor the muted-autoplay attributes on its own).
-    root.querySelectorAll<HTMLVideoElement>("video.vc-stream").forEach((v) => {
-      v.muted = true;
-      v.play().catch(() => {});
-    });
+    // Screen-share clips load and play only while the mock is on screen, and
+    // never for visitors who asked for reduced motion. Attaching src lazily
+    // keeps the clip off the critical path of the landing page entirely.
+    const videos = root.querySelectorAll<HTMLVideoElement>("video.vc-stream");
+    if (videos.length) {
+      const reduceMotion =
+        typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!reduceMotion) {
+        this.videoObserver = new IntersectionObserver((entries) => {
+          for (const entry of entries) {
+            const v = entry.target as HTMLVideoElement;
+            if (entry.isIntersecting) {
+              if (!v.src && v.dataset.src) v.src = v.dataset.src;
+              v.muted = true;
+              v.play().catch(() => {});
+            } else if (!v.paused) {
+              v.pause();
+            }
+          }
+        }, { rootMargin: "200px" });
+        videos.forEach((v) => this.videoObserver!.observe(v));
+      }
+    }
 
     this.fit = fit;
     this.outer = outer;
@@ -400,6 +418,7 @@ class ArgonClientMock extends HTMLElement {
 
   disconnectedCallback() {
     this.ro?.disconnect();
+    this.videoObserver?.disconnect();
     this.timers.forEach((t) => { clearInterval(t); clearTimeout(t); });
     this.timers = [];
   }

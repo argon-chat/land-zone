@@ -36,12 +36,12 @@ const { current = '/' } = Astro.props;
 
           <!-- Products dropdown -->
           <div class="hud-dropdown" id="dropdown-products">
-            <button type="button" class="hud-link hud-dropdown-trigger">
+            <button type="button" class="hud-link hud-dropdown-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="dropdown-products-panel">
               <span class="hud-link-indicator"></span>
               Products
               <ChevronDown class="size-3 ml-0.5 opacity-50" />
             </button>
-            <div class="hud-dropdown-panel">
+            <div class="hud-dropdown-panel" id="dropdown-products-panel">
               <div class="hud-dropdown-edge"></div>
               <a href="/#features" class="hud-dd-item">
                 <Gamepad2 class="size-4 text-accent" />
@@ -69,12 +69,12 @@ const { current = '/' } = Astro.props;
 
           <!-- Developers dropdown -->
           <div class="hud-dropdown" id="dropdown-devs">
-            <button type="button" class="hud-link hud-dropdown-trigger">
+            <button type="button" class="hud-link hud-dropdown-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="dropdown-devs-panel">
               <span class="hud-link-indicator"></span>
               Developers
               <ChevronDown class="size-3 ml-0.5 opacity-50" />
             </button>
-            <div class="hud-dropdown-panel">
+            <div class="hud-dropdown-panel" id="dropdown-devs-panel">
               <div class="hud-dropdown-edge"></div>
               <a href="https://docs.argon.gl" target="_blank" rel="noopener" class="hud-dd-item">
                 <BookOpen class="size-4 text-accent" />
@@ -124,12 +124,12 @@ const { current = '/' } = Astro.props;
 
       <!-- Right: controls -->
       <div class="hud-right">
-        <button id="theme-toggle" type="button" class="hud-btn" aria-label="Toggle theme">
+        <button id="theme-toggle" type="button" class="hud-btn" aria-label="Switch to light theme">
           <Sun class="size-3.5 hidden dark:block" />
           <Moon class="size-3.5 block dark:hidden" />
         </button>
 
-        <button id="mobile-menu-btn" type="button" class="hud-btn" aria-label="Menu">
+        <button id="mobile-menu-btn" type="button" class="hud-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-sidebar">
           <Menu class="size-4 mobile-menu-icon" />
           <X class="size-4 mobile-close-icon hidden" />
         </button>
@@ -200,13 +200,18 @@ const { current = '/' } = Astro.props;
   // ── Dropdown menus ──
   function initDropdowns() {
     document.querySelectorAll('.hud-dropdown').forEach(dd => {
-      const trigger = dd.querySelector('.hud-dropdown-trigger');
+      const trigger = dd.querySelector('.hud-dropdown-trigger') as HTMLElement | null;
       const panel = dd.querySelector('.hud-dropdown-panel') as HTMLElement;
       if (!trigger || !panel) return;
       let timeout: number;
 
-      const show = () => { clearTimeout(timeout); dd.classList.add('open'); };
-      const hide = () => { timeout = window.setTimeout(() => dd.classList.remove('open'), 150); };
+      const setOpen = (open: boolean) => {
+        dd.classList.toggle('open', open);
+        trigger.setAttribute('aria-expanded', String(open));
+      };
+
+      const show = () => { clearTimeout(timeout); setOpen(true); };
+      const hide = () => { timeout = window.setTimeout(() => setOpen(false), 150); };
 
       trigger.addEventListener('mouseenter', show);
       trigger.addEventListener('mouseleave', hide);
@@ -216,14 +221,25 @@ const { current = '/' } = Astro.props;
       // Also toggle on click for touch
       trigger.addEventListener('click', (e) => {
         e.preventDefault();
-        dd.classList.toggle('open');
+        setOpen(!dd.classList.contains('open'));
+      });
+
+      // Escape closes and hands focus back to the control that opened it.
+      dd.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key !== 'Escape' || !dd.classList.contains('open')) return;
+        clearTimeout(timeout);
+        setOpen(false);
+        trigger.focus();
       });
     });
 
     // Close all dropdowns on outside click
     document.addEventListener('click', (e) => {
       if (!(e.target as HTMLElement).closest('.hud-dropdown')) {
-        document.querySelectorAll('.hud-dropdown.open').forEach(dd => dd.classList.remove('open'));
+        document.querySelectorAll('.hud-dropdown.open').forEach(dd => {
+          dd.classList.remove('open');
+          dd.querySelector('.hud-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+        });
       }
     });
   }
@@ -244,10 +260,12 @@ const { current = '/' } = Astro.props;
 
       const applyTheme = () => {
         document.documentElement.classList.toggle('dark');
-        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+        btn.setAttribute('aria-label', isDark ? 'Switch to dark theme' : 'Switch to light theme');
+        try { localStorage.setItem('theme', isDark ? 'light' : 'dark'); } catch (err) { /* site data blocked */ }
       };
 
-      if (typeof document.startViewTransition !== 'function') {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce || typeof document.startViewTransition !== 'function') {
         applyTheme();
         return;
       }
@@ -273,10 +291,18 @@ const { current = '/' } = Astro.props;
       sidebar!.classList.toggle('hidden', isOpen);
       btn!.querySelector('.mobile-menu-icon')?.classList.toggle('hidden', !isOpen);
       btn!.querySelector('.mobile-close-icon')?.classList.toggle('hidden', isOpen);
+      btn!.setAttribute('aria-expanded', String(!isOpen));
+      btn!.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
     }
 
     btn.addEventListener('click', toggle);
     backdrop?.addEventListener('click', toggle);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !sidebar!.classList.contains('hidden')) {
+        toggle();
+        btn!.focus();
+      }
+    });
     sidebar.querySelectorAll('a[href]').forEach(a => {
       a.addEventListener('click', () => {
         if (!sidebar!.classList.contains('hidden')) toggle();
@@ -288,15 +314,24 @@ const { current = '/' } = Astro.props;
     const nav = document.getElementById('hud-nav');
     if (!nav) return;
     let lastY = 0;
+    let queued = false;
+    // A few pixels of jitter should not flip the bar; only a deliberate scroll does.
+    const THRESHOLD = 6;
     window.addEventListener('scroll', () => {
-      const y = window.scrollY;
-      nav.classList.toggle('hud-scrolled', y > 50);
-      nav.classList.toggle('hud-hidden', y > lastY && y > 200);
-      lastY = y;
-    });
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        const y = window.scrollY;
+        nav.classList.toggle('hud-scrolled', y > 50);
+        if (Math.abs(y - lastY) > THRESHOLD) {
+          nav.classList.toggle('hud-hidden', y > lastY && y > 200);
+          lastY = y;
+        }
+      });
+    }, { passive: true });
   }
 
-  document.addEventListener('astro:page-load', () => { initDropdowns(); initThemeToggle(); initMobileMenu(); initHudScroll(); });
   initDropdowns();
   initThemeToggle();
   initMobileMenu();

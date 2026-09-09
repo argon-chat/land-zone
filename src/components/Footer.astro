@@ -70,7 +70,7 @@
         <span class="footer-heading">Status</span>
         <a href="https://status.argon.gl" target="_blank" rel="noopener" class="footer-status-badge" id="footer-status-badge">
           <span class="footer-status-dot" id="footer-status-dot"></span>
-          <span class="text-[11px]" id="footer-status-text">Checking...</span>
+          <span class="text-[11px]" id="footer-status-text" aria-live="polite">Checking...</span>
         </a>
         <div class="footer-stats">
           <div class="footer-stat">
@@ -98,8 +98,8 @@
     <div class="footer-bottom-line"></div>
     <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6">
       <p class="text-[11px] text-text-faint select-none">
-        &copy; 2026 Argon Inc. LLC &middot; Made with
-        <span class="footer-heart" id="footer-heart" title="Click me!">&hearts;</span>
+        &copy; {new Date().getFullYear()} Argon Inc. LLC &middot; Made with
+        <button type="button" class="footer-heart" id="footer-heart" aria-label="A little love from the Argon team">&hearts;</button>
         in Yerevan
       </p>
       <div class="flex items-center gap-4">
@@ -121,7 +121,9 @@
       if (!pingEl) return;
 
       try {
-        const res = await fetch('https://healthcare.argon.zone/api/status');
+        const res = await fetch('https://healthcare.argon.zone/api/status', {
+          signal: AbortSignal.timeout(8000),
+        });
         const data = await res.json();
         const group = data[0];
         if (!group) return;
@@ -164,8 +166,9 @@
     }
 
     fetchStatus();
-    // Refresh every 60s
-    setInterval(fetchStatus, 60000);
+    // Refresh every 60s, and stop once the page is on its way out.
+    const statusTimer = setInterval(fetchStatus, 60000);
+    window.addEventListener('pagehide', () => clearInterval(statusTimer), { once: true });
 
     // ── Heart click easter egg ──
     const heart = document.getElementById('footer-heart');
@@ -182,7 +185,7 @@
         heart.animate([
           { transform: 'scale(0.7)' },
           { transform: `scale(${1 + Math.min(clicks * 0.08, 0.6)})` }
-        ], { duration: 200, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' });
+        ], { duration: 220, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
         if (clicks === 10) {
           import('canvas-confetti').then(({ default: confetti }) => {
             const rect = heart.getBoundingClientRect();
@@ -228,20 +231,22 @@
 
       // Toast
       const toast = document.createElement('div');
+      toast.setAttribute('role', 'status');
       toast.innerHTML = '🎮 <b>Achievement Unlocked:</b> Retro Gamer';
       toast.style.cssText = `
         position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-100px);z-index:100000;
         background:#1a1a2e;border:1px solid #8b5cf6;color:#e2e8f0;
         padding:12px 24px;border-radius:12px;font-size:14px;font-family:system-ui;
-        box-shadow:0 0 30px rgba(139,92,246,0.3);
+        box-shadow:0 12px 32px -8px rgba(0,0,0,0.55), 0 2px 8px rgba(139,92,246,0.18);
         animation:konami-toast 3s ease forwards;
       `;
       document.body.appendChild(toast);
 
-      // Invert + hue-rotate the page briefly
-      document.documentElement.style.transition = 'filter 0.3s';
-      document.documentElement.style.filter = 'hue-rotate(180deg)';
-      setTimeout(() => { document.documentElement.style.filter = ''; }, 1500);
+      // Tint the scan overlay rather than <html>: a filter on the root element
+      // turns it into the containing block for every position:fixed child, which
+      // made the navbar and cookie banner jump for the duration.
+      overlay.style.backdropFilter = 'hue-rotate(180deg)';
+      setTimeout(() => { overlay.style.backdropFilter = ''; }, 1500);
 
       // Confetti burst
       import('canvas-confetti').then(({ default: confetti }) => {
@@ -278,5 +283,4 @@
   }
 
   initFooterEggs();
-  document.addEventListener('astro:after-swap', initFooterEggs);
 </script>

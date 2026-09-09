@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
-import CoinRain from '../components/CoinRain.vue';
+import CoinRain from '../components/CoinRain.astro';
 import {
   Users, Shield, Monitor, Lock, Zap, ArrowRight,
   Download, Volume2, Sparkles, Heart, Crown, Trophy, Gift, Star
@@ -18,7 +18,7 @@ import {
 	<!-- ═══════════════════════════════════════════════ -->
 	<!-- HERO                                           -->
 	<!-- ═══════════════════════════════════════════════ -->
-	<section id="main-content" class="relative z-10 min-h-[100vh] overflow-hidden flex flex-col">
+	<section id="main-content" class="relative z-10 min-h-[100svh] overflow-hidden flex flex-col">
 		<!-- Background -->
 		<div class="absolute inset-0 hero-bg-gradient"></div>
 		<canvas id="hero-particles" class="absolute inset-0 pointer-events-none z-[1]"></canvas>
@@ -27,9 +27,12 @@ import {
 		<div class="relative z-10 pt-40 sm:pt-48 md:pt-56 pb-10 sm:pb-14 px-4 sm:px-6 text-center">
 			<div class="relative inline-block">
 				<h1 class="hero-title text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl" id="hero-scramble">
-					<span class="hero-word" data-word="Drop in.">Drop in.</span>
-					<span class="hero-word" data-word="Talk.">Talk.</span>
-					<span class="hero-word hero-gradient" data-word="Play.">Play.</span>
+					<span class="sr-only">Drop in. Talk. Play.</span>
+					<span aria-hidden="true">
+						<span class="hero-word" data-word="Drop in.">Drop in.</span>
+						<span class="hero-word" data-word="Talk.">Talk.</span>
+						<span class="hero-word hero-gradient" data-word="Play.">Play.</span>
+					</span>
 				</h1>
 				<!-- Minecraft-style splash text -->
 				<span class="mc-splash" aria-hidden="true">Open Beta Now!</span>
@@ -151,14 +154,14 @@ import {
 	<!-- ═══════════════════════════════════════════════ -->
 	<section class="py-24 sm:py-32 px-4 sm:px-6 relative z-10 overflow-hidden">
 		<!-- Coin rain background -->
-		<CoinRain client:visible />
+		<CoinRain />
 
 		<div class="mx-auto max-w-6xl relative z-10">
 			<div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 				<div class="reveal">
 					<span class="section-label">Collect & Level Up</span>
 					<h2 class="mt-3 text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-						Showing up<br/><span class="bg-linear-to-r from-yellow-400 via-amber-400 to-yellow-500 bg-clip-text text-transparent">pays off</span>
+						Showing up<br/><span class="text-amber-400">pays off</span>
 					</h2>
 					<p class="text-text-secondary mt-4 text-base sm:text-lg leading-relaxed max-w-lg">
 						Just being in voice levels you up. Collect coins from common all the way to relic and build a stash
@@ -372,6 +375,7 @@ import {
 
 	// ── Text scramble effect on hero title ──
 	function initScramble() {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 		const words = document.querySelectorAll<HTMLElement>('.hero-word');
 		words.forEach((el, i) => {
 			const target = el.dataset.word || el.textContent || '';
@@ -402,6 +406,7 @@ import {
 
 	// ── Particle canvas (subtle floating dots) ──
 	function initParticles() {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 		const canvas = document.getElementById('hero-particles') as HTMLCanvasElement;
 		if (!canvas) return;
 		const ctx = canvas.getContext('2d');
@@ -409,6 +414,8 @@ import {
 
 		let w = 0, h = 0;
 		let mouseX = -1000, mouseY = -1000;
+		let running = false;
+		let frame = 0;
 
 		function resize() {
 			const section = canvas.parentElement;
@@ -447,6 +454,7 @@ import {
 		});
 
 		function draw() {
+			if (!running) return;
 			ctx!.clearRect(0, 0, w, h);
 			const isDark = document.documentElement.classList.contains('dark');
 			const color = isDark ? '255,255,255' : '0,0,0';
@@ -494,50 +502,59 @@ import {
 				}
 			}
 
-			requestAnimationFrame(draw);
+			frame = requestAnimationFrame(draw);
 		}
-		draw();
+
+		// The hero is one viewport tall, so this loop spent most of a session
+		// drawing something nobody could see. It now runs only while on screen.
+		const observer = new IntersectionObserver(([entry]) => {
+			if (entry.isIntersecting && !running) {
+				running = true;
+				draw();
+			} else if (!entry.isIntersecting && running) {
+				running = false;
+				cancelAnimationFrame(frame);
+			}
+		}, { threshold: 0 });
+		observer.observe(canvas.parentElement || canvas);
 	}
 
 	// ── Feature card tilt on hover ──
 	function initCardTilt() {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		if (!window.matchMedia('(pointer: fine)').matches) return;
+
 		document.querySelectorAll<HTMLElement>('.feature-card').forEach(card => {
+			let rect: DOMRect | null = null;
+			let queued = false;
+			let px = 0, py = 0;
+
+			card.addEventListener('mouseenter', () => { rect = card.getBoundingClientRect(); });
 			card.addEventListener('mousemove', (e) => {
-				const rect = card.getBoundingClientRect();
-				const x = (e.clientX - rect.left) / rect.width - 0.5;
-				const y = (e.clientY - rect.top) / rect.height - 0.5;
-				card.style.transform = `perspective(600px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) scale(1.02)`;
+				if (!rect) rect = card.getBoundingClientRect();
+				px = (e.clientX - rect.left) / rect.width - 0.5;
+				py = (e.clientY - rect.top) / rect.height - 0.5;
+				if (queued) return;
+				queued = true;
+				requestAnimationFrame(() => {
+					queued = false;
+					card.style.transform = `perspective(600px) rotateY(${px * 8}deg) rotateX(${-py * 8}deg) translateY(-2px) scale(1.02)`;
+				});
 			});
 			card.addEventListener('mouseleave', () => {
+				rect = null;
 				card.style.transform = '';
 			});
 		});
 	}
 
-	// ── Konami code easter egg ──
-	function initKonami() {
-		const code = [38,38,40,40,37,39,37,39,66,65];
-		let pos = 0;
-		document.addEventListener('keydown', (e) => {
-			if (e.keyCode === code[pos]) {
-				pos++;
-				if (pos === code.length) {
-					pos = 0;
-					document.body.classList.add('konami-active');
-					setTimeout(() => document.body.classList.remove('konami-active'), 4000);
-				}
-			} else {
-				pos = 0;
-			}
-		});
-	}
-
-
 	// ── Confetti on download clicks ──
 	function initConfetti() {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 		import('canvas-confetti').then(({ default: confetti }) => {
 			document.querySelectorAll('.confetti-trigger').forEach(btn => {
 				btn.addEventListener('click', (e) => {
+					const href = (btn as HTMLAnchorElement).href;
 					const rect = (btn as HTMLElement).getBoundingClientRect();
 					const x = (rect.left + rect.width / 2) / window.innerWidth;
 					const y = (rect.top + rect.height / 2) / window.innerHeight;
@@ -548,6 +565,13 @@ import {
 
 					// From button
 					confetti({ particleCount: 30, spread: 70, origin: { x, y }, colors: ['#8b5cf6', '#06b6d4', '#c084fc', '#fbbf24', '#34d399'] });
+
+					// Same-tick navigation would unmount the canvas before a single
+					// frame painted. Hold briefly, then follow the link.
+					if (href) {
+						e.preventDefault();
+						setTimeout(() => { window.location.href = href; }, 450);
+					}
 				});
 			});
 		});
@@ -557,6 +581,5 @@ import {
 	initScramble();
 	initParticles();
 	initCardTilt();
-	initKonami();
 	initConfetti();
 </script>

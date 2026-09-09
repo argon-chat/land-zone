@@ -1,7 +1,7 @@
 ---
 ---
 
-<div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Cookie consent">
+<div class="cookie-banner" id="cookie-banner" role="region" aria-label="Privacy notice">
   <div class="cookie-inner">
     <div class="cookie-icon">🍪</div>
     <div class="cookie-text">
@@ -20,10 +20,12 @@
     const acceptBtn = document.getElementById('cookie-accept');
     if (!banner || !acceptBtn) return;
 
-    if (localStorage.getItem('cookie-consent') === '1') {
-      banner.remove();
-      return;
-    }
+    try {
+      if (localStorage.getItem('cookie-consent') === '1') {
+        banner.remove();
+        return;
+      }
+    } catch (e) { /* site data blocked; show the notice */ }
 
     // Show with delay
     setTimeout(() => {
@@ -31,7 +33,7 @@
     }, 1500);
 
     acceptBtn.addEventListener('click', () => {
-      localStorage.setItem('cookie-consent', '1');
+      try { localStorage.setItem('cookie-consent', '1'); } catch (e) { /* site data blocked */ }
       banner.classList.remove('visible');
       banner.classList.add('hiding');
       setTimeout(() => banner.remove(), 400);
@@ -39,5 +41,4 @@
   }
 
   initCookieBanner();
-  document.addEventListener('astro:after-swap', initCookieBanner);
 </script>

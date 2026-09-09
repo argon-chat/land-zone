@@ -13,3 +13,20 @@
 # Content-hashed build assets never change — cache them hard.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Static art in public/ is not content-hashed, so it revalidates after a week
+# instead of being pinned for a year.
+/avatars/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/coins/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/payments/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/stream.webm
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/*.svg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400

@@ -227,21 +227,6 @@ html:not(.dark) .note-danger strong {
 }
 /* @client-strip-end */
 
-/* ── Legacy callout (kept for compat) ── */
-.legal-callout {
-  margin: 1.25rem 0;
-  padding: 1rem 1.25rem;
-  border-left: 3px solid var(--color-accent);
-  background: var(--color-accent-subtle);
-  border-radius: 0 8px 8px 0;
-  font-size: 0.875rem;
-  color: var(--color-text-secondary);
-}
-
-.legal-callout strong {
-  color: var(--color-text-primary);
-}
-
 /* ── Contact card ── */
 .legal-contact {
   margin-top: 1rem;

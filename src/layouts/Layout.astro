@@ -100,13 +100,18 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 		<script is:inline>
 			(function() {
-				var t = localStorage.getItem('theme');
+				var root = document.documentElement;
+				// Tells the stylesheet that scripting is live, so the scroll-reveal
+				// blocks may start hidden. Without it they stay at rest and visible.
+				root.classList.add('js');
+				var t = null;
+				try { t = localStorage.getItem('theme'); } catch (e) { /* site data blocked */ }
 				if (t === 'light') {
-					document.documentElement.classList.remove('dark');
+					root.classList.remove('dark');
 				} else if (t === 'dark') {
-					document.documentElement.classList.add('dark');
+					root.classList.add('dark');
 				} else if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
-					document.documentElement.classList.remove('dark');
+					root.classList.remove('dark');
 				}
 			})();
 		</script>
@@ -126,10 +131,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 		<!-- Client-side telemetry: Sentry errors + click metrics -->
 		<script>
-			import { initAnalytics, trackPageview } from '../lib/analytics';
+			import { initAnalytics } from '../lib/analytics';
 			initAnalytics();
-			// Re-count page views on client-side (View Transitions) navigation.
-			document.addEventListener('astro:after-swap', trackPageview);
 		</script>
 
 		<CookieBanner />
@@ -184,6 +187,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 	function initReveal() {
 		const els = document.querySelectorAll('.reveal');
 		if (!els.length) return;
+		if (!('IntersectionObserver' in window)) {
+			els.forEach(el => el.classList.add('visible'));
+			return;
+		}
 		const obs = new IntersectionObserver((entries) => {
 			entries.forEach(e => {
 				if (e.isIntersecting) {
@@ -206,6 +213,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		let pos = { x: 0, y: 0 };
 		let lines = [];
 		let running = false;
+		let frame = 0;
 
 		// Wave for color cycling
 		let wavePhase = Math.random() * 2 * Math.PI;
@@ -286,12 +294,23 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 				updateLine(lines[i]);
 				drawLine(lines[i]);
 			}
-			window.requestAnimationFrame(render);
+			frame = window.requestAnimationFrame(render);
 		}
 
 		function resize() {
 			canvas.width = window.innerWidth - 20;
 			canvas.height = window.innerHeight;
+		}
+
+		function stop() {
+			running = false;
+			cancelAnimationFrame(frame);
+		}
+
+		function start() {
+			if (running || !lines.length) return;
+			running = true;
+			render();
 		}
 
 		function onFirstMove(e) {
@@ -301,8 +320,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			document.addEventListener('touchmove', updatePos);
 			updatePos(e);
 			createLines();
-			running = true;
-			render();
+			start();
 		}
 
 		function updatePos(e) {
@@ -317,8 +335,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 		resize();
 		window.addEventListener('resize', resize);
-		window.addEventListener('focus', function() { if (!running) { running = true; render(); } });
-		window.addEventListener('blur', function() { running = true; });
+		window.addEventListener('focus', start);
+		window.addEventListener('blur', stop);
 		document.addEventListener('mousemove', onFirstMove);
 		document.addEventListener('touchstart', onFirstMove);
 	}
@@ -348,9 +366,4 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 	initBackToTop();
 	initReveal();
 	if (allowMotion) { initCursorGlow(); initCursorTrail(); }
-	document.addEventListener('astro:page-load', () => {
-		initBackToTop();
-		initReveal();
-		if (allowMotion) { initCursorGlow(); initCursorTrail(); }
-	});
 </script>

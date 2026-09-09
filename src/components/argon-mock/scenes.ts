@@ -68,14 +68,14 @@ const AV = {
   ren: "/avatars/ren.svg",
   boba: "/avatars/boba.svg",
   kai: "/avatars/kai.svg",
-  ava: "/avatars/ava.png",
-  dox: "/avatars/dox.png",
-  gox: "/avatars/gox.png",
-  himar: "/avatars/himar.png",
-  lura: "/avatars/lura.png",
-  chiff: "/avatars/chiff.png",
-  koda: "/avatars/koda.png",
-  luci: "/avatars/luci.png",
+  ava: "/avatars/ava.webp",
+  dox: "/avatars/dox.webp",
+  gox: "/avatars/gox.webp",
+  himar: "/avatars/himar.webp",
+  lura: "/avatars/lura.webp",
+  chiff: "/avatars/chiff.webp",
+  koda: "/avatars/koda.webp",
+  luci: "/avatars/luci.webp",
 };
 
 const C = {
@@ -107,7 +107,7 @@ export const ROSTER: Record<string, { color: string; avatar?: string }> = {
 };
 
 export const demoScene: Scene = {
-  server: { name: "Argon HQ", verified: true, boostLevel: 13, boostPct: 72, banner: "/avatars/space_banner.png" },
+  server: { name: "Argon HQ", verified: true, boostLevel: 13, boostPct: 72, banner: "/avatars/space_banner.webp" },
   rail: [
     { initial: "A", color: "#8b5cf6", active: true },
     { initial: "P", color: "#06b6d4" },
