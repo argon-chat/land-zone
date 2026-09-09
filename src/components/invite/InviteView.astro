@@ -39,10 +39,10 @@ const { kind } = Astro.props;
 				</svg>
 			</div>
 			<h1 class="mt-5 text-xl font-black tracking-tight">Invite unavailable</h1>
-			<p id="invite-error-text" class="mt-2 text-sm text-text-secondary">This invite link is invalid or no longer exists.</p>
-			<a href="/download" class="mt-7 inline-flex items-center justify-center gap-2 rounded-2xl border border-oled-border px-6 py-3 text-sm font-medium text-text-secondary transition-all hover:border-oled-border-subtle hover:bg-oled-elevated hover:text-text-primary">
-				Get Argon
-			</a>
+			<p id="invite-error-text" class="mt-2 text-sm text-text-secondary">This link is invalid or no longer exists.</p>
+			<!-- No button here on purpose. The link is dead, and the only thing that fixes it is a new
+			     one from whoever sent this — which the copy says. Offering the app instead would be a
+			     download that does not open anything. -->
 		</div>
 
 		<!-- The invite -->
@@ -140,13 +140,15 @@ const { kind } = Astro.props;
 
 	// Wording per refusal. A link that ran out is a different thing to tell someone than a link that
 	// was never real, and both are different from "you are asking too often".
+	// Each one ends in what the reader can actually do about it, which for a dead link is always the
+	// same thing: get another one from the person who sent this. Nothing on this page can fix it.
 	const ERRORS: Record<string, string> = {
-		EXPIRED: 'This invite link has expired. Ask for a new one.',
-		LIMIT_REACHED: 'This invite has reached its usage limit. Ask for a new one.',
+		EXPIRED: 'This invite has expired. Ask whoever sent it for a new link.',
+		LIMIT_REACHED: 'This invite has been used up. Ask whoever sent it for a new link.',
 		RATE_LIMITED: 'Too many attempts from this network. Try again in a few minutes.',
-		INTERNAL_ERROR: 'Argon could not answer just now. Try again in a moment.',
-		NOT_FOUND: 'This invite link is invalid or no longer exists.',
-		NETWORK: 'Could not reach Argon. Check your connection and try again.',
+		INTERNAL_ERROR: 'Argon could not answer just now. Reload in a moment.',
+		NOT_FOUND: 'This link is invalid or no longer exists. Ask whoever sent it for a new one.',
+		NETWORK: 'Could not reach Argon. Check your connection and reload.',
 	};
 
 	const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
