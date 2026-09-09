@@ -1,0 +1,282 @@
+---
+/**
+ * The page behind an invite link — argon.gl/i/{code} for a space, argon.gl/v/{code} for a voice room.
+ *
+ * The markup is a shell: the code lives in the path, which a statically built page cannot know, so
+ * the card is filled in at runtime. Two sources feed it, in this order:
+ *
+ *   1. `window.__ARGON_INVITE__`, injected by the Cloudflare Pages function in functions/{i,v}/[code].js.
+ *      That function has already fetched the card server-side to write the Open Graph tags a chat
+ *      unfurl needs, so when it ran there is nothing left to fetch here and the card paints instantly.
+ *   2. Otherwise a fetch of the same public endpoint. This is the path on hosts without the function
+ *      (the Firebase mirror), and the reason the shell must be able to stand on its own.
+ */
+interface Props {
+	/** Which link shape led here. Only affects the copy before the card resolves — the card itself says. */
+	kind: 'space' | 'voice';
+}
+
+const { kind } = Astro.props;
+---
+
+<section class="relative flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 pt-28 pb-16 sm:px-6">
+	<!-- Ambient glow, same language as the rest of the site -->
+	<div class="absolute left-1/2 top-1/3 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]"></div>
+
+	<div class="relative z-10 w-full max-w-md" data-invite-kind={kind}>
+		<!-- Loading -->
+		<div id="invite-loading" class="rounded-3xl border border-oled-border bg-oled-card p-10 text-center">
+			<div class="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-oled-border border-t-accent"></div>
+			<p class="mt-4 text-sm text-text-muted">Loading invite…</p>
+		</div>
+
+		<!-- Unusable link -->
+		<div id="invite-error" hidden class="rounded-3xl border border-oled-border bg-oled-card p-10 text-center">
+			<div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-oled-border bg-oled-elevated">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" class="size-7 text-text-muted">
+					<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+					<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+				</svg>
+			</div>
+			<h1 class="mt-5 text-xl font-black tracking-tight">Invite unavailable</h1>
+			<p id="invite-error-text" class="mt-2 text-sm text-text-secondary">This invite link is invalid or no longer exists.</p>
+			<a href="/download" class="mt-7 inline-flex items-center justify-center gap-2 rounded-2xl border border-oled-border px-6 py-3 text-sm font-medium text-text-secondary transition-all hover:border-oled-border-subtle hover:bg-oled-elevated hover:text-text-primary">
+				Get Argon
+			</a>
+		</div>
+
+		<!-- The invite -->
+		<div id="invite-body" hidden class="overflow-hidden rounded-3xl border border-oled-border bg-oled-card">
+			<div id="invite-banner" class="h-28 bg-gradient-to-br from-accent/35 to-accent/5 bg-cover bg-center"></div>
+
+			<div class="-mt-10 px-6 pb-6">
+				<div class="inline-flex rounded-2xl ring-4 ring-oled-card">
+					<div id="invite-avatar" class="flex h-16 w-16 items-center justify-center rounded-2xl border border-oled-border bg-oled-elevated bg-cover bg-center text-lg font-black text-text-secondary"></div>
+				</div>
+
+				<p class="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-text-muted" id="invite-eyebrow">
+					You have been invited to join
+				</p>
+
+				<div class="mt-1 flex items-center gap-1.5">
+					<h1 id="invite-name" class="truncate text-2xl font-black tracking-tight"></h1>
+					<svg id="invite-badge" hidden viewBox="0 0 256 256" fill="currentColor" class="size-5 shrink-0 text-accent">
+						<path d="M225.86,102.82c-3.77-3.94-7.67-8-9.14-11.57-1.36-3.27-1.44-8.69-1.52-13.94-.15-9.76-.31-20.82-8-28.51s-18.75-7.85-28.51-8c-5.25-.08-10.67-.16-13.94-1.52-3.56-1.47-7.63-5.37-11.57-9.14C146.28,23.51,138.44,16,128,16s-18.27,7.51-25.18,14.14c-3.94,3.77-8,7.67-11.57,9.14C88,40.64,82.56,40.72,77.31,40.8c-9.76.15-20.82.31-28.51,8s-7.85,18.75-8,28.51c-.08,5.25-.16,10.67-1.52,13.94-1.47,3.56-5.37,7.63-9.14,11.57C23.51,109.72,16,117.56,16,128s7.51,18.27,14.14,25.18c3.77,3.94,7.67,8,9.14,11.57,1.36,3.27,1.44,8.69,1.52,13.94.15,9.76.31,20.82,8,28.51s18.75,7.85,28.51,8c5.25.08,10.67.16,13.94,1.52,3.56,1.47,7.63,5.37,11.57,9.14C109.72,232.49,117.56,240,128,240s18.27-7.51,25.18-14.14c3.94-3.77,8-7.67,11.57-9.14,3.27-1.36,8.69-1.44,13.94-1.52,9.76-.15,20.82-.31,28.51-8s7.85-18.75,8-28.51c.08-5.25.16-10.67,1.52-13.94,1.47-3.56,5.37-7.63,9.14-11.57C232.49,146.28,240,138.44,240,128S232.49,109.73,225.86,102.82Zm-52.2,6.84-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z" />
+					</svg>
+				</div>
+
+				<!-- Badges spelled out, not left to the seal alone: this is the one screen where the
+				     reader has never seen the space before and decides from it alone. -->
+				<div id="invite-tags" class="mt-2 flex flex-wrap items-center gap-1.5 empty:hidden"></div>
+
+				<p id="invite-description" hidden class="mt-2 line-clamp-3 text-sm leading-relaxed text-text-secondary"></p>
+
+				<div class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-text-muted">
+					<span class="inline-flex items-center gap-2">
+						<span class="h-2 w-2 rounded-full bg-success shadow-[0_0_6px_var(--color-success)]"></span>
+						<span id="invite-online">0</span> online
+					</span>
+					<span class="inline-flex items-center gap-2">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="size-4">
+							<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
+						</svg>
+						<span id="invite-members">0</span> members
+					</span>
+				</div>
+
+				<!-- Only for a link minted for a room: the room is what the person was actually sent to. -->
+				<div id="invite-voice" hidden class="mt-5 flex items-center gap-3 rounded-2xl border border-accent/15 bg-accent-subtle px-4 py-3">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="size-5 shrink-0 text-accent">
+						<path d="M11 5 6 9H2v6h4l5 4V5z" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+					</svg>
+					<div class="min-w-0">
+						<p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">Voice room</p>
+						<p id="invite-voice-name" class="truncate text-sm font-medium text-text-primary"></p>
+					</div>
+				</div>
+
+				<div class="mt-6 space-y-2.5">
+					<a id="invite-open" href="#" class="flex w-full items-center justify-center gap-2 rounded-2xl bg-accent px-6 py-3.5 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-lg hover:shadow-accent/20">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4">
+							<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><path d="m10 17 5-5-5-5" /><path d="M15 12H3" />
+						</svg>
+						<span id="invite-open-label">Open in Argon</span>
+					</a>
+					<a href="/download" class="flex w-full items-center justify-center gap-2 rounded-2xl border border-oled-border px-6 py-3.5 text-sm font-medium text-text-secondary transition-all hover:border-oled-border-subtle hover:bg-oled-elevated hover:text-text-primary">
+						Don't have Argon? Download it
+					</a>
+				</div>
+
+				<p class="mt-4 text-center text-xs text-text-faint">
+					Opening the link launches the Argon app. Nothing is joined until you say so.
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	interface InviteCard {
+		code: string;
+		kind: 'space' | 'voice';
+		deepLink: string;
+		space: {
+			id: string;
+			name: string;
+			description: string;
+			avatarUrl: string | null;
+			bannerUrl: string | null;
+			splashUrl: string | null;
+			isVerified: boolean;
+			isOfficial: boolean;
+			isCommunity: boolean;
+			memberCount: number;
+			onlineCount: number;
+		};
+		voiceChannel: { id: string; name: string } | null;
+	}
+
+	const API_BASE = (import.meta.env.PUBLIC_ARGON_API || 'https://api.argon.gl').replace(/\/+$/, '');
+
+	// Wording per refusal. A link that ran out is a different thing to tell someone than a link that
+	// was never real, and both are different from "you are asking too often".
+	const ERRORS: Record<string, string> = {
+		EXPIRED: 'This invite link has expired. Ask for a new one.',
+		LIMIT_REACHED: 'This invite has reached its usage limit. Ask for a new one.',
+		RATE_LIMITED: 'Too many attempts from this network. Try again in a few minutes.',
+		INTERNAL_ERROR: 'Argon could not answer just now. Try again in a moment.',
+		NOT_FOUND: 'This invite link is invalid or no longer exists.',
+		NETWORK: 'Could not reach Argon. Check your connection and try again.',
+	};
+
+	const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+
+	function readCode(): string {
+		const preloaded = (window as any).__ARGON_INVITE__;
+		if (preloaded?.code) return String(preloaded.code);
+
+		const fromPath = location.pathname.match(/^\/(?:i|v)\/([^/?#]+)/i);
+		if (fromPath) return decodeURIComponent(fromPath[1]);
+
+		return new URLSearchParams(location.search).get('code') ?? '';
+	}
+
+	function showError(reason: string) {
+		el('invite-loading').hidden = true;
+		el('invite-body').hidden = true;
+		el('invite-error-text').textContent = ERRORS[reason] ?? ERRORS.NOT_FOUND;
+		el('invite-error').hidden = false;
+	}
+
+	function initials(name: string): string {
+		return (name || '?').trim().slice(0, 2).toUpperCase();
+	}
+
+	function pill(label: string, classes: string): HTMLElement {
+		const node = document.createElement('span');
+		node.className = `rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${classes}`;
+		node.textContent = label;
+		return node;
+	}
+
+	function render(card: InviteCard) {
+		const { space, voiceChannel } = card;
+
+		document.title = voiceChannel
+			? `Join ${voiceChannel.name} in ${space.name} — Argon`
+			: `Join ${space.name} — Argon`;
+
+		if (space.bannerUrl) {
+			const banner = el('invite-banner');
+			banner.style.backgroundImage = `url("${space.bannerUrl}")`;
+			banner.classList.remove('bg-gradient-to-br', 'from-accent/35', 'to-accent/5');
+		}
+
+		const avatar = el('invite-avatar');
+		if (space.avatarUrl) avatar.style.backgroundImage = `url("${space.avatarUrl}")`;
+		else avatar.textContent = initials(space.name);
+
+		el('invite-name').textContent = space.name;
+
+		// Official outranks verified — the badge is one slot, and "first-party" is the stronger claim.
+		const badge = el('invite-badge');
+		if (space.isOfficial || space.isVerified) {
+			badge.hidden = false;
+			badge.classList.toggle('text-accent', space.isOfficial);
+			badge.classList.toggle('text-success', !space.isOfficial);
+			badge.setAttribute('aria-label', space.isOfficial ? 'Official space' : 'Verified space');
+		}
+
+		const tags = el('invite-tags');
+		if (space.isOfficial) tags.append(pill('Official', 'border-accent/25 bg-accent-subtle text-accent'));
+		else if (space.isVerified) tags.append(pill('Verified', 'border-success/25 bg-success-subtle text-success'));
+		if (space.isCommunity) tags.append(pill('Community', 'border-oled-border bg-oled-elevated text-text-secondary'));
+
+		if (space.description) {
+			const description = el('invite-description');
+			description.textContent = space.description;
+			description.hidden = false;
+		}
+
+		el('invite-online').textContent = String(space.onlineCount);
+		el('invite-members').textContent = String(space.memberCount);
+
+		if (voiceChannel) {
+			el('invite-voice-name').textContent = voiceChannel.name;
+			el('invite-voice').hidden = false;
+			el('invite-eyebrow').textContent = 'You have been invited to talk in';
+			el('invite-open-label').textContent = 'Join the voice room';
+		}
+
+		const open = el<HTMLAnchorElement>('invite-open');
+		open.href = card.deepLink;
+
+		el('invite-loading').hidden = true;
+		el('invite-body').hidden = false;
+
+		autoOpen(card);
+	}
+
+	/**
+	 * Hands the link to the app once, without waiting for a click.
+	 *
+	 * Once per code per tab: a browser that returns to this page after the app took over (alt-tab,
+	 * back button) must not fire the handler again, or the app is raised every time the page is
+	 * looked at. The button stays for the retry, which is why failing to remember is harmless.
+	 */
+	function autoOpen(card: InviteCard) {
+		const key = `argon:invite:opened:${card.code}`;
+		try {
+			if (sessionStorage.getItem(key)) return;
+			sessionStorage.setItem(key, '1');
+		} catch {
+			// Private mode / blocked storage: opening once per load is still better than never.
+		}
+		window.setTimeout(() => {
+			window.location.href = card.deepLink;
+		}, 400);
+	}
+
+	async function load() {
+		const code = readCode();
+		if (!code) return showError('NOT_FOUND');
+
+		const preloaded = (window as any).__ARGON_INVITE__;
+		if (preloaded?.card) return render(preloaded.card as InviteCard);
+		if (preloaded?.error) return showError(String(preloaded.error));
+
+		try {
+			const response = await fetch(`${API_BASE}/api/invite/${encodeURIComponent(code)}`, {
+				headers: { Accept: 'application/json' },
+			});
+			const body = await response.json().catch(() => null);
+
+			if (!response.ok) return showError(body?.error ?? 'NOT_FOUND');
+			render(body as InviteCard);
+		} catch {
+			showError('NETWORK');
+		}
+	}
+
+	load();
+</script>

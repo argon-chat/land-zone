@@ -7,6 +7,7 @@
     "build": "astro build",
     "deploy": "astro build && wrangler pages deploy dist --branch=master",
     "deploy:firebase": "astro build && firebase deploy --only hosting",
+    "setup:ci-secrets": "bun scripts/setup-deploy-secrets.ts",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -25,6 +26,7 @@
     "vue": "^3.5.32"
   },
   "devDependencies": {
+    "@types/bun": "^1.4.2",
     "firebase-tools": "^15.20.0",
     "wrangler": "^4.69.0"
   },

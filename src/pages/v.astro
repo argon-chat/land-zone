@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import InviteView from '../components/invite/InviteView.astro';
+
+// The voice-room half of the same thing: /v/{code} is minted by CreateVoiceInviteCode and points at
+// a room inside a space. One code space, one card endpoint — only the copy before it resolves differs.
+---
+
+<Layout
+	title="Join a voice room on Argon"
+	description="Someone invited you into a voice room on Argon — crystal-clear voice, screen share and games."
+	image="/og/invite.png"
+	noindex={true}
+>
+	<Navbar />
+	<InviteView kind="voice" />
+	<Footer />
+</Layout>

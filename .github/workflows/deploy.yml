@@ -1,0 +1,159 @@
+# The landing is published to two hosts at once, on purpose.
+#
+#   Cloudflare Pages  — argon.gl. Serves the Pages Functions in ./functions: the geo middleware
+#                       that routes RU visitors to the mirror, and the /i/, /v/ invite unfurlers
+#                       that render an OG card per code. Only this host can do those.
+#   Firebase Hosting  — the fallback origin. Same static build, with /i/** and /v/** rewritten to
+#                       the client-side shells (see firebase.json), so the site still works if
+#                       Cloudflare is unreachable.
+#
+# One build feeds both, so the two hosts can never drift apart by a rebuild. Deploy jobs re-checkout
+# the repo because they need the parts that are not in dist/: ./functions for wrangler, firebase.json
+# for the Firebase CLI, and the lockfile for both.
+
+name: Deploy
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Where to publish
+        type: choice
+        default: both
+        options: [both, cloudflare, firebase]
+
+# A newer push supersedes an older one; two deploys racing to the same host would publish in
+# whatever order they happened to finish. Never cancel a run that is already publishing on master.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - run: bun install --frozen-lockfile
+
+      - name: Build
+        env:
+          # Everything the client reads at build time. All optional: an unset PUBLIC_SENTRY_DSN
+          # leaves analytics inert (src/lib/analytics.ts returns early), and an empty
+          # PUBLIC_ARGON_API falls back to https://api.argon.gl.
+          #
+          # PUBLIC_SENTRY_TRACES_SAMPLE_RATE is deliberately not passed: the code reads it with `??`,
+          # so handing it an empty string would pin the sample rate to 0 rather than the 0.1 default.
+          PUBLIC_ARGON_API: ${{ vars.PUBLIC_ARGON_API }}
+          PUBLIC_SENTRY_DSN: ${{ secrets.PUBLIC_SENTRY_DSN }}
+          PUBLIC_SENTRY_ENV: ${{ vars.PUBLIC_SENTRY_ENV || 'production' }}
+          PUBLIC_SENTRY_RELEASE: ${{ github.sha }}
+        run: bun run build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
+          if-no-files-found: error
+
+  cloudflare:
+    name: Cloudflare Pages
+    needs: build
+    if: >-
+      github.event_name != 'pull_request' &&
+      (github.event_name != 'workflow_dispatch' || contains(fromJSON('["both", "cloudflare"]'), inputs.target))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # Wrangler comes from the lockfile rather than `bunx wrangler@latest`: the deploy compiles
+      # ./functions into a Worker, and that is not something to let float between runs.
+      - run: bun install --frozen-lockfile
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Publish
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          if [ -z "${CLOUDFLARE_API_TOKEN:-}" ] || [ -z "${CLOUDFLARE_ACCOUNT_ID:-}" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID are not set. Run 'bun run setup:ci-secrets' locally."
+            exit 1
+          fi
+          # --branch=master is what makes this the production deployment rather than a preview:
+          # Pages decides by branch name, and a direct upload has no branch of its own.
+          ./node_modules/.bin/wrangler pages deploy dist --branch=master
+
+  firebase:
+    name: Firebase Hosting
+    needs: build
+    if: >-
+      github.event_name != 'pull_request' &&
+      (github.event_name != 'workflow_dispatch' || contains(fromJSON('["both", "firebase"]'), inputs.target))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - run: bun install --frozen-lockfile
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Publish
+        env:
+          # Two ways in, because the two are obtained very differently. A service-account key is the
+          # supported one and is what setup:ci-secrets mints when gcloud is available; FIREBASE_TOKEN
+          # is the `firebase login:ci` refresh token, kept as the path for anyone without IAM rights
+          # on the project.
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          set -euo pipefail
+          key="$RUNNER_TEMP/firebase-service-account.json"
+          cleanup() { rm -f "$key"; }
+          trap cleanup EXIT
+
+          if [ -n "${FIREBASE_SERVICE_ACCOUNT:-}" ]; then
+            # Written to disk because the CLI authenticates through GOOGLE_APPLICATION_CREDENTIALS,
+            # which takes a path and not a value. RUNNER_TEMP is wiped with the runner.
+            umask 077
+            printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$key"
+            export GOOGLE_APPLICATION_CREDENTIALS="$key"
+          elif [ -z "${FIREBASE_TOKEN:-}" ]; then
+            echo "::error::Neither FIREBASE_SERVICE_ACCOUNT nor FIREBASE_TOKEN is set. Run 'bun run setup:ci-secrets' locally."
+            exit 1
+          fi
+
+          ./node_modules/.bin/firebase deploy \
+            --only hosting \
+            --project argon-chat \
+            --non-interactive \
+            --message "${GITHUB_SHA::7} — ${GITHUB_WORKFLOW} #${GITHUB_RUN_NUMBER}"

@@ -30,6 +30,12 @@ const pages: Record<string, { title: string; subtitle?: string }> = {
     title: 'Contact',
     subtitle: 'Get in touch with the Argon team.',
   },
+  // The fallback behind an invite link. A link that resolves gets the space's own name and picture
+  // written into its tags by functions/{i,v}/[code].js; this is what an unresolvable one unfurls as.
+  invite: {
+    title: "You're invited to Argon",
+    subtitle: 'Open the link to see the space and join.',
+  },
 };
 
 export const getStaticPaths: GetStaticPaths = () => {

@@ -1,1 +1,6 @@
 /.well-known/webauthn /.well-known/webauthn.json 200
+
+# No rewrite for /i/* or /v/* here on purpose. The Pages functions under functions/{i,v}/ answer
+# those paths, and they build their page by asking the asset server for the shell — a splat rewrite
+# to /i turns that lookup into a redirect loop the runtime kills as "Too many redirects". The
+# Firebase mirror, which has no functions, gets the same effect from the rewrites in firebase.json.
