@@ -50,7 +50,7 @@ const contacts = [
 	<Navbar current="/contact/" />
 
 	<!-- Hero -->
-	<section class="relative pt-32 sm:pt-40 pb-16 sm:pb-20 px-4 sm:px-6">
+	<section class="relative z-10 pt-32 sm:pt-40 pb-16 sm:pb-20 px-4 sm:px-6">
 		<div class="absolute left-1/2 top-1/4 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]"></div>
 
 		<div class="relative z-10 mx-auto max-w-4xl text-center">
@@ -66,7 +66,7 @@ const contacts = [
 	</section>
 
 	<!-- Contact cards -->
-	<section class="px-4 sm:px-6 pb-20 sm:pb-24">
+	<section class="relative z-10 px-4 sm:px-6 pb-20 sm:pb-24">
 		<div class="mx-auto max-w-5xl">
 			<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
 				{contacts.map((c) => (
@@ -96,7 +96,7 @@ const contacts = [
 
 	<!-- No-JS / crawler fallback so at least one inbox is always reachable -->
 	<noscript>
-		<div class="px-4 sm:px-6 pb-12">
+		<div class="relative z-10 px-4 sm:px-6 pb-12">
 			<div class="mx-auto max-w-5xl text-center text-sm text-text-secondary">
 				Prefer email? Reach us at
 				<a class="text-accent hover:text-accent-hover" href="mailto:ask@argon.support">ask@argon.support</a>
@@ -108,7 +108,7 @@ const contacts = [
 	</noscript>
 
 	<!-- Community & Social -->
-	<section class="px-4 sm:px-6 pb-20 sm:pb-24">
+	<section class="relative z-10 px-4 sm:px-6 pb-20 sm:pb-24">
 		<div class="mx-auto max-w-5xl">
 			<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-6">Community</h2>
 
@@ -135,7 +135,7 @@ const contacts = [
 	</section>
 
 	<!-- Legal entity -->
-	<section class="px-4 sm:px-6 pb-20 sm:pb-28">
+	<section class="relative z-10 px-4 sm:px-6 pb-20 sm:pb-28">
 		<div class="mx-auto max-w-5xl">
 			<div class="rounded-2xl border border-oled-border bg-oled-surface p-6 sm:p-8">
 				<h2 class="text-base font-bold mb-3">Legal Entity</h2>

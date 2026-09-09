@@ -138,20 +138,24 @@ html:not(.dark) {
   100% { transform: translateX(100%); }
 }
 
+/* fill-mode is `backwards`, not `both`, on purpose: `both` keeps the opacity
+   animation applied forever, which leaves the element a composited backdrop
+   root — any backdrop-filter inside it (glass cards) then has nothing to blur.
+   `backwards` still covers the delay, and the end state equals the base style. */
 .animate-fade-in-up {
-  animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 .animate-fade-in-up-delay-1 {
-  animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards;
 }
 .animate-fade-in-up-delay-2 {
-  animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
 }
 .animate-fade-in-up-delay-3 {
-  animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+  animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s backwards;
 }
 .animate-fade-in-up-delay-4 {
-  animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+  animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s backwards;
 }
 
 .animate-float { animation: float 6s ease-in-out infinite; }
@@ -744,6 +748,15 @@ html:not(.dark) .hud-mobile-panel {
 .reveal-delay-3 { transition-delay: 0.3s; }
 .reveal-delay-4 { transition-delay: 0.4s; }
 
+/* ── Blur behind ──
+   Blocks sit above the cursor-trail canvas, so whatever passes underneath is
+   frosted instead of cutting straight across them — same treatment as .glass.
+   Put this on any translucent card that has no backdrop-filter of its own. */
+.blur-behind {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
 /* ── Cursor glow (dark only) ── */
 .cursor-glow {
   pointer-events: none;
@@ -755,7 +768,8 @@ html:not(.dark) .hud-mobile-panel {
   opacity: 0;
   transform: translate(-50%, -50%);
   transition: opacity 0.4s;
-  z-index: 0;
+  /* Sits with the cursor trail canvas, below every content block. */
+  z-index: -1;
   mix-blend-mode: screen;
 }
 

@@ -13,7 +13,7 @@ import { Check, X, Minus, ArrowRight, Download, Shield, Zap, Gamepad2, Users, He
 	<Navbar />
 
 	<!-- Hero -->
-	<section class="pt-36 sm:pt-44 pb-16 sm:pb-24 px-4 sm:px-6 relative overflow-hidden">
+	<section class="pt-36 sm:pt-44 pb-16 sm:pb-24 px-4 sm:px-6 relative z-10 overflow-hidden">
 		<div class="absolute inset-0 hero-bg-gradient opacity-50"></div>
 		<div class="relative z-10 mx-auto max-w-4xl text-center">
 			<span class="inline-block text-xs font-bold uppercase tracking-wider text-accent bg-accent/10 px-3 py-1 rounded-full border border-accent/20 mb-6">Comparison</span>
@@ -27,7 +27,7 @@ import { Check, X, Minus, ArrowRight, Download, Shield, Zap, Gamepad2, Users, He
 	</section>
 
 	<!-- Comparison Table -->
-	<section class="pb-20 sm:pb-28 px-4 sm:px-6">
+	<section class="relative z-10 pb-20 sm:pb-28 px-4 sm:px-6">
 		<div class="mx-auto max-w-6xl">
 			<h2 class="text-2xl sm:text-3xl font-bold text-center mb-10">Feature comparison</h2>
 			
@@ -263,7 +263,7 @@ import { Check, X, Minus, ArrowRight, Download, Shield, Zap, Gamepad2, Users, He
 	</section>
 
 	<!-- For Gamers -->
-	<section class="py-20 sm:py-28 px-4 sm:px-6 bg-oled-surface/30">
+	<section class="relative z-10 py-20 sm:py-28 px-4 sm:px-6 bg-oled-surface/30">
 		<div class="mx-auto max-w-6xl">
 			<div class="flex items-center justify-center gap-3 mb-4">
 				<Gamepad2 class="size-7 text-accent" />
@@ -386,7 +386,7 @@ import { Check, X, Minus, ArrowRight, Download, Shield, Zap, Gamepad2, Users, He
 	</section>
 
 	<!-- For Community Creators -->
-	<section class="py-20 sm:py-28 px-4 sm:px-6">
+	<section class="relative z-10 py-20 sm:py-28 px-4 sm:px-6">
 		<div class="mx-auto max-w-6xl">
 			<div class="flex items-center justify-center gap-3 mb-4">
 				<Crown class="size-7 text-accent" />
@@ -517,7 +517,7 @@ import { Check, X, Minus, ArrowRight, Download, Shield, Zap, Gamepad2, Users, He
 	</section>
 
 	<!-- What makes Argon different -->
-	<section class="py-20 sm:py-28 px-4 sm:px-6 bg-oled-surface/30">
+	<section class="relative z-10 py-20 sm:py-28 px-4 sm:px-6 bg-oled-surface/30">
 		<div class="mx-auto max-w-4xl">
 			<h2 class="text-2xl sm:text-3xl font-bold text-center mb-4">What makes Argon different</h2>
 			<p class="text-text-secondary text-center max-w-2xl mx-auto mb-12">
@@ -550,7 +550,7 @@ import { Check, X, Minus, ArrowRight, Download, Shield, Zap, Gamepad2, Users, He
 	</section>
 
 	<!-- Honest takes -->
-	<section class="py-20 sm:py-28 px-4 sm:px-6">
+	<section class="relative z-10 py-20 sm:py-28 px-4 sm:px-6">
 		<div class="mx-auto max-w-3xl">
 			<h2 class="text-2xl sm:text-3xl font-bold text-center mb-4">The honest take</h2>
 			<p class="text-text-secondary text-center max-w-2xl mx-auto mb-10">
@@ -579,7 +579,7 @@ import { Check, X, Minus, ArrowRight, Download, Shield, Zap, Gamepad2, Users, He
 	</section>
 
 	<!-- FAQ Section -->
-	<section class="py-20 sm:py-28 px-4 sm:px-6 bg-oled-surface/30">
+	<section class="relative z-10 py-20 sm:py-28 px-4 sm:px-6 bg-oled-surface/30">
 		<div class="mx-auto max-w-3xl">
 			<h2 class="text-2xl sm:text-3xl font-bold text-center mb-10">Common questions</h2>
 
@@ -628,7 +628,7 @@ import { Check, X, Minus, ArrowRight, Download, Shield, Zap, Gamepad2, Users, He
 	</section>
 
 	<!-- CTA -->
-	<section class="py-20 sm:py-28 px-4 sm:px-6">
+	<section class="relative z-10 py-20 sm:py-28 px-4 sm:px-6">
 		<div class="mx-auto max-w-3xl text-center">
 			<h2 class="text-3xl sm:text-4xl font-bold">Curious? Try it yourself.</h2>
 			<p class="text-text-secondary mt-4 text-lg max-w-xl mx-auto">
@@ -639,7 +639,7 @@ import { Check, X, Minus, ArrowRight, Download, Shield, Zap, Gamepad2, Users, He
 					<Download class="size-5" />
 					Download Argon Chat
 				</a>
-				<a href="/" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-oled-border bg-oled-surface/50 px-8 py-4 text-base font-semibold text-text-primary backdrop-blur-sm transition-all hover:border-oled-border hover:bg-oled-hover hover:-translate-y-0.5">
+				<a href="/" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-oled-border blur-behind bg-oled-surface/50 px-8 py-4 text-base font-semibold text-text-primary backdrop-blur-sm transition-all hover:border-oled-border hover:bg-oled-hover hover:-translate-y-0.5">
 					Explore features
 					<ArrowRight class="size-4" />
 				</a>

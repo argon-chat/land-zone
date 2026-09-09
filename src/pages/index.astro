@@ -18,7 +18,7 @@ import {
 	<!-- ═══════════════════════════════════════════════ -->
 	<!-- HERO                                           -->
 	<!-- ═══════════════════════════════════════════════ -->
-	<section id="main-content" class="relative min-h-[100vh] overflow-hidden flex flex-col">
+	<section id="main-content" class="relative z-10 min-h-[100vh] overflow-hidden flex flex-col">
 		<!-- Background -->
 		<div class="absolute inset-0 hero-bg-gradient"></div>
 		<canvas id="hero-particles" class="absolute inset-0 pointer-events-none z-[1]"></canvas>
@@ -62,7 +62,7 @@ import {
 	<!-- ═══════════════════════════════════════════════ -->
 	<!-- SECTION: Crystal Clear Voice (+ overlay)       -->
 	<!-- ═══════════════════════════════════════════════ -->
-	<section id="m-voice-test" class="py-24 sm:py-32 px-4 sm:px-6 scroll-mt-0">
+	<section id="m-voice-test" class="relative z-10 py-24 sm:py-32 px-4 sm:px-6 scroll-mt-0">
 		<div class="mx-auto max-w-6xl">
 			<div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 				<!-- Voice channel mockup -->
@@ -106,7 +106,7 @@ import {
 	<!-- ═══════════════════════════════════════════════ -->
 	<!-- SECTION: PlayFrame — Games                     -->
 	<!-- ═══════════════════════════════════════════════ -->
-	<section class="py-24 sm:py-32 px-4 sm:px-6 bg-oled-surface/30 relative overflow-hidden">
+	<section class="py-24 sm:py-32 px-4 sm:px-6 bg-oled-surface/30 relative z-10 overflow-hidden">
 		<div class="mx-auto max-w-6xl">
 			<div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 				<div class="reveal">
@@ -149,7 +149,7 @@ import {
 	<!-- ═══════════════════════════════════════════════ -->
 	<!-- SECTION: Loot & Levels                         -->
 	<!-- ═══════════════════════════════════════════════ -->
-	<section class="py-24 sm:py-32 px-4 sm:px-6 relative overflow-hidden">
+	<section class="py-24 sm:py-32 px-4 sm:px-6 relative z-10 overflow-hidden">
 		<!-- Coin rain background -->
 		<CoinRain client:visible />
 
@@ -198,7 +198,7 @@ import {
 	<!-- ═══════════════════════════════════════════════ -->
 	<!-- SECTION: Feature Grid                          -->
 	<!-- ═══════════════════════════════════════════════ -->
-	<section id="features" class="py-24 sm:py-32 px-4 sm:px-6 bg-oled-surface/30 scroll-mt-16">
+	<section id="features" class="relative z-10 py-24 sm:py-32 px-4 sm:px-6 bg-oled-surface/30 scroll-mt-16">
 		<div class="mx-auto max-w-6xl">
 			<div class="reveal text-center mb-12 sm:mb-16">
 				<span class="section-label">Everything You Need</span>
@@ -264,7 +264,7 @@ import {
 	<!-- ═══════════════════════════════════════════════ -->
 	<!-- SECTION: FAQ (visible — mirrors FAQPage schema) -->
 	<!-- ═══════════════════════════════════════════════ -->
-	<section id="faq" class="py-24 sm:py-32 px-4 sm:px-6 scroll-mt-16">
+	<section id="faq" class="relative z-10 py-24 sm:py-32 px-4 sm:px-6 scroll-mt-16">
 		<div class="mx-auto max-w-3xl">
 			<div class="reveal text-center mb-12">
 				<span class="section-label">FAQ</span>
@@ -300,7 +300,7 @@ import {
 	<!-- ═══════════════════════════════════════════════ -->
 	<!-- SECTION: CTA                                   -->
 	<!-- ═══════════════════════════════════════════════ -->
-	<section class="py-24 sm:py-32 px-4 sm:px-6 relative overflow-hidden">
+	<section class="py-24 sm:py-32 px-4 sm:px-6 relative z-10 overflow-hidden">
 		<!-- Glow bg -->
 		<div class="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]"></div>
 
@@ -320,7 +320,7 @@ import {
 						<Download class="size-5" />
 						Download Argon Chat
 					</a>
-					<a href="https://github.com/argon-chat" target="_blank" rel="noopener" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-oled-border bg-oled-surface/50 px-8 py-4 text-base font-semibold text-text-primary backdrop-blur-sm transition-all hover:border-oled-border hover:bg-oled-hover hover:-translate-y-0.5">
+					<a href="https://github.com/argon-chat" target="_blank" rel="noopener" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-oled-border blur-behind bg-oled-surface/50 px-8 py-4 text-base font-semibold text-text-primary backdrop-blur-sm transition-all hover:border-oled-border hover:bg-oled-hover hover:-translate-y-0.5">
 						View on GitHub
 						<ArrowRight class="size-4" />
 					</a>

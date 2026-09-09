@@ -11,7 +11,7 @@ import { Sparkles, Download, Palette, Type, Shield } from 'lucide-astro';
 	<!-- ═══════════════════════════════════════════════ -->
 	<!-- HERO                                           -->
 	<!-- ═══════════════════════════════════════════════ -->
-	<section class="relative pt-32 sm:pt-40 pb-16 sm:pb-20 px-4 sm:px-6">
+	<section class="relative z-10 pt-32 sm:pt-40 pb-16 sm:pb-20 px-4 sm:px-6">
 		<div class="absolute left-1/2 top-1/4 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]"></div>
 
 		<div class="relative z-10 mx-auto max-w-4xl text-center">
@@ -29,7 +29,7 @@ import { Sparkles, Download, Palette, Type, Shield } from 'lucide-astro';
 	<!-- ═══════════════════════════════════════════════ -->
 	<!-- LOGO                                           -->
 	<!-- ═══════════════════════════════════════════════ -->
-	<section id="logo" class="px-4 sm:px-6 pb-20 sm:pb-24">
+	<section id="logo" class="relative z-10 px-4 sm:px-6 pb-20 sm:pb-24">
 		<div class="mx-auto max-w-5xl">
 			<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-6 flex items-center gap-2">
 				<Download class="size-5 text-accent" />
@@ -72,7 +72,7 @@ import { Sparkles, Download, Palette, Type, Shield } from 'lucide-astro';
 	<!-- ═══════════════════════════════════════════════ -->
 	<!-- COLORS                                         -->
 	<!-- ═══════════════════════════════════════════════ -->
-	<section id="colors" class="px-4 sm:px-6 pb-20 sm:pb-24">
+	<section id="colors" class="relative z-10 px-4 sm:px-6 pb-20 sm:pb-24">
 		<div class="mx-auto max-w-5xl">
 			<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-6 flex items-center gap-2">
 				<Palette class="size-5 text-accent" />
@@ -108,7 +108,7 @@ import { Sparkles, Download, Palette, Type, Shield } from 'lucide-astro';
 	<!-- ═══════════════════════════════════════════════ -->
 	<!-- TYPOGRAPHY                                     -->
 	<!-- ═══════════════════════════════════════════════ -->
-	<section id="typography" class="px-4 sm:px-6 pb-20 sm:pb-24">
+	<section id="typography" class="relative z-10 px-4 sm:px-6 pb-20 sm:pb-24">
 		<div class="mx-auto max-w-5xl">
 			<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-6 flex items-center gap-2">
 				<Type class="size-5 text-accent" />
@@ -142,7 +142,7 @@ import { Sparkles, Download, Palette, Type, Shield } from 'lucide-astro';
 	<!-- ═══════════════════════════════════════════════ -->
 	<!-- GUIDELINES                                     -->
 	<!-- ═══════════════════════════════════════════════ -->
-	<section id="guidelines" class="px-4 sm:px-6 pb-20 sm:pb-24">
+	<section id="guidelines" class="relative z-10 px-4 sm:px-6 pb-20 sm:pb-24">
 		<div class="mx-auto max-w-5xl">
 			<h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-6 flex items-center gap-2">
 				<Shield class="size-5 text-accent" />
@@ -150,7 +150,7 @@ import { Sparkles, Download, Palette, Type, Shield } from 'lucide-astro';
 			</h2>
 
 			<div class="grid sm:grid-cols-2 gap-4">
-				<div class="rounded-2xl border border-success/20 bg-success/5 p-5">
+				<div class="blur-behind rounded-2xl border border-success/20 bg-success/5 p-5">
 					<div class="text-sm font-bold text-success mb-3">Do</div>
 					<ul class="text-sm text-text-secondary space-y-2 list-none">
 						<li class="flex items-start gap-2"><span class="text-success mt-0.5">✓</span> Use the official SVG logo files</li>
@@ -160,7 +160,7 @@ import { Sparkles, Download, Palette, Type, Shield } from 'lucide-astro';
 					</ul>
 				</div>
 
-				<div class="rounded-2xl border border-red-500/20 bg-red-500/5 p-5">
+				<div class="blur-behind rounded-2xl border border-red-500/20 bg-red-500/5 p-5">
 					<div class="text-sm font-bold text-red-400 mb-3">Don't</div>
 					<ul class="text-sm text-text-secondary space-y-2 list-none">
 						<li class="flex items-start gap-2"><span class="text-red-400 mt-0.5">✕</span> Distort, rotate, or skew the logo</li>
