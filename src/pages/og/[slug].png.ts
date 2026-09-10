@@ -30,6 +30,14 @@ const pages: Record<string, { title: string; subtitle?: string }> = {
     title: 'Contact',
     subtitle: 'Get in touch with the Argon team.',
   },
+  security: {
+    title: 'Security',
+    subtitle: 'How Argon Chat protects your data.',
+  },
+  beaf: {
+    title: 'ArgonCrawler',
+    subtitle: "How Argon's metadata bot works, and how to control it.",
+  },
   // The fallback behind an invite link. A link that resolves gets the space's own name and picture
   // written into its tags by functions/{i,v}/[code].js; this is what an unresolvable one unfurls as.
   invite: {

@@ -62,7 +62,7 @@ import { Bot, Shield, Clock, Eye, Server, Link, FileText, Globe } from 'lucide-a
 						<h3 class="text-sm font-semibold">User-Agent</h3>
 					</div>
 					<code class="block text-xs bg-oled-elevated rounded-lg px-3 py-2 text-accent-2 break-all font-mono">
-						ArgonCrawler/1.3 (+https://argon.gl/beaf; like TwitterBot)
+						ArgonCrawler/1.5 (+https://argon.gl/beaf; like TwitterBot)
 					</code>
 					<p class="text-xs text-text-muted mt-2">
 						You can identify our bot by this User-Agent string in your access logs.
@@ -82,7 +82,7 @@ import { Bot, Shield, Clock, Eye, Server, Link, FileText, Globe } from 'lucide-a
 						<li class="flex items-start gap-1.5"><span class="text-accent-2 mt-0.5">•</span> Favicon, canonical URL</li>
 					</ul>
 					<p class="text-xs text-text-muted mt-2">
-						That's it. No full-page content, no JavaScript execution.
+						That's it. No full-page content, and no JavaScript on the vast majority of fetches.
 					</p>
 				</div>
 
@@ -94,7 +94,8 @@ import { Bot, Shield, Clock, Eye, Server, Link, FileText, Globe } from 'lucide-a
 					</div>
 					<p class="text-xs text-text-secondary leading-relaxed">
 						Each URL is fetched <strong class="text-text-primary">once</strong> and cached for up to 6 months.
-						Subsequent requests for the same URL are served from cache — your server won't see repeated hits.
+						Repeat requests are served from that cache; after a week we may send one conditional
+						revalidation request, which your server can answer with a 304.
 						We never batch-crawl, spider, or recursively follow links on your page.
 					</p>
 				</div>
@@ -161,7 +162,7 @@ Disallow: /</code></pre>
 				<div class="rounded-xl border border-oled-border bg-oled-surface p-5">
 					<h3 class="text-sm font-semibold mb-2">What we store</h3>
 					<p class="text-xs text-text-secondary leading-relaxed">
-						Only the extracted Open Graph metadata (title, description, image URL) and a cached copy of the OG image. We do <strong class="text-text-primary">not</strong> store the full HTML content of your page, and we do not execute JavaScript.
+						Only the extracted Open Graph metadata (title, description, image URL) and a cached copy of the OG image. We do <strong class="text-text-primary">not</strong> store the full HTML content of your page. A small allow-list of hosts that cannot be read statically is rendered in a headless browser; everything else is parsed as plain HTML.
 					</p>
 				</div>
 
@@ -182,7 +183,7 @@ Disallow: /</code></pre>
 				<div class="rounded-xl border border-oled-border bg-oled-surface p-5">
 					<h3 class="text-sm font-semibold mb-2">No tracking</h3>
 					<p class="text-xs text-text-secondary leading-relaxed">
-						ArgonCrawler does not set cookies, does not execute JavaScript, does not fingerprint users or devices, and does not participate in ad networks. It makes a single HTTP GET request for the HTML, optionally downloads the OG image, and that's the end of the interaction.
+						ArgonCrawler does not set cookies, does not fingerprint users or devices, and does not participate in ad networks. A typical crawl is one GET for your robots.txt and one for the HTML, plus an optional oEmbed lookup and OG image download — and that's the end of the interaction.
 					</p>
 				</div>
 			</div>

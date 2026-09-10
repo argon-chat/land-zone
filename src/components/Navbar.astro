@@ -1,5 +1,5 @@
 ---
-import { Sun, Moon, Menu, X, Download, ChevronDown, Video, Gamepad2, BookOpen, Bot, LayoutDashboard, Github, Terminal as TerminalIcon, LifeBuoy as Support } from 'lucide-astro';
+import { Sun, Moon, Menu, X, Download, ChevronDown, Video, Gamepad2, BookOpen, Bot, LayoutDashboard, Github, Terminal as TerminalIcon } from 'lucide-astro';
 
 interface Props {
   current?: string;
@@ -95,13 +95,6 @@ const { current = '/' } = Astro.props;
                 <div>
                   <div class="hud-dd-title">Console</div>
                   <div class="hud-dd-desc">Manage bots & credentials</div>
-                </div>
-              </a>
-              <a href="https://argon.support" target="_blank" rel="noopener" class="hud-dd-item">
-                <Support class="size-4 text-accent-3" />
-                <div>
-                  <div class="hud-dd-title">Support</div>
-                  <div class="hud-dd-desc">Get help & support</div>
                 </div>
               </a>
               <div class="hud-dd-sep"></div>
