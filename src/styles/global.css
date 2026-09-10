@@ -286,7 +286,7 @@ html:not(.dark) .hud-scrolled .hud-bar {
   min-height: 48px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .hud-content { padding: 8px 16px; }
 }
 
@@ -595,6 +595,19 @@ html:not(.dark) .hud-dd-sep {
   0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
   50% { opacity: 1; }
   100% { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+}
+
+/* ─── Compact tier ───
+   The full link row appears at 768px, but between there and ~860px the bar is
+   narrower than the row it holds: nothing in .hud-content shrinks, so the
+   overflow pushed the theme toggle and the CTA straight through the bar's right
+   edge. Trim the horizontal spacing until the whole row fits at 768px. */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .hud-content { padding: 8px 12px; }
+  .hud-left { gap: 8px; }
+  .hud-right { gap: 4px; }
+  .hud-link { padding: 4px 8px; gap: 5px; }
+  .hud-cta { padding: 6px 12px; }
 }
 
 /* ─── Mobile panel ─── */

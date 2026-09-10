@@ -26,7 +26,7 @@ const { current = '/' } = Astro.props;
           <span class="hud-brand">ARGON</span>
         </a>
 
-        <div class="hud-sep"></div>
+        <div class="hud-sep hidden md:block"></div>
 
         <div class="hidden md:flex items-center gap-0.5">
           <a href="/" class:list={["hud-link", current === '/' && 'active']}>
