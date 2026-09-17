@@ -7,6 +7,15 @@ interface Props {
 	description?: string;
 	image?: string;
 	noindex?: boolean;
+	/**
+	 * Whether this page carries the site's furniture.
+	 *
+	 * Off for a page that is one decision and nothing else — the invite landing, where the navbar
+	 * and footer are links away from the only thing the visitor came to do. What lives here rather
+	 * than in the page is the furniture the layout itself draws: the blur strip that exists to sit
+	 * under the navbar, and the back-to-top button, both of which are stray marks without it.
+	 */
+	chrome?: boolean;
 }
 
 const {
@@ -14,6 +23,7 @@ const {
 	description = 'Modern communication platform with crystal-clear voice, rich messaging, screen sharing, and built-in games. Designed for communities that value quality and privacy. Windows, macOS & Linux.',
 	image = '/og/index.png',
 	noindex = false,
+	chrome = true,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -125,7 +135,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		<canvas id="cursor-trail" class="fixed inset-0 -z-10 pointer-events-none"></canvas>
 
 		<!-- Progressive blur under HUD navbar -->
-		<div class="progressive-blur-nav"></div>
+		{chrome && <div class="progressive-blur-nav"></div>}
 
 		<slot />
 
@@ -138,10 +148,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		<CookieBanner />
 
 		<!-- Back to top -->
-		<button id="back-to-top" type="button" aria-label="Back to top"
-			class="fixed bottom-6 right-6 z-40 w-10 h-10 rounded-full bg-oled-elevated border border-oled-border-subtle flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-oled-hover transition-all opacity-0 translate-y-4 pointer-events-none cursor-pointer shadow-lg">
-			<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
-		</button>
+		{chrome && (
+			<button id="back-to-top" type="button" aria-label="Back to top"
+				class="fixed bottom-6 right-6 z-40 w-10 h-10 rounded-full bg-oled-elevated border border-oled-border-subtle flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-oled-hover transition-all opacity-0 translate-y-4 pointer-events-none cursor-pointer shadow-lg">
+				<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+			</button>
+		)}
 	</body>
 </html>
 

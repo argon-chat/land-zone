@@ -40,6 +40,14 @@
   --color-success: #34d399;
   --color-success-subtle: rgba(52, 211, 153, 0.10);
 
+  /* Space badges — Official, Verified, Community.
+     Not drawn from the accent ramp on purpose: these three carry the same meaning here as they do
+     inside the client, and a space that is sky-blue in the app must not be purple on its invite
+     page. The values are the client's (see SpaceBadges.vue / InvitePreviewModal.vue). */
+  --color-badge-official: #38bdf8;
+  --color-badge-verified: #fbbf24;
+  --color-badge-community: #34d399;
+
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', monospace;
 }
@@ -74,6 +82,12 @@ html:not(.dark) {
 
   --color-success: #059669;
   --color-success-subtle: rgba(5, 150, 105, 0.08);
+
+  /* Same three hues, walked down the ramp until each clears 4.5:1 on the light card — the badge
+     text is 11px, which is exactly where the dark-theme values stop being readable. */
+  --color-badge-official: #0369a1;
+  --color-badge-verified: #b45309;
+  --color-badge-community: #047857;
 }
 
 @layer base {

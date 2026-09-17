@@ -1,11 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
-import Footer from '../components/Footer.astro';
 import InviteView from '../components/invite/InviteView.astro';
 
 // Served for every /i/{code} — Cloudflare through functions/i/[code].js, Firebase through the
 // rewrite in firebase.json. The code is read from the path at runtime; see InviteView.
+//
+// No navbar and no footer, unlike every other page here: this one is a single decision made by
+// someone who did not come to the site, arrived from a link in a chat, and is handed to the app a
+// moment later. Every link in that furniture leads away from the one thing they are here for — and
+// a space's splash image is meant to fill the screen, which it cannot do around a site header.
 ---
 
 <Layout
@@ -13,8 +16,7 @@ import InviteView from '../components/invite/InviteView.astro';
 	description="Someone invited you to a space on Argon — voice, messaging and games for communities."
 	image="/og/invite.png"
 	noindex={true}
+	chrome={false}
 >
-	<Navbar />
 	<InviteView kind="space" />
-	<Footer />
 </Layout>

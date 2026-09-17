@@ -19,9 +19,31 @@ interface Props {
 const { kind } = Astro.props;
 ---
 
-<section class="relative z-10 flex min-h-[calc(100svh-4rem)] items-center justify-center px-4 pt-28 pb-16 sm:px-6">
-	<!-- Ambient glow, same language as the rest of the site -->
-	<div class="absolute left-1/2 top-1/3 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]"></div>
+<!--
+	The space's own splash, when it has one.
+
+	`invite_splash_image_desc` in the client promises verified and official spaces that this picture
+	is "shown fullscreen when this space's invite link is opened in a browser" — this is that browser,
+	and this is the only place that promise can be kept. Fixed rather than in flow, so it fills the
+	viewport behind the card on a phone as well; the scrim over it is what keeps the card legible on
+	top of artwork nobody here has seen.
+-->
+<div id="invite-splash" hidden class="pointer-events-none fixed inset-0 z-0">
+	<div id="invite-splash-image" class="absolute inset-0 bg-cover bg-center"></div>
+	<div class="absolute inset-0 bg-gradient-to-b from-oled-black/80 via-oled-black/90 to-oled-black"></div>
+</div>
+
+<section class="relative z-10 flex min-h-[100svh] flex-col items-center justify-center px-4 py-12 sm:px-6">
+	<!-- Ambient glow, same language as the rest of the site. Dropped when a splash paints: two
+	     backgrounds fighting over the same card is one too many. -->
+	<div id="invite-glow" class="absolute left-1/2 top-1/3 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]"></div>
+
+	<!-- The page runs without the site's navbar, so this is the only thing that says whose link this
+	     is. Quiet on purpose: the card is the subject, not the brand. -->
+	<a href="/" class="relative z-10 mb-8 inline-flex items-center gap-2 text-text-muted transition-colors hover:text-text-primary" aria-label="Argon — Home">
+		<img src="/argon-cat.svg" alt="" class="invite-brand-mark size-6" />
+		<span class="text-sm font-black tracking-[0.2em]">ARGON</span>
+	</a>
 
 	<div class="relative z-10 w-full max-w-md" data-invite-kind={kind}>
 		<!-- Loading -->
@@ -58,15 +80,11 @@ const { kind } = Astro.props;
 					You have been invited to join
 				</p>
 
-				<div class="mt-1 flex items-center gap-1.5">
-					<h1 id="invite-name" class="truncate text-2xl font-black tracking-tight"></h1>
-					<svg id="invite-badge" hidden viewBox="0 0 256 256" fill="currentColor" class="size-5 shrink-0 text-accent">
-						<path d="M225.86,102.82c-3.77-3.94-7.67-8-9.14-11.57-1.36-3.27-1.44-8.69-1.52-13.94-.15-9.76-.31-20.82-8-28.51s-18.75-7.85-28.51-8c-5.25-.08-10.67-.16-13.94-1.52-3.56-1.47-7.63-5.37-11.57-9.14C146.28,23.51,138.44,16,128,16s-18.27,7.51-25.18,14.14c-3.94,3.77-8,7.67-11.57,9.14C88,40.64,82.56,40.72,77.31,40.8c-9.76.15-20.82.31-28.51,8s-7.85,18.75-8,28.51c-.08,5.25-.16,10.67-1.52,13.94-1.47,3.56-5.37,7.63-9.14,11.57C23.51,109.72,16,117.56,16,128s7.51,18.27,14.14,25.18c3.77,3.94,7.67,8,9.14,11.57,1.36,3.27,1.44,8.69,1.52,13.94.15,9.76.31,20.82,8,28.51s18.75,7.85,28.51,8c5.25.08,10.67.16,13.94,1.52,3.56,1.47,7.63,5.37,11.57,9.14C109.72,232.49,117.56,240,128,240s18.27-7.51,25.18-14.14c3.94-3.77,8-7.67,11.57-9.14,3.27-1.36,8.69-1.44,13.94-1.52,9.76-.15,20.82-.31,28.51-8s7.85-18.75,8-28.51c.08-5.25.16-10.67,1.52-13.94,1.47-3.56,5.37-7.63,9.14-11.57C232.49,146.28,240,138.44,240,128S232.49,109.73,225.86,102.82Zm-52.2,6.84-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z" />
-					</svg>
-				</div>
+				<h1 id="invite-name" class="mt-1 truncate text-2xl font-black tracking-tight"></h1>
 
-				<!-- Badges spelled out, not left to the seal alone: this is the one screen where the
-				     reader has never seen the space before and decides from it alone. -->
+				<!-- Badges spelled out rather than left to the seal icon used elsewhere: this is the one
+				     screen where the reader has never seen the space before and decides from it alone.
+				     Same icons, same words and same colours as the client's own invite preview. -->
 				<div id="invite-tags" class="mt-2 flex flex-wrap items-center gap-1.5 empty:hidden"></div>
 
 				<p id="invite-description" hidden class="mt-2 line-clamp-3 text-sm leading-relaxed text-text-secondary"></p>
@@ -153,6 +171,26 @@ const { kind } = Astro.props;
 
 	const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
+	/**
+	 * The three space badges, as the client draws them.
+	 *
+	 * Phosphor's `seal-check` and `users-three` at fill weight, inlined rather than pulled from an
+	 * icon package: two paths are not worth a dependency, and these have to match
+	 * `SpaceBadges.vue` exactly — a badge that means "first-party" in the app and something else
+	 * here is worse than no badge. Official and Verified share the seal and are mutually exclusive;
+	 * Community is orthogonal and sits alongside either.
+	 */
+	const SEAL_CHECK =
+		'M225.86,102.82c-3.77-3.94-7.67-8-9.14-11.57-1.36-3.27-1.44-8.69-1.52-13.94-.15-9.76-.31-20.82-8-28.51s-18.75-7.85-28.51-8c-5.25-.08-10.67-.16-13.94-1.52-3.56-1.47-7.63-5.37-11.57-9.14C146.28,23.51,138.44,16,128,16s-18.27,7.51-25.18,14.14c-3.94,3.77-8,7.67-11.57,9.14C88,40.64,82.56,40.72,77.31,40.8c-9.76.15-20.82.31-28.51,8s-7.85,18.75-8,28.51c-.08,5.25-.16,10.67-1.52,13.94-1.47,3.56-5.37,7.63-9.14,11.57C23.51,109.72,16,117.56,16,128s7.51,18.27,14.14,25.18c3.77,3.94,7.67,8,9.14,11.57,1.36,3.27,1.44,8.69,1.52,13.94.15,9.76.31,20.82,8,28.51s18.75,7.85,28.51,8c5.25.08,10.67.16,13.94,1.52,3.56,1.47,7.63,5.37,11.57,9.14C109.72,232.49,117.56,240,128,240s18.27-7.51,25.18-14.14c3.94-3.77,8-7.67,11.57-9.14,3.27-1.36,8.69-1.44,13.94-1.52,9.76-.15,20.82-.31,28.51-8s7.85-18.75,8-28.51c.08-5.25.16-10.67,1.52-13.94,1.47-3.56,5.37-7.63,9.14-11.57C232.49,146.28,240,138.44,240,128S232.49,109.73,225.86,102.82Zm-52.2,6.84-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z';
+	const USERS_THREE =
+		'M64.12,147.8a4,4,0,0,1-4,4.2H16a8,8,0,0,1-7.8-6.17,8.35,8.35,0,0,1,1.62-6.93A67.79,67.79,0,0,1,37,117.51a40,40,0,1,1,66.46-35.8,3.94,3.94,0,0,1-2.27,4.18A64.08,64.08,0,0,0,64,144C64,145.28,64,146.54,64.12,147.8Zm182-8.91A67.76,67.76,0,0,0,219,117.51a40,40,0,1,0-66.46-35.8,3.94,3.94,0,0,0,2.27,4.18A64.08,64.08,0,0,1,192,144c0,1.28,0,2.54-.12,3.8a4,4,0,0,0,4,4.2H240a8,8,0,0,0,7.8-6.17A8.33,8.33,0,0,0,246.17,138.89Zm-89,43.18a48,48,0,1,0-58.37,0A72.13,72.13,0,0,0,65.07,212,8,8,0,0,0,72,224H184a8,8,0,0,0,6.93-12A72.15,72.15,0,0,0,157.19,182.07Z';
+
+	const BADGES = {
+		official: { label: 'Official Space', path: SEAL_CHECK, tone: 'border-badge-official/30 bg-badge-official/10 text-badge-official' },
+		verified: { label: 'Verified Space', path: SEAL_CHECK, tone: 'border-badge-verified/30 bg-badge-verified/10 text-badge-verified' },
+		community: { label: 'Community Space', path: USERS_THREE, tone: 'border-badge-community/30 bg-badge-community/10 text-badge-community' },
+	} as const;
+
 	function readCode(): string {
 		const preloaded = (window as any).__ARGON_INVITE__;
 		if (preloaded?.code) return String(preloaded.code);
@@ -174,10 +212,16 @@ const { kind } = Astro.props;
 		return (name || '?').trim().slice(0, 2).toUpperCase();
 	}
 
-	function pill(label: string, classes: string): HTMLElement {
+	function badge(kind: keyof typeof BADGES): HTMLElement {
+		const { label, path, tone } = BADGES[kind];
+
 		const node = document.createElement('span');
-		node.className = `rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${classes}`;
-		node.textContent = label;
+		node.className = `inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold ${tone}`;
+
+		// Constant markup — nothing from the card reaches this string; the label goes in as text.
+		node.innerHTML = `<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" class="size-3.5 shrink-0"><path d="${path}" /></svg>`;
+		node.append(label);
+
 		return node;
 	}
 
@@ -187,6 +231,15 @@ const { kind } = Astro.props;
 		document.title = voiceChannel
 			? `Join ${voiceChannel.name} in ${space.name} — Argon`
 			: `Join ${space.name} — Argon`;
+
+		// Verified and official spaces may hand the web page a picture of their own to stand behind
+		// the card. Nothing below it depends on it arriving, so it is painted straight away and the
+		// site's own glow steps aside; a URL that 404s simply leaves the page as it already is.
+		if (space.splashUrl) {
+			el('invite-splash-image').style.backgroundImage = `url("${space.splashUrl}")`;
+			el('invite-splash').hidden = false;
+			el('invite-glow').hidden = true;
+		}
 
 		if (space.bannerUrl) {
 			const banner = el('invite-banner');
@@ -200,19 +253,12 @@ const { kind } = Astro.props;
 
 		el('invite-name').textContent = space.name;
 
-		// Official outranks verified — the badge is one slot, and "first-party" is the stronger claim.
-		const badge = el('invite-badge');
-		if (space.isOfficial || space.isVerified) {
-			badge.hidden = false;
-			badge.classList.toggle('text-accent', space.isOfficial);
-			badge.classList.toggle('text-success', !space.isOfficial);
-			badge.setAttribute('aria-label', space.isOfficial ? 'Official space' : 'Verified space');
-		}
-
+		// Official outranks verified — one seal, and "first-party" is the stronger claim. Community
+		// says something else entirely, so it sits next to whichever of the two was drawn.
 		const tags = el('invite-tags');
-		if (space.isOfficial) tags.append(pill('Official', 'border-accent/25 bg-accent-subtle text-accent'));
-		else if (space.isVerified) tags.append(pill('Verified', 'border-success/25 bg-success-subtle text-success'));
-		if (space.isCommunity) tags.append(pill('Community', 'border-oled-border bg-oled-elevated text-text-secondary'));
+		if (space.isOfficial) tags.append(badge('official'));
+		else if (space.isVerified) tags.append(badge('verified'));
+		if (space.isCommunity) tags.append(badge('community'));
 
 		if (space.description) {
 			const description = el('invite-description');
@@ -282,3 +328,19 @@ const { kind } = Astro.props;
 
 	load();
 </script>
+
+<style>
+	/*
+	 * The cat is a black shape, drawn on black. Every other place it appears on the site recolours
+	 * it in CSS rather than shipping a second file (see .hud-logo-icon, .footer-cat) — same trick
+	 * here, and the same two values, so the mark reads identically in both themes.
+	 */
+	.invite-brand-mark {
+		filter: brightness(0) invert(1);
+		opacity: 0.8;
+	}
+
+	html:not(.dark) .invite-brand-mark {
+		filter: brightness(0) invert(0.15);
+	}
+</style>
