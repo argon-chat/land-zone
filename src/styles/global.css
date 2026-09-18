@@ -702,6 +702,19 @@ html:not(.dark) .hud-mobile-panel {
   color: var(--color-accent);
 }
 
+/* ── Browser-client entry points on the Russian mirror ──
+   Scoped to html.no-web-app, set by the inline head script from the hostname. One build
+   serves both argon.gl and the mirror, so this is the only seam where the two can differ
+   without splitting the build in two and letting them drift.
+
+   The browser client is not reachable from the mirror and is not getting a redirect, so
+   every way into it is hidden there rather than left to strand the visitor. Marked at the
+   call site with [data-web-app] — put that on the outermost element that should vanish,
+   including its spacing, not just the <a>. */
+html.no-web-app [data-web-app] {
+  display: none !important;
+}
+
 /* ── Scroll reveal ──
    Scoped to html.js, set by the inline head script. Without JS — or if that
    script throws — every .reveal block stays at its visible resting state

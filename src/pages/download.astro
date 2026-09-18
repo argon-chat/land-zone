@@ -95,8 +95,10 @@ const others = [
 				))}
 			</div>
 
-			<!-- Browser build — the third option, deliberately quieter than the two installs -->
-			<div class="animate-fade-in-up-delay-3 mt-4 max-w-2xl mx-auto text-left">
+			<!-- Browser build — the third option, deliberately quieter than the two installs.
+			     Marked on the wrapper, not the card, so its top margin leaves with it on the
+			     Russian mirror (see html.no-web-app in global.css). -->
+			<div class="animate-fade-in-up-delay-3 mt-4 max-w-2xl mx-auto text-left" data-web-app>
 				<a href={webUrl} target="_blank" rel="noopener" class="dl-web group" data-track="download_web">
 					<div class="dl-web-icon">
 						<Globe class="size-6" />

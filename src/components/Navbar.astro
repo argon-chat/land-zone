@@ -50,7 +50,7 @@ const { current = '/' } = Astro.props;
                   <div class="hud-dd-desc">Voice, text & games platform</div>
                 </div>
               </a>
-              <a href="https://app.argon.gl" target="_blank" rel="noopener" class="hud-dd-item" data-track="nav_web_app">
+              <a href="https://app.argon.gl" data-web-app target="_blank" rel="noopener" class="hud-dd-item" data-track="nav_web_app">
                 <Globe class="size-4 text-accent-2" />
                 <div>
                   <div class="hud-dd-title">Argon for Web</div>
@@ -163,7 +163,7 @@ const { current = '/' } = Astro.props;
         <a href="/download/" class:list={["hud-mobile-link", current === '/download/' && 'active']}>
           <span class="hud-ml-dot"></span>Download
         </a>
-        <a href="https://app.argon.gl" target="_blank" rel="noopener" class="hud-mobile-link" data-track="nav_web_app">
+        <a href="https://app.argon.gl" data-web-app target="_blank" rel="noopener" class="hud-mobile-link" data-track="nav_web_app">
           <span class="hud-ml-dot"></span>Open in browser
         </a>
 

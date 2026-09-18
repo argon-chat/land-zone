@@ -114,6 +114,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 				// Tells the stylesheet that scripting is live, so the scroll-reveal
 				// blocks may start hidden. Without it they stay at rest and visible.
 				root.classList.add('js');
+				// The Russian mirror serves the same build as argon.gl, but the browser
+				// client behind app.argon.gl is not reachable from there and is not getting
+				// a redirect — so every entry point into it is hidden. Decided here, before
+				// paint, so the buttons never flash in and disappear.
+				if (location.hostname === 'ru.argon.gl' || location.hostname === 'argon-land.web.app') {
+					root.classList.add('no-web-app');
+				}
 				var t = null;
 				try { t = localStorage.getItem('theme'); } catch (e) { /* site data blocked */ }
 				if (t === 'light') {
