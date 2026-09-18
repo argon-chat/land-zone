@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
-import { ArrowRight, Check } from 'lucide-astro';
+import { ArrowRight, Check, Globe } from 'lucide-astro';
 
 // Brand glyphs (single-path SVGs)
 const glyphs: Record<string, string> = {
@@ -33,6 +33,8 @@ const primary = [
 	},
 ];
 
+const webUrl = 'https://app.argon.gl';
+
 const others = [
 	{ name: 'Linux', sub: 'In the works', icon: 'linux', status: 'Soon' },
 	{ name: 'iOS', sub: 'On the roadmap', icon: 'apple', status: 'Planned' },
@@ -42,7 +44,7 @@ const others = [
 ];
 ---
 
-<Layout title="Download — Argon Chat" description="Download Argon Chat for Windows and macOS. Crystal-clear voice, games inside your calls, and an overlay that keeps you in the game." image="/og/download.png">
+<Layout title="Download — Argon Chat" description="Download Argon Chat for Windows and macOS, or open it straight in your browser at app.argon.gl. Crystal-clear voice, games inside your calls, and an overlay that keeps you in the game." image="/og/download.png">
 	<Navbar current="/download/" />
 
 	<!-- ═══════════════════════════════════════════════ -->
@@ -62,7 +64,7 @@ const others = [
 			</h1>
 			<p class="animate-fade-in-up-delay-2 mx-auto mt-5 max-w-xl text-base sm:text-lg leading-relaxed text-text-secondary">
 				One download. Crystal-clear voice, real games inside your calls, and an overlay
-				that keeps you in the game.
+				that keeps you in the game. Or skip the install and open it in your browser.
 			</p>
 
 			<!-- Primary download cards -->
@@ -93,6 +95,26 @@ const others = [
 				))}
 			</div>
 
+			<!-- Browser build — the third option, deliberately quieter than the two installs -->
+			<div class="animate-fade-in-up-delay-3 mt-4 max-w-2xl mx-auto text-left">
+				<a href={webUrl} target="_blank" rel="noopener" class="dl-web group" data-track="download_web">
+					<div class="dl-web-icon">
+						<Globe class="size-6" />
+					</div>
+					<div class="min-w-0 flex-1">
+						<div class="flex items-center gap-2 flex-wrap">
+							<h2 class="text-base font-bold text-text-primary">Argon for Web</h2>
+							<span class="dl-badge dl-badge-web">No install</span>
+						</div>
+						<p class="text-xs text-text-muted mt-0.5">The full app at <span class="dl-web-url">app.argon.gl</span> — nothing to install.</p>
+					</div>
+					<span class="dl-web-cta">
+						Open app
+						<ArrowRight class="size-4 transition-transform group-hover:translate-x-1" />
+					</span>
+				</a>
+			</div>
+
 		</div>
 	</section>
 
@@ -103,7 +125,7 @@ const others = [
 		<div class="mx-auto max-w-5xl">
 			<div class="text-center mb-8">
 				<h2 class="text-xl sm:text-2xl font-bold tracking-tight">More platforms</h2>
-				<p class="text-text-muted text-sm mt-2">We're bringing Argon everywhere your squad hangs out.</p>
+				<p class="text-text-muted text-sm mt-2">We're bringing Argon everywhere your squad hangs out — on desktop, the browser build works today.</p>
 			</div>
 
 			<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
@@ -298,12 +320,53 @@ const others = [
 	.status-planned { background: rgba(255,255,255,0.05); color: var(--color-text-muted); border: 1px solid rgba(255,255,255,0.08); }
 	html:not(.dark) .status-planned { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); }
 
+	/* Browser card — the same surface as the install cards, laid out as one row so it
+	   reads as the footnote to them rather than a third headline. */
+	.dl-web {
+		display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+		padding: 18px 20px;
+		border-radius: 18px;
+		background: linear-gradient(rgba(255,255,255,0.02), rgba(255,255,255,0.02));
+		background-color: rgba(0,0,0,0.45);
+		backdrop-filter: blur(20px);
+		-webkit-backdrop-filter: blur(20px);
+		border: 1px solid rgba(255,255,255,0.06);
+		transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), border-color 0.3s;
+	}
+	html:not(.dark) .dl-web {
+		background: linear-gradient(rgba(0,0,0,0.015), rgba(0,0,0,0.015));
+		background-color: rgba(255,255,255,0.65);
+		border-color: rgba(0,0,0,0.07);
+	}
+	.dl-web:hover { transform: translateY(-3px); border-color: rgba(6,182,212,0.35); }
+
+	.dl-web-icon {
+		display: flex; align-items: center; justify-content: center;
+		width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+		background: rgba(6,182,212,0.12);
+		border: 1px solid rgba(6,182,212,0.18);
+		color: var(--color-accent-2);
+		transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+	}
+	.dl-web:hover .dl-web-icon { transform: scale(1.08) rotate(-4deg); }
+
+	.dl-web-url { color: var(--color-text-secondary); font-weight: 600; }
+
+	.dl-web-cta {
+		display: inline-flex; align-items: center; gap: 6px;
+		white-space: nowrap;
+		font-size: 13px; font-weight: 700;
+		color: var(--color-accent);
+	}
+
+	.dl-badge-web { background: rgba(6,182,212,0.12); color: var(--color-accent-2); border: 1px solid rgba(6,182,212,0.22); }
+
 	/* Highlight the card matching the visitor's OS */
 	.dl-card.os-match { border-color: rgba(139,92,246,0.45); box-shadow: 0 0 0 1px rgba(139,92,246,0.25), 0 20px 50px rgba(139,92,246,0.12); }
 
 	@media (prefers-reduced-motion: reduce) {
 		.dl-dot { animation: none; }
-		.dl-card, .dl-soon-card, .dl-icon { transition: none; }
+		.dl-card, .dl-soon-card, .dl-icon, .dl-web, .dl-web-icon { transition: none; }
 	}
 </style>
 

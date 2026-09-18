@@ -1,5 +1,5 @@
 ---
-import { Sun, Moon, Menu, X, Download, ChevronDown, Video, Gamepad2, BookOpen, Bot, LayoutDashboard, Github, Terminal as TerminalIcon } from 'lucide-astro';
+import { Sun, Moon, Menu, X, Download, ChevronDown, Video, Gamepad2, Globe, BookOpen, Bot, LayoutDashboard, Github, Terminal as TerminalIcon } from 'lucide-astro';
 
 interface Props {
   current?: string;
@@ -50,15 +50,22 @@ const { current = '/' } = Astro.props;
                   <div class="hud-dd-desc">Voice, text & games platform</div>
                 </div>
               </a>
+              <a href="https://app.argon.gl" target="_blank" rel="noopener" class="hud-dd-item" data-track="nav_web_app">
+                <Globe class="size-4 text-accent-2" />
+                <div>
+                  <div class="hud-dd-title">Argon for Web</div>
+                  <div class="hud-dd-desc">The client, in your browser</div>
+                </div>
+              </a>
               <a href="https://meet.argon.gl" target="_blank" rel="noopener" class="hud-dd-item">
-                <Video class="size-4 text-accent-2" />
+                <Video class="size-4 text-accent-3" />
                 <div>
                   <div class="hud-dd-title">Argon Meet</div>
                   <div class="hud-dd-desc">Video conferencing</div>
                 </div>
               </a>
               <a href="https://pew.red" target="_blank" rel="noopener" class="hud-dd-item">
-                <Gamepad2 class="size-4 text-accent-3" />
+                <Gamepad2 class="size-4 text-accent" />
                 <div>
                   <div class="hud-dd-title">Pew Pew Engine</div>
                   <div class="hud-dd-desc">2D game engine</div>
@@ -155,6 +162,9 @@ const { current = '/' } = Astro.props;
         </a>
         <a href="/download/" class:list={["hud-mobile-link", current === '/download/' && 'active']}>
           <span class="hud-ml-dot"></span>Download
+        </a>
+        <a href="https://app.argon.gl" target="_blank" rel="noopener" class="hud-mobile-link" data-track="nav_web_app">
+          <span class="hud-ml-dot"></span>Open in browser
         </a>
 
         <div class="hud-mobile-sep"></div>

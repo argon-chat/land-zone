@@ -8,7 +8,7 @@ const pages: Record<string, { title: string; subtitle?: string }> = {
   },
   download: {
     title: 'Download Argon Chat',
-    subtitle: 'Get Argon for Windows and macOS. Free to start.',
+    subtitle: 'Get Argon for Windows and macOS, or open it in your browser. Free to start.',
   },
   privacy: {
     title: 'Privacy Policy',
