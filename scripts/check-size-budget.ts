@@ -1,11 +1,20 @@
 #!/usr/bin/env bun
-// Fails the build when a response a visitor actually loads would not survive Russian transit.
+// Keeps individual responses small. This is a hygiene gate, NOT what makes the site work in
+// Russia — read the next paragraph before you rely on it for that.
 //
-// Russian transit throttles a Cloudflare connection once a response passes a fixed size:
-// measured from a St. Petersburg exit (AS42065, 2026-09-18) the cut is at 19139 bytes on
-// HTTP/2 — what browsers use — and 24162 on HTTP/1.1, after which throughput collapses to
-// ~637 B/s and never recovers. A page one byte over the line simply never finishes loading
-// for those visitors, and nothing in a normal CI run would notice.
+// Russian transit throttles a Cloudflare connection once it has carried ~19139 bytes on HTTP/2
+// (24162 on HTTP/1.1), after which throughput collapses to ~637 B/s and never recovers. The
+// budget is CUMULATIVE PER CONNECTION, not per response: a browser multiplexes a whole page
+// over one HTTP/2 connection, so a 16KB document plus anything at all exceeds it. Measured
+// from a St. Petersburg exit (AS42065, 2026-09-18), a full page load over one connection
+// returned zero responses in 120 seconds. No arrangement of per-file sizes fixes that, which
+// is why RU visitors are redirected to the Firebase mirror in functions/_middleware.js — the
+// only thing Cloudflare serves them is a 302 of a few hundred bytes.
+//
+// So what this script still buys: it keeps the per-response ceiling honest for anyone who
+// does land on Cloudflare (an explicit ?lang=en), and it keeps the chunk splits in
+// src/components/argon-mock from silently regrowing. Treat a failure as "this got big",
+// not as "Russia is broken" — and never read a pass as "Russia works".
 //
 // WIRE bytes are what the throttle counts, so that is what is measured:
 //   - compressible types, brotli at quality 3 — what Cloudflare's on-the-fly compression
