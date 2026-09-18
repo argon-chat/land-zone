@@ -6,12 +6,13 @@
 //         <argon-client-mock view="chat|voice|inventory|playframe"></…>
 //         attrs: view, accent (#hex), theme (dark)
 
-import sheet from "./argon-mock.css?raw";
+// Its own chunk, for the same reason as ./presets below: 25KB of stylesheet text inlined into
+// this module is 25KB that has to clear the Russian-transit ceiling on every page load.
+const mockStyles = import("./argon-mock.css?raw").then((m) => m.default);
 import {
   demoScene, demoCoins, demoGames, demoVoicePool, demoPresences, ROSTER,
   type Scene, type Message, type Member, type VoiceMember,
 } from "./scenes";
-import { chatPresets } from "./presets";
 import {
   Hash, Volume2, Antenna, Mic, MicOff, Headphones, ScreenShare, Camera,
   Gamepad2, PhoneOff, OctagonMinus, ChevronDown, Rocket, BadgeCheck, Plus,
@@ -20,6 +21,14 @@ import {
 } from "lucide";
 
 type View = "shell" | "chat" | "voice" | "inventory" | "playframe";
+
+// The screen-share clip is served off Cloudflare on purpose. Russian transit throttles a
+// Cloudflare connection to a crawl past ~19KB (HTTP/2; ~24KB on HTTP/1.1), which is fine for
+// every other asset on the site — they all compress under that — but kills a 626KB video
+// outright. Measured from a St. Petersburg exit: argon.gl stalls at 19139 bytes and 637 B/s,
+// the same file off Firebase arrives in under a second. Anything large added here belongs on
+// this host too, and it must stay in the media-src of both CSPs (public/_headers, firebase.json).
+const MEDIA_ORIGIN = (import.meta.env.PUBLIC_MEDIA_ORIGIN || "https://argon-land.web.app").replace(/\/+$/, "");
 
 // Design widths = inner card width + the 36px stage padding (18px each side),
 // so the scaled content never overflows / clips.
@@ -71,7 +80,17 @@ const PRESENCE_ICON: Record<string, string> = {
 
 // ONE dialogue preset per page load — shared by every <argon-client-mock> on the
 // page so the whole landing tells a single coherent conversation (not all four at once).
-const PAGE_PRESET = chatPresets[Math.floor(Math.random() * chatPresets.length)] ?? [];
+// Memoising the promise, not the value, is what keeps that true across instances: every
+// element awaits the same import and the same random pick.
+//
+// ./presets is 41KB of generated dialogue. Bundled in, it pushed this module to 26800 bytes
+// on the wire — past the ~19KB ceiling Russian transit puts on a Cloudflare response, so the
+// mock never finished loading there (see scripts/check-size-budget.ts). As its own chunk both
+// halves fit. The import is kicked off here at module scope rather than inside mount(), so it
+// downloads alongside this module instead of one round trip after it.
+const pagePreset = import("./presets").then(
+  (m) => m.chatPresets[Math.floor(Math.random() * m.chatPresets.length)] ?? [],
+);
 
 /* ---- panel builders ----------------------------------------------------- */
 
@@ -267,7 +286,7 @@ function renderVoice(s: Scene) {
     .map((m) => {
       if (m.state === "screen")
         return `<div class="vc-tile screen">
-          <video class="vc-stream" data-src="/stream.webm" muted loop playsinline preload="none"></video>
+          <video class="vc-stream" data-src="${MEDIA_ORIGIN}/stream.webm" muted loop playsinline preload="none"></video>
           <span class="screenlabel">${icon("screen")} Sharing screen</span>
           <span class="tag"><img src="${m.avatar}" style="width:18px;height:18px;border-radius:50%">${esc(m.name)}</span></div>`;
       const cls = m.state === "speaking" ? " speaking" : "";
@@ -345,12 +364,23 @@ class ArgonClientMock extends HTMLElement {
   private timers: number[] = [];
   private stream: Message[] = [];
   private voiceJoinIv?: number;
+  private mountToken = 0;
 
   connectedCallback() {
+    // Mounting awaits the preset chunk, so it is async. The token settles which mount wins if
+    // a second connect lands while the first is still in flight — moving the element in the
+    // DOM fires connectedCallback again.
+    void this.mount(++this.mountToken);
+  }
+
+  private async mount(token: number) {
     const view = ((this.getAttribute("view") as View) || "shell") in DESIGN
       ? (this.getAttribute("view") as View) || "shell"
       : "shell";
     const accent = this.getAttribute("accent");
+
+    const sheet = await mockStyles;
+    if (token !== this.mountToken || !this.isConnected) return;
 
     const root = this.shadowRoot ?? this.attachShadow({ mode: "open" });
     const style = document.createElement("style");
@@ -368,7 +398,9 @@ class ArgonClientMock extends HTMLElement {
     // Chat-bearing views: pick a random dialogue preset, show the first slice, stream the rest.
     let sceneForRender = demoScene;
     if (view === "shell" || view === "chat") {
-      const stamped: Message[] = PAGE_PRESET.map((m, i) => ({ ...m, time: m.time ?? clock(i) }));
+      const preset = await pagePreset;
+      if (token !== this.mountToken || !this.isConnected) return;
+      const stamped: Message[] = preset.map((m, i) => ({ ...m, time: m.time ?? clock(i) }));
       if (stamped.length) stamped[0] = { ...stamped[0], date: "Today" };
       const INITIAL = 6;
       sceneForRender = { ...demoScene, messages: stamped.slice(0, INITIAL) };

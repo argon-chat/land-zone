@@ -57,10 +57,21 @@ jobs:
           # PUBLIC_SENTRY_TRACES_SAMPLE_RATE is deliberately not passed: the code reads it with `??`,
           # so handing it an empty string would pin the sample rate to 0 rather than the 0.1 default.
           PUBLIC_ARGON_API: ${{ vars.PUBLIC_ARGON_API }}
+          # Where assets too large for Russian transit are served from. Must be a host that is
+          # not behind Cloudflare, and must match the media-src of both CSPs. Unset falls back
+          # to the Firebase mirror, which this workflow already publishes the same build to.
+          PUBLIC_MEDIA_ORIGIN: ${{ vars.PUBLIC_MEDIA_ORIGIN }}
           PUBLIC_SENTRY_DSN: ${{ secrets.PUBLIC_SENTRY_DSN }}
           PUBLIC_SENTRY_ENV: ${{ vars.PUBLIC_SENTRY_ENV || 'production' }}
           PUBLIC_SENTRY_RELEASE: ${{ github.sha }}
         run: bun run build
+
+      # Russian transit throttles a Cloudflare connection dead once a single response passes
+      # ~19KB, so a page can grow past the point of loading there while every CI signal stays
+      # green. This is the only check that notices. It runs before the artifact is uploaded,
+      # so a build that cannot be served in Russia is never published to either host.
+      - name: Size budget
+        run: bun run check:size
 
       - uses: actions/upload-artifact@v4
         with:

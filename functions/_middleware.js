@@ -1,22 +1,33 @@
 // Cloudflare Pages middleware — runs on every request to the Pages project (argon.gl).
 //
-// Goal: visitors geolocated to Russia get sent to the Russian mirror at ru.argon.gl,
-// exactly once. The choice is remembered in a cookie so we never loop, and never
-// fight a user who explicitly picked a language.
+// Goal: honour an explicit mirror choice, and nothing else. Visitors are never moved
+// off argon.gl on their behalf.
+//
+// There used to be a geo rule here that pushed every RU-geolocated visitor to the mirror,
+// because Russian transit throttles Cloudflare connections. Measured from a St. Petersburg
+// exit (AS42065), that throttle cuts a response at 19139 bytes on HTTP/2 and 24162 on
+// HTTP/1.1, then drops to ~637 B/s. Every page and every asset this site serves compresses
+// under that — the main page is 17244 bytes brotli, all twelve subresources pass — so the
+// blanket redirect was routing traffic away from a host that already works. The one asset
+// that did not fit, the 626KB screen-share clip, now loads from the media origin instead
+// (see PUBLIC_MEDIA_ORIGIN in src/components/argon-mock/argon-client-mock.ts).
+//
+// The margin is thin: 1895 bytes on the main page. scripts/check-size-budget.ts fails the
+// build before it can be spent, and the mirror stays deployed as a manual fallback.
 //
 // Decision order:
 //   1. ?lang=en|ru  → explicit toggle: remember it, clean the URL, go to the right host.
 //   2. on ru.argon.gl → never redirect away (no loops).
 //   3. has a cookie  → respect it (en = stay on main, ru = go to mirror).
-//   4. no cookie, real HTML page load, geo == RU → redirect to the mirror + remember.
-// Everything else (assets, robots.txt, sitemaps, OG images, /.well-known, non-GET) passes through.
+// Everything else passes through.
 
 const MAIN_HOST = 'argon.gl';
 const RU_HOST = 'ru.argon.gl';
-const COOKIE = 'argon_lang';
 
-// Countries routed to the Russian site. Add 'BY', 'KZ', 'KG', … here if you want them too.
-const RU_COUNTRIES = ['RU'];
+// Renamed from argon_lang deliberately. Every argon_lang cookie in the wild was written by the
+// geo rule, not chosen by anyone; honouring those would pin exactly the visitors this change is
+// meant to free to the mirror forever. The new name is only ever set by an explicit ?lang=.
+const COOKIE = 'argon_site';
 
 export async function onRequest(context) {
   const { request, next } = context;
@@ -31,31 +42,23 @@ export async function onRequest(context) {
     return redirect(url, langParam);
   }
 
-  // 2. On the Russian host: just serve. Never geo-redirect (avoids loops).
+  // 2. On the Russian host: just serve. Never redirect away (avoids loops).
   if (url.hostname === RU_HOST) return next();
 
-  // 3. Remembered choice wins.
-  const cookie = readCookie(request, COOKIE);
-  if (cookie === 'en') return next();
-  if (cookie === 'ru') {
-    url.hostname = RU_HOST;
-    return redirect(url, 'ru');
-  }
-
-  // 4. Only act on genuine HTML page loads — not assets, robots.txt, sitemaps, OG, /.well-known.
-  const accept = request.headers.get('Accept') || '';
-  if (request.method !== 'GET' || !accept.includes('text/html')) return next();
-
-  // Geo: send RU-country visitors to the mirror (once), remembering it.
-  if (RU_COUNTRIES.includes(request.cf?.country)) {
-    url.hostname = RU_HOST;
-    return redirect(url, 'ru');
+  // 3. A remembered explicit choice moves page loads only — never assets, OG fetches or
+  //    non-GET. A visitor who picked the mirror lands there and fetches the rest from it.
+  if (readCookie(request, COOKIE) === 'ru') {
+    const accept = request.headers.get('Accept') || '';
+    if (request.method === 'GET' && accept.includes('text/html')) {
+      url.hostname = RU_HOST;
+      return redirect(url, 'ru');
+    }
   }
 
   return next();
 }
 
-// 302 (temporary — geo redirects must never be cached/permanent) + remember the choice.
+// 302 (temporary — never cache a host choice) + remember it.
 function redirect(url, lang) {
   const headers = new Headers();
   headers.set('Location', url.toString());

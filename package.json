@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "check:size": "bun scripts/check-size-budget.ts",
     "deploy": "astro build && wrangler pages deploy dist --branch=master",
     "deploy:firebase": "astro build && firebase deploy --only hosting",
     "setup:ci-secrets": "bun scripts/setup-deploy-secrets.ts",
