@@ -752,7 +752,7 @@ html.js .reveal.visible {
   background: radial-gradient(circle, var(--color-accent-glow) 0%, transparent 70%);
   opacity: 0;
   transform: translate(-50%, -50%);
-  transition: opacity 0.4s;
+  transition: opacity 0.3s ease-out;
   /* Sits with the cursor trail canvas, below every content block. */
   z-index: -1;
   mix-blend-mode: screen;
@@ -760,6 +760,16 @@ html.js .reveal.visible {
 
 html:not(.dark) .cursor-glow {
   display: none;
+}
+
+#cursor-trail {
+  opacity: 0;
+  transition: opacity 0.24s ease-out;
+}
+
+#cursor-trail.is-active {
+  opacity: 0.7;
+  transition-duration: 0.32s;
 }
 
 /* ── Mockup window ── */

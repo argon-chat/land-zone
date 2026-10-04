@@ -191,15 +191,22 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		if (!glow) return;
 		let raf = 0;
 		document.addEventListener('mousemove', (e) => {
+			if (document.hidden || !document.hasFocus()) return;
 			cancelAnimationFrame(raf);
 			raf = requestAnimationFrame(() => {
 				glow.style.left = e.clientX + 'px';
 				glow.style.top = e.clientY + 'px';
-				glow.style.opacity = '0.15';
+				glow.style.opacity = '0.12';
 			});
 		});
-		document.addEventListener('mouseleave', () => {
+		function hide() {
+			cancelAnimationFrame(raf);
 			glow.style.opacity = '0';
+		}
+		document.addEventListener('mouseleave', hide);
+		window.addEventListener('blur', hide);
+		document.addEventListener('visibilitychange', () => {
+			if (document.hidden) hide();
 		});
 	}
 
@@ -324,40 +331,35 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		function stop() {
 			running = false;
 			cancelAnimationFrame(frame);
+			canvas.classList.remove('is-active');
 		}
 
 		function start() {
 			if (running || !lines.length) return;
 			running = true;
 			render();
+			canvas.classList.add('is-active');
 		}
 
-		function onFirstMove(e) {
-			document.removeEventListener('mousemove', onFirstMove);
-			document.removeEventListener('touchstart', onFirstMove);
-			document.addEventListener('mousemove', updatePos);
-			document.addEventListener('touchmove', updatePos);
-			updatePos(e);
-			createLines();
-			start();
-		}
-
-		function updatePos(e) {
-			if (e.touches) {
-				pos.x = e.touches[0].pageX;
-				pos.y = e.touches[0].pageY;
-			} else {
-				pos.x = e.clientX;
-				pos.y = e.clientY;
+		function updatePos(e: MouseEvent) {
+			if (document.hidden || !document.hasFocus()) return;
+			pos.x = e.clientX;
+			pos.y = e.clientY;
+			if (!running) {
+				// Resume at the current pointer, without pulling the old trail across the page.
+				createLines();
+				start();
 			}
 		}
 
 		resize();
 		window.addEventListener('resize', resize);
-		window.addEventListener('focus', start);
 		window.addEventListener('blur', stop);
-		document.addEventListener('mousemove', onFirstMove);
-		document.addEventListener('touchstart', onFirstMove);
+		document.addEventListener('mouseleave', stop);
+		document.addEventListener('visibilitychange', () => {
+			if (document.hidden) stop();
+		});
+		document.addEventListener('mousemove', updatePos);
 	}
 
 	// Argon Console Branding
