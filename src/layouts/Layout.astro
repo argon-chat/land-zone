@@ -191,7 +191,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		if (!glow) return;
 		let raf = 0;
 		document.addEventListener('mousemove', (e) => {
-			if (document.hidden || !document.hasFocus()) return;
+			if (document.hidden) return;
 			cancelAnimationFrame(raf);
 			raf = requestAnimationFrame(() => {
 				glow.style.left = e.clientX + 'px';
@@ -341,8 +341,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			canvas.classList.add('is-active');
 		}
 
-		function updatePos(e: MouseEvent) {
-			if (document.hidden || !document.hasFocus()) return;
+		function updatePos(e) {
+			if (document.hidden) return;
 			pos.x = e.clientX;
 			pos.y = e.clientY;
 			if (!running) {
