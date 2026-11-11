@@ -77,7 +77,7 @@ const others = [
 			</p>
 
 			<!-- Primary download cards -->
-			<div class="animate-fade-in-up-delay-3 mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 max-w-2xl lg:max-w-4xl mx-auto text-left">
+			<div class="animate-fade-in-up-delay-3 relative z-[1] mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 max-w-2xl lg:max-w-4xl mx-auto text-left">
 				{primary.map((p) => (
 					<a href={p.href} class="dl-card group" data-detect={p.name.toLowerCase()} data-track={`download_${p.name.toLowerCase()}`}>
 						<div class="dl-card-glow"></div>
@@ -105,18 +105,28 @@ const others = [
 				))}
 			</div>
 
-			<!-- What the installs are not: a gold pill under the cards. -->
-			<div class="animate-fade-in-up-delay-3 mt-6 flex justify-center">
-				<p class="dl-gold">
-					<Sparkles class="dl-gold-icon size-4 shrink-0" aria-hidden="true" />
-					<span class="relative">No Electron. No Chromium bloat. No bullshit.</span>
-				</p>
+			<!-- What the installs are not: a gold pill under the cards, with a sunburst that the
+			     cards and the web card above it (z-index 1) keep behind them. -->
+			<div class="animate-fade-in-up-delay-3 relative z-0 mt-7 mb-1 flex justify-center">
+				<div class="dl-gold-wrap">
+					<span class="dl-gold-burst" aria-hidden="true"></span>
+					<span class="dl-gold-halo" aria-hidden="true"></span>
+					<span class="dl-gold-sparks" aria-hidden="true">
+						{[8, 19, 31, 44, 56, 67, 79, 91].map((x, i) => (
+							<i style={`--x:${x}%;--i:${i}`}></i>
+						))}
+					</span>
+					<p class="dl-gold">
+						<Sparkles class="dl-gold-icon size-4 shrink-0" aria-hidden="true" />
+						<span class="dl-gold-text">No Electron. No Chromium bloat. No bullshit.</span>
+					</p>
+				</div>
 			</div>
 
 			<!-- Browser build — the fourth option, deliberately quieter than the installs.
 			     Marked on the wrapper, not the card, so its top margin leaves with it on the
 			     Russian mirror (see html.no-web-app in global.css). -->
-			<div class="animate-fade-in-up-delay-3 mt-4 max-w-2xl lg:max-w-4xl mx-auto text-left" data-web-app>
+			<div class="animate-fade-in-up-delay-3 relative z-[1] mt-4 max-w-2xl lg:max-w-4xl mx-auto text-left" data-web-app>
 				<a href={webUrl} target="_blank" rel="noopener" class="dl-web group" data-track="download_web">
 					<div class="dl-web-icon">
 						<Globe class="size-6" />
@@ -381,58 +391,168 @@ const others = [
 
 	.dl-badge-web { background: rgba(6,182,212,0.12); color: var(--color-accent-2); border: 1px solid rgba(6,182,212,0.22); }
 
-	/* Gold pill: a ring that turns, a breathing glow and a sheen that crosses it now and then.
-	   The text stays a solid colour, so forced-colors mode still shows it. */
+	/* Gold pill with a sunburst. Back to front: two fans of rays turning against each other, a
+	   breathing halo, then the pill — a gold ring with a bright comet running round it, a sheen
+	   crossing it, text whose gold flows — and sparks rising off its edges. */
 	@property --dl-gold-angle {
 		syntax: '<angle>';
 		initial-value: 0deg;
 		inherits: false;
 	}
+	@property --dl-gold-comet {
+		syntax: '<angle>';
+		initial-value: 0deg;
+		inherits: false;
+	}
+	.dl-gold-wrap {
+		position: relative;
+		display: inline-flex;
+		max-width: 100%;
+	}
+	.dl-gold-wrap > * { pointer-events: none; }
+
+	/* The rays: a squashed disc, faded out at its middle (under the pill) and its rim. */
+	.dl-gold-burst {
+		position: absolute; left: 50%; top: 50%; z-index: -1;
+		width: 860px; height: 860px;
+		margin: -430px 0 0 -430px;
+		transform: scaleY(0.36);
+		-webkit-mask-image: radial-gradient(closest-side, transparent 16%, #000 28%, rgba(0,0,0,0.5) 55%, transparent 80%);
+		mask-image: radial-gradient(closest-side, transparent 16%, #000 28%, rgba(0,0,0,0.5) 55%, transparent 80%);
+		animation: dl-gold-burst 5.5s ease-in-out infinite;
+		transition: filter 0.4s;
+	}
+	.dl-gold-burst::before,
+	.dl-gold-burst::after {
+		content: '';
+		position: absolute; inset: 0;
+		border-radius: 50%;
+	}
+	.dl-gold-burst::before {
+		background: repeating-conic-gradient(from 0deg, transparent 0deg, rgba(255,214,120,0.34) 2deg, transparent 4deg, transparent 12deg);
+		animation: dl-gold-turn 50s linear infinite;
+	}
+	.dl-gold-burst::after {
+		background: repeating-conic-gradient(from 7deg, transparent 0deg, rgba(255,184,70,0.22) 4deg, transparent 8deg, transparent 22.5deg);
+		animation: dl-gold-turn 80s linear infinite reverse;
+	}
+	.dl-gold-wrap:hover .dl-gold-burst { filter: brightness(1.6); }
+
+	.dl-gold-halo {
+		position: absolute; inset: -16px -32px; z-index: -1;
+		border-radius: 9999px;
+		background: radial-gradient(closest-side, rgba(246,190,70,0.38), rgba(246,190,70,0.12) 60%, transparent);
+		filter: blur(10px);
+		animation: dl-gold-halo 3.2s ease-in-out infinite;
+	}
+
 	.dl-gold {
 		position: relative;
 		display: inline-flex; align-items: center; gap: 8px;
 		max-width: 100%;
-		padding: 8px 18px;
+		margin: 0;
+		padding: 9px 20px;
 		border-radius: 9999px;
 		border: 1px solid transparent;
 		background:
-			linear-gradient(rgba(24,17,4,0.92), rgba(24,17,4,0.92)) padding-box,
+			linear-gradient(rgba(22,15,3,0.94), rgba(22,15,3,0.94)) padding-box,
+			conic-gradient(from var(--dl-gold-comet), transparent 0 76%, rgba(255,248,220,0.95) 88%, transparent 97%) border-box,
 			conic-gradient(from var(--dl-gold-angle), #7a5512, #f6d77a, #c8921f, #fff2c2, #7a5512) border-box;
 		color: #f6d77a;
 		font-size: 13px; font-weight: 700; letter-spacing: 0.01em;
 		text-align: center;
-		text-shadow: 0 0 12px rgba(246,200,90,0.45);
 		box-shadow: 0 0 22px rgba(232,170,50,0.22), inset 0 0 14px rgba(246,200,90,0.08);
 		overflow: hidden;
-		animation: dl-gold-spin 6s linear infinite, dl-gold-breathe 3.2s ease-in-out infinite;
+		animation:
+			dl-gold-spin 8s linear infinite,
+			dl-gold-comet 2.8s linear infinite,
+			dl-gold-breathe 3.2s ease-in-out infinite;
 	}
 	.dl-gold::after {
 		content: '';
 		position: absolute; inset: 0;
 		border-radius: inherit;
-		background: linear-gradient(105deg, transparent 35%, rgba(255,236,170,0.28) 50%, transparent 65%);
+		background: linear-gradient(105deg, transparent 35%, rgba(255,236,170,0.26) 50%, transparent 65%);
 		transform: translateX(-120%);
 		animation: dl-gold-sheen 4.5s ease-in-out infinite;
-		pointer-events: none;
 	}
 	.dl-gold-icon {
 		color: #fbd36b;
 		filter: drop-shadow(0 0 6px rgba(251,211,107,0.7));
 		animation: dl-gold-twinkle 2.4s ease-in-out infinite;
 	}
+	.dl-gold-text {
+		position: relative;
+		filter: drop-shadow(0 0 8px rgba(246,200,90,0.35));
+	}
+	@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+		.dl-gold-text {
+			background: linear-gradient(100deg, #d9a43a 0%, #f6d77a 22%, #fff7da 38%, #f6d77a 54%, #c8921f 76%, #f6d77a 100%);
+			background-size: 220% 100%;
+			-webkit-background-clip: text;
+			background-clip: text;
+			-webkit-text-fill-color: transparent;
+			animation: dl-gold-flow 5s linear infinite;
+		}
+	}
+
+	/* Sparks: odd ones rise off the top edge, even ones fall off the bottom. */
+	.dl-gold-sparks {
+		position: absolute; inset: 0; z-index: 1;
+	}
+	.dl-gold-sparks i {
+		position: absolute; left: var(--x); top: var(--y);
+		width: 3px; height: 3px;
+		border-radius: 50%;
+		background: #ffe7a3;
+		box-shadow: 0 0 6px 1px rgba(255,200,90,0.9);
+		opacity: 0;
+		animation: dl-gold-spark 3.4s ease-out infinite;
+		animation-delay: calc(var(--i) * -0.43s);
+	}
+	.dl-gold-sparks i:nth-child(odd) { --y: 0%; --dy: -38px; --dx: 7px; }
+	.dl-gold-sparks i:nth-child(even) { --y: 100%; --dy: 30px; --dx: -6px; animation-duration: 4.1s; }
+
 	html:not(.dark) .dl-gold {
 		background:
 			linear-gradient(#fffaeb, #fffaeb) padding-box,
+			conic-gradient(from var(--dl-gold-comet), transparent 0 76%, rgba(255,255,255,0.95) 88%, transparent 97%) border-box,
 			conic-gradient(from var(--dl-gold-angle), #b07c16, #f3c94f, #8a5d0b, #f7dc8a, #b07c16) border-box;
 		color: #8a5d0b;
-		text-shadow: none;
 		box-shadow: 0 0 22px rgba(214,158,40,0.22);
 	}
 	html:not(.dark) .dl-gold-icon { color: #c48a12; filter: drop-shadow(0 0 4px rgba(214,158,40,0.5)); }
+	html:not(.dark) .dl-gold-text { filter: none; }
+	@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+		html:not(.dark) .dl-gold-text {
+			background-image: linear-gradient(100deg, #8a5d0b 0%, #b07c16 22%, #e0a92a 38%, #b07c16 54%, #7a5210 76%, #8a5d0b 100%);
+		}
+	}
+	html:not(.dark) .dl-gold-burst::before {
+		background: repeating-conic-gradient(from 0deg, transparent 0deg, rgba(214,150,30,0.2) 2deg, transparent 4deg, transparent 12deg);
+	}
+	html:not(.dark) .dl-gold-burst::after {
+		background: repeating-conic-gradient(from 7deg, transparent 0deg, rgba(214,150,30,0.12) 4deg, transparent 8deg, transparent 22.5deg);
+	}
+	html:not(.dark) .dl-gold-halo {
+		background: radial-gradient(closest-side, rgba(240,180,50,0.3), rgba(240,180,50,0.08) 60%, transparent);
+	}
+	html:not(.dark) .dl-gold-sparks i { background: #f0b53a; box-shadow: 0 0 5px rgba(214,150,30,0.8); }
+
+	@keyframes dl-gold-turn { to { transform: rotate(360deg); } }
+	@keyframes dl-gold-burst {
+		0%, 100% { opacity: 0.7; transform: scaleY(0.36) scale(0.97); }
+		50% { opacity: 1; transform: scaleY(0.36) scale(1.04); }
+	}
+	@keyframes dl-gold-halo {
+		0%, 100% { opacity: 0.6; transform: scale(0.96); }
+		50% { opacity: 1; transform: scale(1.06); }
+	}
 	@keyframes dl-gold-spin { to { --dl-gold-angle: 360deg; } }
+	@keyframes dl-gold-comet { to { --dl-gold-comet: 360deg; } }
 	@keyframes dl-gold-breathe {
 		0%, 100% { box-shadow: 0 0 18px rgba(232,170,50,0.16), inset 0 0 14px rgba(246,200,90,0.06); }
-		50% { box-shadow: 0 0 34px rgba(232,170,50,0.34), inset 0 0 18px rgba(246,200,90,0.12); }
+		50% { box-shadow: 0 0 36px rgba(232,170,50,0.36), inset 0 0 18px rgba(246,200,90,0.12); }
 	}
 	@keyframes dl-gold-sheen {
 		0%, 55% { transform: translateX(-120%); }
@@ -440,17 +560,32 @@ const others = [
 	}
 	@keyframes dl-gold-twinkle {
 		0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.85; }
-		50% { transform: scale(1.18) rotate(12deg); opacity: 1; }
+		50% { transform: scale(1.2) rotate(14deg); opacity: 1; }
 	}
+	@keyframes dl-gold-flow { to { background-position: -220% 0; } }
+	@keyframes dl-gold-spark {
+		0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
+		15% { opacity: 1; }
+		100% { transform: translate(var(--dx), var(--dy)) scale(1); opacity: 0; }
+	}
+
 	@media (max-width: 400px) {
 		.dl-gold { font-size: 12px; padding: 8px 14px; }
+		.dl-gold-burst { width: 600px; height: 600px; margin: -300px 0 0 -300px; }
+	}
+	/* Forced colors: the plain pill and its text, nothing painted round it. */
+	@media (forced-colors: active) {
+		.dl-gold-burst, .dl-gold-halo, .dl-gold-sparks { display: none; }
+		.dl-gold-text { background: none; -webkit-text-fill-color: currentColor; }
 	}
 
 	/* Highlight the card matching the visitor's OS */
 	.dl-card.os-match { border-color: rgba(139,92,246,0.45); box-shadow: 0 0 0 1px rgba(139,92,246,0.25), 0 20px 50px rgba(139,92,246,0.12); }
 
 	@media (prefers-reduced-motion: reduce) {
-		.dl-dot, .dl-gold, .dl-gold::after, .dl-gold-icon { animation: none; }
+		.dl-dot, .dl-gold, .dl-gold::after, .dl-gold-icon, .dl-gold-text, .dl-gold-halo,
+		.dl-gold-burst, .dl-gold-burst::before, .dl-gold-burst::after { animation: none; }
+		.dl-gold-sparks { display: none; }
 		.dl-card, .dl-soon-card, .dl-icon, .dl-web, .dl-web-icon { transition: none; }
 	}
 </style>
