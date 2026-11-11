@@ -414,9 +414,9 @@ const others = [
 	/* The rays: a squashed disc, faded out at its middle (under the pill) and its rim. */
 	.dl-gold-burst {
 		position: absolute; left: 50%; top: 50%; z-index: -1;
-		width: 860px; height: 860px;
-		margin: -430px 0 0 -430px;
-		transform: scaleY(0.36);
+		width: 580px; height: 580px;
+		margin: -290px 0 0 -290px;
+		transform: scaleY(0.23);
 		-webkit-mask-image: radial-gradient(closest-side, transparent 16%, #000 28%, rgba(0,0,0,0.5) 55%, transparent 80%);
 		mask-image: radial-gradient(closest-side, transparent 16%, #000 28%, rgba(0,0,0,0.5) 55%, transparent 80%);
 		animation: dl-gold-burst 5.5s ease-in-out infinite;
@@ -541,8 +541,8 @@ const others = [
 
 	@keyframes dl-gold-turn { to { transform: rotate(360deg); } }
 	@keyframes dl-gold-burst {
-		0%, 100% { opacity: 0.7; transform: scaleY(0.36) scale(0.97); }
-		50% { opacity: 1; transform: scaleY(0.36) scale(1.04); }
+		0%, 100% { opacity: 0.7; transform: scaleY(0.23) scale(0.97); }
+		50% { opacity: 1; transform: scaleY(0.23) scale(1.04); }
 	}
 	@keyframes dl-gold-halo {
 		0%, 100% { opacity: 0.6; transform: scale(0.96); }
@@ -571,7 +571,7 @@ const others = [
 
 	@media (max-width: 400px) {
 		.dl-gold { font-size: 12px; padding: 8px 14px; }
-		.dl-gold-burst { width: 600px; height: 600px; margin: -300px 0 0 -300px; }
+		.dl-gold-burst { width: 540px; height: 540px; margin: -270px 0 0 -270px; }
 	}
 	/* Forced colors: the plain pill and its text, nothing painted round it. */
 	@media (forced-colors: active) {
