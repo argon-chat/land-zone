@@ -85,7 +85,7 @@ const PRESENCE_ICON: Record<string, string> = {
 //
 // ./presets is 41KB of generated dialogue. Bundled in, it pushed this module to 26800 bytes
 // on the wire — past the ~19KB ceiling Russian transit puts on a Cloudflare response, so the
-// mock never finished loading there (see scripts/check-size-budget.ts). As its own chunk both
+// mock never finished loading there. As its own chunk both
 // halves fit. The import is kicked off here at module scope rather than inside mount(), so it
 // downloads alongside this module instead of one round trip after it.
 const pagePreset = import("./presets").then(

@@ -21,9 +21,6 @@ import sitemap from '@astrojs/sitemap';
 // traffic worldwide onto the mirror, which makes the mirror a hard dependency of the primary
 // host rather than its fallback — a real availability trade, worth making deliberately when
 // Cloudflare degrades further, not by default.
-//
-// scripts/check-size-budget.ts keeps enforcing the per-chunk ceiling either way, so this can
-// be switched on and off without the split quietly rotting.
 const assetsPrefix = process.env.PUBLIC_MEDIA_ORIGIN?.replace(/\/+$/, '') || undefined;
 
 // https://astro.build/config

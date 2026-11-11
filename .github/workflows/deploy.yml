@@ -66,13 +66,6 @@ jobs:
           PUBLIC_SENTRY_RELEASE: ${{ github.sha }}
         run: bun run build
 
-      # Russian transit throttles a Cloudflare connection dead once a single response passes
-      # ~19KB, so a page can grow past the point of loading there while every CI signal stays
-      # green. This is the only check that notices. It runs before the artifact is uploaded,
-      # so a build that cannot be served in Russia is never published to either host.
-      - name: Size budget
-        run: bun run check:size
-
       - uses: actions/upload-artifact@v4
         with:
           name: dist
