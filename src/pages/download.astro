@@ -31,12 +31,21 @@ const primary = [
 		cta: 'Download for macOS',
 		ext: '.dmg',
 	},
+	{
+		name: 'Linux',
+		sub: 'x86-64 · AppImage',
+		icon: 'linux',
+		href: 'https://ru-central-updates.argon.gl/ArgonChat-x86_64.AppImage',
+		cta: 'Download for Linux',
+		ext: '.AppImage',
+		// Built on Ubuntu 26.04: the image needs its glibc or newer.
+		note: 'Requires glibc 2.43+ (Ubuntu 26.04 or newer)',
+	},
 ];
 
 const webUrl = 'https://app.argon.gl';
 
 const others = [
-	{ name: 'Linux', sub: 'In the works', icon: 'linux', status: 'Soon' },
 	{ name: 'iOS', sub: 'On the roadmap', icon: 'apple', status: 'Planned' },
 	{ name: 'Android', sub: 'In the works', icon: 'android', status: 'Soon' },
 	{ name: 'SteamOS', sub: 'On the roadmap', icon: 'steam', status: 'Planned' },
@@ -44,7 +53,7 @@ const others = [
 ];
 ---
 
-<Layout title="Download — Argon Chat" description="Download Argon Chat for Windows and macOS, or open it straight in your browser at app.argon.gl. Crystal-clear voice, games inside your calls, and an overlay that keeps you in the game." image="/og/download.png">
+<Layout title="Download — Argon Chat" description="Download Argon Chat for Windows, macOS and Linux, or open it straight in your browser at app.argon.gl. Crystal-clear voice, games inside your calls, and an overlay that keeps you in the game." image="/og/download.png">
 	<Navbar current="/download/" />
 
 	<!-- ═══════════════════════════════════════════════ -->
@@ -68,7 +77,7 @@ const others = [
 			</p>
 
 			<!-- Primary download cards -->
-			<div class="animate-fade-in-up-delay-3 mt-12 grid gap-4 sm:grid-cols-2 max-w-2xl mx-auto text-left">
+			<div class="animate-fade-in-up-delay-3 mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 max-w-2xl lg:max-w-4xl mx-auto text-left">
 				{primary.map((p) => (
 					<a href={p.href} class="dl-card group" data-detect={p.name.toLowerCase()} data-track={`download_${p.name.toLowerCase()}`}>
 						<div class="dl-card-glow"></div>
@@ -91,6 +100,7 @@ const others = [
 							<span class="dl-btn-ext">{p.ext}</span>
 							<ArrowRight class="size-4 transition-transform group-hover:translate-x-1" />
 						</div>
+						{p.note && <p class="relative mt-2.5 text-center text-[11px] text-text-faint">{p.note}</p>}
 					</a>
 				))}
 			</div>
@@ -98,7 +108,7 @@ const others = [
 			<!-- Browser build — the third option, deliberately quieter than the two installs.
 			     Marked on the wrapper, not the card, so its top margin leaves with it on the
 			     Russian mirror (see html.no-web-app in global.css). -->
-			<div class="animate-fade-in-up-delay-3 mt-4 max-w-2xl mx-auto text-left" data-web-app>
+			<div class="animate-fade-in-up-delay-3 mt-4 max-w-2xl lg:max-w-4xl mx-auto text-left" data-web-app>
 				<a href={webUrl} target="_blank" rel="noopener" class="dl-web group" data-track="download_web">
 					<div class="dl-web-icon">
 						<Globe class="size-6" />
@@ -130,7 +140,7 @@ const others = [
 				<p class="text-text-muted text-sm mt-2">We're bringing Argon everywhere your squad hangs out — on desktop, the browser build works today.</p>
 			</div>
 
-			<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+			<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 				{others.map((o) => (
 					<div class={`dl-soon-card ${o.status === 'Soon' ? 'is-soon' : 'is-planned'}`}>
 						<div class="dl-soon-icon">
@@ -379,6 +389,7 @@ const others = [
 		let match: string | null = null;
 		if (ua.includes('win')) match = 'windows';
 		else if (ua.includes('mac')) match = 'macos';
+		else if (ua.includes('linux') && !ua.includes('android')) match = 'linux';
 		if (!match) return;
 		const card = document.querySelector(`.dl-card[data-detect="${match}"]`);
 		card?.classList.add('os-match');
