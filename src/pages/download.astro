@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
-import { ArrowRight, Check, Globe } from 'lucide-astro';
+import { ArrowRight, Check, Globe, Sparkles } from 'lucide-astro';
 
 // Brand glyphs (single-path SVGs)
 const glyphs: Record<string, string> = {
@@ -105,7 +105,15 @@ const others = [
 				))}
 			</div>
 
-			<!-- Browser build — the third option, deliberately quieter than the two installs.
+			<!-- What the installs are not: a gold pill under the cards. -->
+			<div class="animate-fade-in-up-delay-3 mt-6 flex justify-center">
+				<p class="dl-gold">
+					<Sparkles class="dl-gold-icon size-4 shrink-0" aria-hidden="true" />
+					<span class="relative">No Electron. No Chromium bloat. No bullshit.</span>
+				</p>
+			</div>
+
+			<!-- Browser build — the fourth option, deliberately quieter than the installs.
 			     Marked on the wrapper, not the card, so its top margin leaves with it on the
 			     Russian mirror (see html.no-web-app in global.css). -->
 			<div class="animate-fade-in-up-delay-3 mt-4 max-w-2xl lg:max-w-4xl mx-auto text-left" data-web-app>
@@ -373,11 +381,76 @@ const others = [
 
 	.dl-badge-web { background: rgba(6,182,212,0.12); color: var(--color-accent-2); border: 1px solid rgba(6,182,212,0.22); }
 
+	/* Gold pill: a ring that turns, a breathing glow and a sheen that crosses it now and then.
+	   The text stays a solid colour, so forced-colors mode still shows it. */
+	@property --dl-gold-angle {
+		syntax: '<angle>';
+		initial-value: 0deg;
+		inherits: false;
+	}
+	.dl-gold {
+		position: relative;
+		display: inline-flex; align-items: center; gap: 8px;
+		max-width: 100%;
+		padding: 8px 18px;
+		border-radius: 9999px;
+		border: 1px solid transparent;
+		background:
+			linear-gradient(rgba(24,17,4,0.92), rgba(24,17,4,0.92)) padding-box,
+			conic-gradient(from var(--dl-gold-angle), #7a5512, #f6d77a, #c8921f, #fff2c2, #7a5512) border-box;
+		color: #f6d77a;
+		font-size: 13px; font-weight: 700; letter-spacing: 0.01em;
+		text-align: center;
+		text-shadow: 0 0 12px rgba(246,200,90,0.45);
+		box-shadow: 0 0 22px rgba(232,170,50,0.22), inset 0 0 14px rgba(246,200,90,0.08);
+		overflow: hidden;
+		animation: dl-gold-spin 6s linear infinite, dl-gold-breathe 3.2s ease-in-out infinite;
+	}
+	.dl-gold::after {
+		content: '';
+		position: absolute; inset: 0;
+		border-radius: inherit;
+		background: linear-gradient(105deg, transparent 35%, rgba(255,236,170,0.28) 50%, transparent 65%);
+		transform: translateX(-120%);
+		animation: dl-gold-sheen 4.5s ease-in-out infinite;
+		pointer-events: none;
+	}
+	.dl-gold-icon {
+		color: #fbd36b;
+		filter: drop-shadow(0 0 6px rgba(251,211,107,0.7));
+		animation: dl-gold-twinkle 2.4s ease-in-out infinite;
+	}
+	html:not(.dark) .dl-gold {
+		background:
+			linear-gradient(#fffaeb, #fffaeb) padding-box,
+			conic-gradient(from var(--dl-gold-angle), #b07c16, #f3c94f, #8a5d0b, #f7dc8a, #b07c16) border-box;
+		color: #8a5d0b;
+		text-shadow: none;
+		box-shadow: 0 0 22px rgba(214,158,40,0.22);
+	}
+	html:not(.dark) .dl-gold-icon { color: #c48a12; filter: drop-shadow(0 0 4px rgba(214,158,40,0.5)); }
+	@keyframes dl-gold-spin { to { --dl-gold-angle: 360deg; } }
+	@keyframes dl-gold-breathe {
+		0%, 100% { box-shadow: 0 0 18px rgba(232,170,50,0.16), inset 0 0 14px rgba(246,200,90,0.06); }
+		50% { box-shadow: 0 0 34px rgba(232,170,50,0.34), inset 0 0 18px rgba(246,200,90,0.12); }
+	}
+	@keyframes dl-gold-sheen {
+		0%, 55% { transform: translateX(-120%); }
+		100% { transform: translateX(120%); }
+	}
+	@keyframes dl-gold-twinkle {
+		0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.85; }
+		50% { transform: scale(1.18) rotate(12deg); opacity: 1; }
+	}
+	@media (max-width: 400px) {
+		.dl-gold { font-size: 12px; padding: 8px 14px; }
+	}
+
 	/* Highlight the card matching the visitor's OS */
 	.dl-card.os-match { border-color: rgba(139,92,246,0.45); box-shadow: 0 0 0 1px rgba(139,92,246,0.25), 0 20px 50px rgba(139,92,246,0.12); }
 
 	@media (prefers-reduced-motion: reduce) {
-		.dl-dot { animation: none; }
+		.dl-dot, .dl-gold, .dl-gold::after, .dl-gold-icon { animation: none; }
 		.dl-card, .dl-soon-card, .dl-icon, .dl-web, .dl-web-icon { transition: none; }
 	}
 </style>
